@@ -1,0 +1,23 @@
+.owl-carousel {
+    background: $white;
+    padding: $spacer 0;
+
+    .owl-item {
+        &.center {
+            .day {
+                background: rgba($text-alterate, .1);
+                height: 30px;
+                width: 30px;
+                display: block;
+                margin: 0 auto;
+                border-radius: 100%;
+            }
+        }
+
+        .day {
+            line-height: 30px;
+        }
+
+    }
+    
+}

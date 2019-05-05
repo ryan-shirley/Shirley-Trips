@@ -1,0 +1,33 @@
+// Body
+$body-bg: #F2F3F6;
+
+// Typography
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+
+// Colors
+$white: #fff;
+$blue: #3490dc;
+$indigo: #6574cd;
+$purple: #450C88;
+$pink: #f66D9b;
+$red: #e3342f;
+$orange: #f6993f;
+$yellow: #ffed4a;
+$green: #38c172;
+$teal: #4dc0b5;
+$cyan: #6cb2eb;
+
+// Theme Colours
+$primary: $purple;
+$primary-dark: darken( $primary, 10% );
+$text-primary: #605D6C;
+$text-alterate: #A4AEB8;
+
+
+// Spacing
+$spacer: 1rem;
+
+// Components
+$border-radius:               10px;
+$border-radius-sm:            3px;

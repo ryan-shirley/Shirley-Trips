@@ -1,0 +1,9 @@
+html,
+body {
+  overflow-x: hidden; /* Prevent scroll on narrow devices */
+}
+
+/* since the navbar is fixed we need to add some space to the body */
+body {
+  padding-top: 44px;
+}
