@@ -41,4 +41,14 @@ Route::middleware('auth:api')->group(function () {
         'create', 'edit'
     ]);
 
+    // Airlines
+    Route::resource('airlines', 'API\AirlineController')->except([
+        'create', 'edit'
+    ]);
+
+    // Comment Images
+    Route::resource('comment-images', 'API\CommentImageController')->except([
+        'create', 'edit'
+    ]);
+
 });

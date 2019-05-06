@@ -1787,8 +1787,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'navigation',
+  props: {
+    editPermissions: {
+      type: Boolean,
+      "default": false
+    }
+  },
   data: function data() {
     return {
       open: false
@@ -1797,6 +1814,9 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     toggleNav: function toggleNav() {
       this.open = !this.open;
+    },
+    editModeToggle: function editModeToggle() {
+      this.$emit('editModeToggle');
     },
     checkActive: function checkActive(name) {
       if (this.$route.name == name) {
@@ -1856,12 +1876,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'activity-list',
   props: {
     activitiesRaw: Array,
     hotel: Object,
-    day: String
+    day: String,
+    editMode: Boolean,
+    dayId: Number
   },
   data: function data() {
     return {
@@ -1869,7 +1907,6 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    console.log('Mounted');
     this.loadActivities();
   },
   methods: {
@@ -1878,34 +1915,38 @@ __webpack_require__.r(__webpack_exports__);
       var token = localStorage.getItem('token');
       var activitiesRaw = app.activitiesRaw;
 
-      for (var i = 0; i < activitiesRaw.length; i++) {
+      var _loop = function _loop() {
         var activity = activitiesRaw[i];
 
         if (activity.comment_id != null) {
-          console.log('Loading Comment');
           axios.get('/api/comment/' + activity.comment_id, {
             headers: {
               Authorization: "Bearer " + token
             }
           }).then(function (resp) {
             var data = resp.data;
+            data.activity_id = activity.id;
             app.activities.push(data);
           })["catch"](function (resp) {
             alert('Could not load comment');
           });
         } else if (activity.flight_id != null) {
-          console.log('Loading Flight');
           axios.get('/api/flight/' + activity.flight_id, {
             headers: {
               Authorization: "Bearer " + token
             }
           }).then(function (resp) {
             var data = resp.data;
+            data.activity_id = activity.id;
             app.activities.push(data);
           })["catch"](function (resp) {
             alert('Could not load flight');
           });
         }
+      };
+
+      for (var i = 0; i < activitiesRaw.length; i++) {
+        _loop();
       }
     }
   }
@@ -1938,6 +1979,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'date-slider',
@@ -1945,18 +2001,131 @@ __webpack_require__.r(__webpack_exports__);
     carousel: vue_owl_carousel__WEBPACK_IMPORTED_MODULE_0___default.a
   },
   props: {
-    parentData: Array
+    parentData: Array,
+    startPosition: {
+      type: Number
+    }
   },
   data: function data() {
     return {
-      days: this.parentData
+      days: this.parentData,
+      startIndex: 0
     };
+  },
+  beforeMount: function beforeMount() {
+    var app = this;
+
+    if (app.startPosition != 0) {
+      var days = app.days;
+
+      for (var i = 0; i < days.length; i++) {
+        var day = days[i];
+
+        if (day.id == app.startPosition) {
+          app.startIndex = i;
+          break;
+        }
+      }
+    }
   },
   methods: {
     dayChanged: function dayChanged(event) {
       var index = event.property.value;
-      console.log('Day changed. Index in array ' + index);
       this.$emit('childToParent', this.days[index].id);
+    },
+    getWeekDay: function getWeekDay(date) {
+      //Create an array containing each day, starting with Sunday.
+      var weekdays = new Array("S", "M", "T", "W", "T", "F", "S"); //Use the getDay() method to get the day.
+
+      var day = date.getDay(); //Return the element that corresponds to that index.
+
+      return weekdays[day];
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/new-activity-picker.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/new-activity-picker.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'new-acitvity-picker',
+  props: {
+    dayId: {
+      type: Number
+    },
+    day: {
+      type: String
+    }
+  },
+  methods: {
+    newActivitySelected: function newActivitySelected(acitvity) {
+      $('#newActivityModal').modal('hide');
+
+      if (acitvity == 'message') {
+        this.$router.push({
+          name: 'holiday.add.message',
+          params: {
+            'day': this.dayId
+          }
+        });
+      } else if (acitvity == 'flight') {
+        this.$router.push({
+          name: 'holiday.add.flight',
+          params: {
+            'day': this.dayId,
+            'dayString': this.day
+          }
+        });
+      } else if (acitvity == 'photo') {
+        this.$router.push({
+          name: 'holiday.add.photo',
+          params: {
+            'day': this.dayId
+          }
+        });
+      }
     }
   }
 });
@@ -2077,10 +2246,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     var app = this;
     var id = app.$route.params.id;
+    var dayStartPosition = app.$route.params.dayStartPosition;
     var token = localStorage.getItem('token');
     axios.get('/api/holiday/' + id, {
       headers: {
@@ -2089,6 +2273,12 @@ __webpack_require__.r(__webpack_exports__);
     }).then(function (resp) {
       app.holiday = resp.data;
       app.editPermission();
+
+      if (dayStartPosition != undefined) {
+        app.loadDay(dayStartPosition);
+      } else {
+        app.loadDay(app.holiday.days[0].id);
+      }
     })["catch"](function (resp) {
       alert('Could not load holiday');
     });
@@ -2097,7 +2287,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       holiday: {},
       editPer: false,
+      editMode: false,
       day: {
+        id: 0,
         day: '',
         hotel: {
           name: '',
@@ -2111,13 +2303,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     editPermission: function editPermission() {
-      console.log('Checking Permissions');
       var app = this;
       var users = app.holiday.users;
 
       for (var i = 0; i < users.length; i++) {
         if (users[i].pivot.editPermission == true) {
           app.editPer = true;
+
+          if (app.$route.params.editMode == true) {
+            app.editMode = true;
+          }
+
           return;
         }
       }
@@ -2127,7 +2323,6 @@ __webpack_require__.r(__webpack_exports__);
       return mlist[dt.getMonth()];
     },
     loadDay: function loadDay(day_id) {
-      console.log("Loading day: " + day_id);
       var app = this;
       var token = localStorage.getItem('token');
       app.day.hotel = {};
@@ -2138,6 +2333,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }).then(function (resp) {
         var day = resp.data;
+        app.day.id = day.id;
         app.day.day = day.day;
 
         if (day.hotel != null) {
@@ -2151,6 +2347,742 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (resp) {
         alert('Could not load day');
       });
+    },
+    editModeToggle: function editModeToggle() {
+      this.editMode = !this.editMode;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/flights/AddFlight.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/holiday/flights/AddFlight.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _classes_Form_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../classes/Form.js */ "./resources/js/classes/Form.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      form: new _classes_Form_js__WEBPACK_IMPORTED_MODULE_0__["default"]('/flight', 'post', true, {
+        airlineId: '',
+        flightNumber: '',
+        originDate: this.$route.params.dayString,
+        originTime: '',
+        originAirportShort: '',
+        originAirportLong: '',
+        destinationDate: '',
+        destinationTime: '',
+        destinationAirportShort: '',
+        destinationAirportLong: '',
+        dayId: this.$route.params.day
+      }),
+      airlines: []
+    };
+  },
+  mounted: function mounted() {
+    var app = this;
+    var token = localStorage.getItem('token'); // Load Airlines
+
+    axios.get('/api/airlines/', {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    }).then(function (resp) {
+      app.airlines = resp.data;
+    })["catch"](function (errors) {
+      return alert('Could not load airline');
+    });
+  },
+  methods: {
+    onSubmit: function onSubmit() {
+      var app = this;
+      this.form.submit().then(function (data) {
+        app.$router.push({
+          name: 'holiday.view',
+          params: {
+            'editMode': true,
+            'dayStartPosition': app.form.dayId
+          }
+        });
+      })["catch"](function (errors) {
+        return console.log(errors);
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/flights/EditFlight.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/holiday/flights/EditFlight.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _classes_Form_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../classes/Form.js */ "./resources/js/classes/Form.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      form: new _classes_Form_js__WEBPACK_IMPORTED_MODULE_0__["default"]('/flight/' + this.$route.params.flightId, 'put', true, {
+        airlineId: '',
+        flightNumber: '',
+        originDate: '',
+        originTime: '',
+        originAirportShort: '',
+        originAirportLong: '',
+        destinationDate: '',
+        destinationTime: '',
+        destinationAirportShort: '',
+        destinationAirportLong: '',
+        dayId: this.$route.params.day
+      }),
+      airlines: []
+    };
+  },
+  mounted: function mounted() {
+    var app = this;
+    var token = localStorage.getItem('token'); // Load Airlines
+
+    axios.get('/api/airlines/', {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    }).then(function (resp) {
+      app.airlines = resp.data;
+    })["catch"](function (errors) {
+      return alert('Could not load airline');
+    }); // Load Flight
+
+    axios.get('/api/flight/' + this.$route.params.flightId, {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    }).then(function (resp) {
+      app.form.airlineId = resp.data.airline_id;
+      app.form.flightNumber = resp.data.flightNumber;
+      app.form.originAirportShort = resp.data.originAirportShort;
+      app.form.originAirportLong = resp.data.originAirportLong;
+      app.form.destinationAirportShort = resp.data.destinationAirportShort;
+      app.form.destinationAirportLong = resp.data.destinationAirportLong; // Convert Day Times
+
+      var originDayTime = new Date(resp.data.originDayTime);
+      app.form.originDate = originDayTime.getFullYear() + "-" + app.appendLeadingZeroes(originDayTime.getMonth() + 1) + "-" + app.appendLeadingZeroes(originDayTime.getDate());
+      app.form.originTime = app.appendLeadingZeroes(originDayTime.getHours()) + ":" + app.appendLeadingZeroes(originDayTime.getMinutes());
+      var destinationDayTime = new Date(resp.data.destinationDayTime);
+      app.form.destinationDate = destinationDayTime.getFullYear() + "-" + app.appendLeadingZeroes(destinationDayTime.getMonth() + 1) + "-" + app.appendLeadingZeroes(destinationDayTime.getDate());
+      app.form.destinationTime = app.appendLeadingZeroes(destinationDayTime.getHours()) + ":" + app.appendLeadingZeroes(destinationDayTime.getMinutes());
+    })["catch"](function (errors) {
+      return alert('Could not load flight');
+    });
+  },
+  methods: {
+    onSubmit: function onSubmit() {
+      var app = this;
+      this.form.submit().then(function (data) {
+        app.$router.push({
+          name: 'holiday.view',
+          params: {
+            'editMode': true,
+            'dayStartPosition': app.form.dayId
+          }
+        });
+      })["catch"](function (errors) {
+        return console.log(errors);
+      });
+    },
+    appendLeadingZeroes: function appendLeadingZeroes(n) {
+      if (n <= 9) {
+        return "0" + n;
+      }
+
+      return n;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/messages/AddMessage.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/holiday/messages/AddMessage.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _classes_Form_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../classes/Form.js */ "./resources/js/classes/Form.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      form: new _classes_Form_js__WEBPACK_IMPORTED_MODULE_0__["default"]('/comment', 'post', true, {
+        title: '',
+        subTitle: '',
+        dayId: this.$route.params.day
+      })
+    };
+  },
+  methods: {
+    onSubmit: function onSubmit() {
+      var app = this;
+      this.form.submit().then(function (data) {
+        app.$router.push({
+          name: 'holiday.view',
+          params: {
+            'editMode': true,
+            'dayStartPosition': app.form.dayId
+          }
+        });
+      })["catch"](function (errors) {
+        return console.log(errors);
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/messages/EditMessage.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/holiday/messages/EditMessage.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _classes_Form_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../classes/Form.js */ "./resources/js/classes/Form.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      form: new _classes_Form_js__WEBPACK_IMPORTED_MODULE_0__["default"]('/comment/' + this.$route.params.commentId, 'put', true, {
+        title: '',
+        subTitle: '',
+        dayId: this.$route.params.day
+      })
+    };
+  },
+  mounted: function mounted() {
+    var app = this;
+    var token = localStorage.getItem('token');
+    var commentId = app.$route.params.commentId; // Load individual course
+
+    axios.get('/api/comment/' + commentId, {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    }).then(function (resp) {
+      app.form.title = resp.data.title;
+      app.form.subTitle = resp.data.subTitle;
+    })["catch"](function (errors) {
+      return alert('Could not load comment');
+    });
+  },
+  methods: {
+    onSubmit: function onSubmit() {
+      var app = this;
+      this.form.submit().then(function (data) {
+        app.$router.push({
+          name: 'holiday.view',
+          params: {
+            'editMode': true,
+            'dayStartPosition': app.form.dayId
+          }
+        });
+      })["catch"](function (errors) {
+        return console.log(errors);
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/photos/AddPhoto.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/holiday/photos/AddPhoto.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _classes_Form_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../classes/Form.js */ "./resources/js/classes/Form.js");
+/* harmony import */ var form_data__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! form-data */ "./node_modules/form-data/lib/browser.js");
+/* harmony import */ var form_data__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(form_data__WEBPACK_IMPORTED_MODULE_1__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+ // Uploading Image
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      form: new _classes_Form_js__WEBPACK_IMPORTED_MODULE_0__["default"]('/comment', 'post', true, {
+        title: '',
+        subTitle: '',
+        dayId: this.$route.params.day
+      }),
+      selectedFile: null,
+      images: [],
+      imageUploadCount: 0
+    };
+  },
+  methods: {
+    onSubmit: function onSubmit() {
+      var app = this;
+      var token = localStorage.getItem('token'); // Submit Comment
+
+      this.form.submit().then(function (data) {
+        console.log('Comment added successfully');
+        var images = app.images; // Upload Images
+
+        for (var i = 0; i < images.length; i++) {
+          var imageData = new form_data__WEBPACK_IMPORTED_MODULE_1___default.a();
+          imageData.append('image', images[i]);
+          imageData.append('commentId', data.id);
+          axios.post('/api/comment-images/', imageData, {
+            headers: {
+              Authorization: "Bearer " + token,
+              'Content-Type': 'multipart/form-data'
+            }
+          }).then(function (resp) {
+            console.log('Successfully uploaded.');
+            app.imageUploadCount = app.imageUploadCount + 1;
+            app.CheckImageUploadCompletion();
+          })["catch"](function (resp) {
+            alert('Could not save image');
+            console.log(resp);
+          });
+        }
+      })["catch"](function (errors) {
+        return console.log(errors);
+      });
+    },
+    // This function will be called every time you add a file
+    uploadFieldChange: function uploadFieldChange(e) {
+      var files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+
+      for (var i = files.length - 1; i >= 0; i--) {
+        this.images.push(files[i]);
+      } // Reset the form to avoid copying these files multiple times into this.attachments
+
+
+      document.getElementById("images").value = [];
+    },
+    removeImage: function removeImage(image) {
+      this.images.splice(this.images.indexOf(image), 1);
+      this.getAttachmentSize();
+    },
+    getAttachmentSize: function getAttachmentSize() {
+      var _this = this;
+
+      this.upload_size = 0; // Reset to beginning
+
+      this.images.map(function (item) {
+        _this.upload_size += parseInt(item.size);
+      });
+      this.upload_size = Number(this.upload_size.toFixed(1));
+      this.$forceUpdate();
+    },
+    CheckImageUploadCompletion: function CheckImageUploadCompletion() {
+      if (this.imageUploadCount == this.images.length) {
+        console.log('All images uploaded');
+        this.$router.push({
+          name: 'holiday.view',
+          params: {
+            'editMode': true,
+            'dayStartPosition': this.form.dayId
+          }
+        });
+      } else {
+        console.log('Not all images uploaded');
+      }
     }
   }
 });
@@ -6698,6 +7630,19 @@ __webpack_require__.r(__webpack_exports__);
 
 }));
 //# sourceMappingURL=bootstrap.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/form-data/lib/browser.js":
+/*!***********************************************!*\
+  !*** ./node_modules/form-data/lib/browser.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* eslint-env browser */
+module.exports = typeof self == 'object' ? self.FormData : window.FormData;
 
 
 /***/ }),
@@ -37577,6 +38522,48 @@ var render = function() {
         _vm._v("E & R")
       ]),
       _vm._v(" "),
+      _vm.editPermissions
+        ? _c("div", { staticClass: "btn-group" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-secondary dropdown-toggle",
+                attrs: {
+                  type: "button",
+                  "data-toggle": "dropdown",
+                  "aria-haspopup": "true",
+                  "aria-expanded": "false"
+                }
+              },
+              [_vm._v("\n            ...\n        ")]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "dropdown-menu dropdown-menu-right" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "dropdown-item",
+                  attrs: { type: "button" },
+                  on: {
+                    click: function($event) {
+                      return _vm.editModeToggle()
+                    }
+                  }
+                },
+                [_vm._v("Edit")]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "dropdown-divider" }),
+              _vm._v(" "),
+              _c(
+                "button",
+                { staticClass: "dropdown-item", attrs: { type: "button" } },
+                [_vm._v("Delete Holiday")]
+              )
+            ])
+          ])
+        : _vm._e(),
+      _vm._v(" "),
       _c(
         "div",
         {
@@ -37647,14 +38634,12 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "container mb-5 mt-5" },
-    [
-      _c("h4", [_vm._v("Day " + _vm._s(_vm.day))]),
-      _vm._v(" "),
-      _vm.hotel.name
-        ? _c("p", [
+  return _c("div", { staticClass: "container mb-5 mt-5" }, [
+    _c("h4", [_vm._v("Day " + _vm._s(_vm.day))]),
+    _vm._v(" "),
+    _vm.hotel.name
+      ? _c("section", [
+          _c("p", [
             _vm._v(
               "You are saying at the " +
                 _vm._s(_vm.hotel.name) +
@@ -37663,53 +38648,113 @@ var render = function() {
                 " today"
             )
           ])
-        : _vm._e(),
-      _vm._v(" "),
-      _c("h3", [_vm._v("Your activities are")]),
-      _vm._v(" "),
-      _vm._l(_vm.activities, function(activity) {
-        return _c("div", { key: activity.id }, [
-          activity.airline_id != null
-            ? _c("div", { staticClass: "activity-card" }, [
-                _c("div", { staticClass: "body" }, [
-                  _c("h4", [_vm._v(_vm._s(activity.airline.name))]),
-                  _vm._v(
-                    "\n                " +
-                      _vm._s(activity.flightNumber) +
-                      "\n            "
-                  )
-                ])
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          activity.title != null
-            ? _c(
-                "div",
-                { staticClass: "activity-card" },
-                [
-                  _c("div", { staticClass: "body" }, [
-                    _c("h4", [_vm._v(_vm._s(activity.title))]),
-                    _vm._v(
-                      "\n                " +
-                        _vm._s(activity.subTitle) +
-                        "\n            "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _vm._l(activity.images, function(image) {
-                    return _c("div", { key: "activity_image" + image.id }, [
-                      _c("img", { attrs: { src: image.path } })
-                    ])
-                  })
-                ],
-                2
-              )
-            : _vm._e()
         ])
-      })
-    ],
-    2
-  )
+      : _c("section", [
+          _c("p", [_vm._v("It looks like you have no home for the day..")])
+        ]),
+    _vm._v(" "),
+    _vm.activities.length > 0
+      ? _c(
+          "section",
+          { staticClass: "activity-list" },
+          [
+            _c("h3", [_vm._v("Your activities are")]),
+            _vm._v(" "),
+            _vm._l(_vm.activities, function(activity) {
+              return _c("div", { key: activity.activity_id }, [
+                activity.airline_id != null
+                  ? _c("div", { staticClass: "activity-card" }, [
+                      _c(
+                        "div",
+                        { staticClass: "body" },
+                        [
+                          _c("h4", [_vm._v(_vm._s(activity.airline.name))]),
+                          _vm._v(
+                            "\n                    " +
+                              _vm._s(activity.flightNumber) +
+                              "\n                    "
+                          ),
+                          _vm.editMode
+                            ? _c(
+                                "router-link",
+                                {
+                                  staticClass: "btn btn-secondary",
+                                  attrs: {
+                                    to: {
+                                      name: "holiday.edit.flight",
+                                      params: {
+                                        day: _vm.dayId,
+                                        flightId: activity.id
+                                      }
+                                    }
+                                  }
+                                },
+                                [_vm._v("Edit")]
+                              )
+                            : _vm._e()
+                        ],
+                        1
+                      )
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                activity.title != null
+                  ? _c(
+                      "div",
+                      { staticClass: "activity-card" },
+                      [
+                        _c(
+                          "div",
+                          { staticClass: "body" },
+                          [
+                            _c("h4", [_vm._v(_vm._s(activity.title))]),
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(activity.subTitle) +
+                                "\n                    "
+                            ),
+                            _vm.editMode
+                              ? _c(
+                                  "router-link",
+                                  {
+                                    staticClass: "btn btn-secondary",
+                                    attrs: {
+                                      to: {
+                                        name: "holiday.edit.message",
+                                        params: {
+                                          day: _vm.dayId,
+                                          commentId: activity.id
+                                        }
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Edit")]
+                                )
+                              : _vm._e()
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _vm._l(activity.images, function(image) {
+                          return _c(
+                            "div",
+                            { key: "activity_image" + image.id },
+                            [_c("img", { attrs: { src: image.path } })]
+                          )
+                        })
+                      ],
+                      2
+                    )
+                  : _vm._e()
+              ])
+            })
+          ],
+          2
+        )
+      : _c("section", [
+          _c("h3", [_vm._v("You have no activities for this day..")])
+        ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -37736,11 +38781,34 @@ var render = function() {
   return _c(
     "carousel",
     {
-      attrs: { nav: false, center: true, dots: false, items: 18 },
+      attrs: {
+        nav: false,
+        center: true,
+        dots: false,
+        startPosition: _vm.startIndex,
+        responsive: {
+          0: {
+            items: 6
+          },
+          600: {
+            items: 10
+          },
+          1000: {
+            items: 15
+          },
+          1500: {
+            items: 20
+          }
+        }
+      },
       on: { changed: _vm.dayChanged }
     },
     _vm._l(_vm.days, function(day) {
       return _c("div", { key: day.id, staticClass: "text-center" }, [
+        _c("span", { staticClass: "letter" }, [
+          _vm._v(_vm._s(_vm.getWeekDay(new Date(day.day))))
+        ]),
+        _vm._v(" "),
         _c("span", { staticClass: "day" }, [_vm._v(_vm._s(day.day.slice(-2)))])
       ])
     }),
@@ -37748,6 +38816,174 @@ var render = function() {
   )
 }
 var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/new-activity-picker.vue?vue&type=template&id=7821ad38&":
+/*!**********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/new-activity-picker.vue?vue&type=template&id=7821ad38& ***!
+  \**********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-primary floating-activity-btn",
+        attrs: {
+          type: "button",
+          "data-toggle": "modal",
+          "data-target": "#newActivityModal"
+        }
+      },
+      [_vm._v("\n    +\n    ")]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "newActivityModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "newActivityModalTitle",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-dialog-centered modal-xl",
+            attrs: { role: "document" }
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("ul", { staticClass: "list-group" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "list-group-item list-group-item-action",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.newActivitySelected("flight")
+                        }
+                      }
+                    },
+                    [_vm._v("Flight")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "list-group-item list-group-item-action",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.newActivitySelected("photo")
+                        }
+                      }
+                    },
+                    [_vm._v("Photo")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "list-group-item list-group-item-action",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.newActivitySelected("message")
+                        }
+                      }
+                    },
+                    [_vm._v("Message")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "list-group-item list-group-item-action",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.newActivitySelected("hotel")
+                        }
+                      }
+                    },
+                    [_vm._v("Hotel")]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _vm._m(1)
+            ])
+          ]
+        )
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "newActivityModalTitle" } },
+        [_vm._v("Select Activity Type")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Close")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -37906,30 +39142,49 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("navigation"),
-      _vm._v(" "),
-      _c("section", { staticClass: "bg-primary page-title" }, [
-        _c("h1", [_vm._v(_vm._s(_vm.holiday.title))]),
-        _vm._v(" "),
-        _c("p", [_vm._v(_vm._s(_vm.holiday.subTitle))]),
-        _vm._v(" "),
-        _c("p", [
-          _vm._v(
-            _vm._s(_vm.holiday.beginDate.slice(-2)) +
-              " " +
-              _vm._s(_vm.month_name(new Date(_vm.holiday.beginDate))) +
-              " - " +
-              _vm._s(_vm.holiday.endDate.slice(-2)) +
-              " " +
-              _vm._s(_vm.month_name(new Date(_vm.holiday.endDate)))
-          )
-        ])
-      ]),
-      _vm._v(" "),
-      _c("date-slider", {
-        attrs: { parentData: _vm.holiday.days },
-        on: { childToParent: _vm.loadDay }
+      _c("navigation", {
+        attrs: { editPermissions: _vm.editPer },
+        on: { editModeToggle: _vm.editModeToggle }
       }),
+      _vm._v(" "),
+      _vm.holiday.image
+        ? _c(
+            "section",
+            {
+              staticClass: "bg-primary page-title bg-image",
+              style: {
+                "background-image": "url(" + _vm.holiday.image.path + ")"
+              }
+            },
+            [
+              _c("div", { staticClass: "overlay" }, [
+                _c("h1", [_vm._v(_vm._s(_vm.holiday.title))]),
+                _vm._v(" "),
+                _c("p", [_vm._v(_vm._s(_vm.holiday.subTitle))]),
+                _vm._v(" "),
+                _c("p", [
+                  _vm._v(
+                    _vm._s(_vm.holiday.beginDate.slice(-2)) +
+                      " " +
+                      _vm._s(_vm.month_name(new Date(_vm.holiday.beginDate))) +
+                      " - " +
+                      _vm._s(_vm.holiday.endDate.slice(-2)) +
+                      " " +
+                      _vm._s(_vm.month_name(new Date(_vm.holiday.endDate)))
+                  )
+                ])
+              ])
+            ]
+          )
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.holiday.days
+        ? _c("date-slider", {
+            key: _vm.day.id,
+            attrs: { parentData: _vm.holiday.days, startPosition: _vm.day.id },
+            on: { childToParent: _vm.loadDay }
+          })
+        : _vm._e(),
       _vm._v(" "),
       _vm.day.activitiesRaw.length || _vm.day.day.length
         ? _c("activity-list", {
@@ -37937,8 +39192,16 @@ var render = function() {
             attrs: {
               activitiesRaw: _vm.day.activitiesRaw,
               hotel: _vm.day.hotel,
-              day: _vm.day.day
+              day: _vm.day.day,
+              dayId: _vm.day.id,
+              editMode: _vm.editMode
             }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _vm.editMode
+        ? _c("new-acitvity-picker", {
+            attrs: { dayId: _vm.day.id, day: _vm.day.day }
           })
         : _vm._e()
     ],
@@ -37946,6 +39209,1548 @@ var render = function() {
   )
 }
 var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/flights/AddFlight.vue?vue&type=template&id=07401b42&":
+/*!***********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/holiday/flights/AddFlight.vue?vue&type=template&id=07401b42& ***!
+  \***********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("navigation"),
+      _vm._v(" "),
+      _vm._m(0),
+      _vm._v(" "),
+      _c("section", { staticClass: "container" }, [
+        _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.onSubmit($event)
+              },
+              keydown: function($event) {
+                return _vm.form.errors.clear($event.target.name)
+              }
+            }
+          },
+          [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "airline" } }, [
+                    _vm._v("Airline")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.form.airlineId,
+                          expression: "form.airlineId"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.form,
+                            "airlineId",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    _vm._l(_vm.airlines, function(airline) {
+                      return _c(
+                        "option",
+                        { key: airline.id, domProps: { value: airline.id } },
+                        [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(airline.name) +
+                              "\n                            "
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  ),
+                  _vm._v(" "),
+                  _vm.form.errors.has("airlineId")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(_vm.form.errors.get("airlineId"))
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "flightNumber" } }, [
+                    _vm._v("Flight Number")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.flightNumber,
+                        expression: "form.flightNumber"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", name: "flightNumber" },
+                    domProps: { value: _vm.form.flightNumber },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "flightNumber", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("flightNumber")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(
+                            _vm.form.errors.get("flightNumber")
+                          )
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "originDate" } }, [
+                    _vm._v("Origin Date")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.originDate,
+                        expression: "form.originDate"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "date", name: "originDate" },
+                    domProps: { value: _vm.form.originDate },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "originDate", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("originDate")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(_vm.form.errors.get("originDate"))
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "originTime" } }, [
+                    _vm._v("Origin Time")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.originTime,
+                        expression: "form.originTime"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "time", name: "originTime" },
+                    domProps: { value: _vm.form.originTime },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "originTime", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("originTime")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(_vm.form.errors.get("originTime"))
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "originAirportShort" } }, [
+                    _vm._v("Origin Airport Short")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.originAirportShort,
+                        expression: "form.originAirportShort"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", name: "originAirportShort" },
+                    domProps: { value: _vm.form.originAirportShort },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.form,
+                          "originAirportShort",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("originAirportShort")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(
+                            _vm.form.errors.get("originAirportShort")
+                          )
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "originAirportLong" } }, [
+                    _vm._v("Origin Airport Long")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.originAirportLong,
+                        expression: "form.originAirportLong"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", name: "originAirportLong" },
+                    domProps: { value: _vm.form.originAirportLong },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.form,
+                          "originAirportLong",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("originAirportLong")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(
+                            _vm.form.errors.get("originAirportLong")
+                          )
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "destinationDate" } }, [
+                    _vm._v("Destination Date")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.destinationDate,
+                        expression: "form.destinationDate"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "date", name: "destinationDate" },
+                    domProps: { value: _vm.form.destinationDate },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.form,
+                          "destinationDate",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("destinationDate")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(
+                            _vm.form.errors.get("destinationDate")
+                          )
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "destinationTime" } }, [
+                    _vm._v("Destination Time")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.destinationTime,
+                        expression: "form.destinationTime"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "time", name: "destinationTime" },
+                    domProps: { value: _vm.form.destinationTime },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.form,
+                          "destinationTime",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("destinationTime")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(
+                            _vm.form.errors.get("destinationTime")
+                          )
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "destinationAirportShort" } }, [
+                    _vm._v("Destination Airport Short")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.destinationAirportShort,
+                        expression: "form.destinationAirportShort"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", name: "destinationAirportShort" },
+                    domProps: { value: _vm.form.destinationAirportShort },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.form,
+                          "destinationAirportShort",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("destinationAirportShort")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(
+                            _vm.form.errors.get("destinationAirportShort")
+                          )
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "destinationAirportLong" } }, [
+                    _vm._v("Destination Airport Long")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.destinationAirportLong,
+                        expression: "form.destinationAirportLong"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", name: "destinationAirportLong" },
+                    domProps: { value: _vm.form.destinationAirportLong },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.form,
+                          "destinationAirportLong",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("destinationAirportLong")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(
+                            _vm.form.errors.get("destinationAirportLong")
+                          )
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+              [_vm._v("Submit")]
+            )
+          ]
+        )
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("section", { staticClass: "bg-primary page-title" }, [
+      _c("h1", [_vm._v("Add Flight")])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/flights/EditFlight.vue?vue&type=template&id=02a80b9c&":
+/*!************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/holiday/flights/EditFlight.vue?vue&type=template&id=02a80b9c& ***!
+  \************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("navigation"),
+      _vm._v(" "),
+      _vm._m(0),
+      _vm._v(" "),
+      _c("section", { staticClass: "container" }, [
+        _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.onSubmit($event)
+              },
+              keydown: function($event) {
+                return _vm.form.errors.clear($event.target.name)
+              }
+            }
+          },
+          [
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "airline" } }, [
+                    _vm._v("Airline")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.form.airlineId,
+                          expression: "form.airlineId"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.form,
+                            "airlineId",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
+                      }
+                    },
+                    _vm._l(_vm.airlines, function(airline) {
+                      return _c(
+                        "option",
+                        { key: airline.id, domProps: { value: airline.id } },
+                        [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(airline.name) +
+                              "\n                            "
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  ),
+                  _vm._v(" "),
+                  _vm.form.errors.has("airlineId")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(_vm.form.errors.get("airlineId"))
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "flightNumber" } }, [
+                    _vm._v("Flight Number")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.flightNumber,
+                        expression: "form.flightNumber"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", name: "flightNumber" },
+                    domProps: { value: _vm.form.flightNumber },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "flightNumber", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("flightNumber")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(
+                            _vm.form.errors.get("flightNumber")
+                          )
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "originDate" } }, [
+                    _vm._v("Origin Date")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.originDate,
+                        expression: "form.originDate"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "date", name: "originDate" },
+                    domProps: { value: _vm.form.originDate },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "originDate", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("originDate")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(_vm.form.errors.get("originDate"))
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "originTime" } }, [
+                    _vm._v("Origin Time")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.originTime,
+                        expression: "form.originTime"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "time", name: "originTime" },
+                    domProps: { value: _vm.form.originTime },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "originTime", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("originTime")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(_vm.form.errors.get("originTime"))
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "originAirportShort" } }, [
+                    _vm._v("Origin Airport Short")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.originAirportShort,
+                        expression: "form.originAirportShort"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", name: "originAirportShort" },
+                    domProps: { value: _vm.form.originAirportShort },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.form,
+                          "originAirportShort",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("originAirportShort")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(
+                            _vm.form.errors.get("originAirportShort")
+                          )
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "originAirportLong" } }, [
+                    _vm._v("Origin Airport Long")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.originAirportLong,
+                        expression: "form.originAirportLong"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", name: "originAirportLong" },
+                    domProps: { value: _vm.form.originAirportLong },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.form,
+                          "originAirportLong",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("originAirportLong")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(
+                            _vm.form.errors.get("originAirportLong")
+                          )
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("hr"),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "destinationDate" } }, [
+                    _vm._v("Destination Date")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.destinationDate,
+                        expression: "form.destinationDate"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "date", name: "destinationDate" },
+                    domProps: { value: _vm.form.destinationDate },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.form,
+                          "destinationDate",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("destinationDate")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(
+                            _vm.form.errors.get("destinationDate")
+                          )
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "destinationTime" } }, [
+                    _vm._v("Destination Time")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.destinationTime,
+                        expression: "form.destinationTime"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "time", name: "destinationTime" },
+                    domProps: { value: _vm.form.destinationTime },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.form,
+                          "destinationTime",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("destinationTime")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(
+                            _vm.form.errors.get("destinationTime")
+                          )
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "destinationAirportShort" } }, [
+                    _vm._v("Destination Airport Short")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.destinationAirportShort,
+                        expression: "form.destinationAirportShort"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", name: "destinationAirportShort" },
+                    domProps: { value: _vm.form.destinationAirportShort },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.form,
+                          "destinationAirportShort",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("destinationAirportShort")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(
+                            _vm.form.errors.get("destinationAirportShort")
+                          )
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-6" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "destinationAirportLong" } }, [
+                    _vm._v("Destination Airport Long")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.destinationAirportLong,
+                        expression: "form.destinationAirportLong"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", name: "destinationAirportLong" },
+                    domProps: { value: _vm.form.destinationAirportLong },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.form,
+                          "destinationAirportLong",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("destinationAirportLong")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(
+                            _vm.form.errors.get("destinationAirportLong")
+                          )
+                        }
+                      })
+                    : _vm._e()
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+              [_vm._v("Update")]
+            )
+          ]
+        )
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("section", { staticClass: "bg-primary page-title" }, [
+      _c("h1", [_vm._v("Add Flight")])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/messages/AddMessage.vue?vue&type=template&id=93e4dcfa&":
+/*!*************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/holiday/messages/AddMessage.vue?vue&type=template&id=93e4dcfa& ***!
+  \*************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("navigation"),
+      _vm._v(" "),
+      _vm._m(0),
+      _vm._v(" "),
+      _c("section", { staticClass: "container" }, [
+        _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.onSubmit($event)
+              },
+              keydown: function($event) {
+                return _vm.form.errors.clear($event.target.name)
+              }
+            }
+          },
+          [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "title" } }, [_vm._v("Title")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.title,
+                    expression: "form.title"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", name: "title" },
+                domProps: { value: _vm.form.title },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "title", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _vm.form.errors.has("title")
+                ? _c("span", {
+                    staticClass: "badge badge-danger",
+                    domProps: {
+                      textContent: _vm._s(_vm.form.errors.get("title"))
+                    }
+                  })
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "subTitle" } }, [
+                _vm._v("Sub Title")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.subTitle,
+                    expression: "form.subTitle"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", name: "title" },
+                domProps: { value: _vm.form.subTitle },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "subTitle", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _vm.form.errors.has("subTitle")
+                ? _c("span", {
+                    staticClass: "badge badge-danger",
+                    domProps: {
+                      textContent: _vm._s(_vm.form.errors.get("subTitle"))
+                    }
+                  })
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+              [_vm._v("Submit")]
+            )
+          ]
+        )
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("section", { staticClass: "bg-primary page-title" }, [
+      _c("h1", [_vm._v("Add Message")])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/messages/EditMessage.vue?vue&type=template&id=0cfc7590&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/holiday/messages/EditMessage.vue?vue&type=template&id=0cfc7590& ***!
+  \**************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("navigation"),
+      _vm._v(" "),
+      _vm._m(0),
+      _vm._v(" "),
+      _c("section", { staticClass: "container" }, [
+        _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.onSubmit($event)
+              },
+              keydown: function($event) {
+                return _vm.form.errors.clear($event.target.name)
+              }
+            }
+          },
+          [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "title" } }, [_vm._v("Title")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.title,
+                    expression: "form.title"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", name: "title" },
+                domProps: { value: _vm.form.title },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "title", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _vm.form.errors.has("title")
+                ? _c("span", {
+                    staticClass: "badge badge-danger",
+                    domProps: {
+                      textContent: _vm._s(_vm.form.errors.get("title"))
+                    }
+                  })
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "subTitle" } }, [
+                _vm._v("Sub Title")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.subTitle,
+                    expression: "form.subTitle"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", name: "title" },
+                domProps: { value: _vm.form.subTitle },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "subTitle", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _vm.form.errors.has("subTitle")
+                ? _c("span", {
+                    staticClass: "badge badge-danger",
+                    domProps: {
+                      textContent: _vm._s(_vm.form.errors.get("subTitle"))
+                    }
+                  })
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+              [_vm._v("Update")]
+            )
+          ]
+        )
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("section", { staticClass: "bg-primary page-title" }, [
+      _c("h1", [_vm._v("Add Message")])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/photos/AddPhoto.vue?vue&type=template&id=56e70ace&":
+/*!*********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/holiday/photos/AddPhoto.vue?vue&type=template&id=56e70ace& ***!
+  \*********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("navigation"),
+      _vm._v(" "),
+      _vm._m(0),
+      _vm._v(" "),
+      _c("section", { staticClass: "container" }, [
+        _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.onSubmit($event)
+              },
+              keydown: function($event) {
+                return _vm.form.errors.clear($event.target.name)
+              }
+            }
+          },
+          [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "title" } }, [_vm._v("Title")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.title,
+                    expression: "form.title"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", name: "title" },
+                domProps: { value: _vm.form.title },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "title", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _vm.form.errors.has("title")
+                ? _c("span", {
+                    staticClass: "badge badge-danger",
+                    domProps: {
+                      textContent: _vm._s(_vm.form.errors.get("title"))
+                    }
+                  })
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "subTitle" } }, [
+                _vm._v("Sub Title")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.subTitle,
+                    expression: "form.subTitle"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", name: "title" },
+                domProps: { value: _vm.form.subTitle },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "subTitle", $event.target.value)
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _vm.form.errors.has("subTitle")
+                ? _c("span", {
+                    staticClass: "badge badge-danger",
+                    domProps: {
+                      textContent: _vm._s(_vm.form.errors.get("subTitle"))
+                    }
+                  })
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "image" } }, [_vm._v("Image")]),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
+              _c("input", {
+                attrs: { type: "file", multiple: "multiple", id: "images" },
+                on: { change: _vm.uploadFieldChange }
+              }),
+              _vm._v(" "),
+              _c("hr"),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-md-12" },
+                _vm._l(_vm.images, function(image, index) {
+                  return _c(
+                    "div",
+                    { staticClass: "attachment-holder animated fadeIn" },
+                    [
+                      _c("span", { staticClass: "label label-primary" }, [
+                        _vm._v(
+                          _vm._s(
+                            image.name +
+                              " (" +
+                              Number((image.size / 1024 / 1024).toFixed(1)) +
+                              "MB)"
+                          )
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c(
+                        "span",
+                        {
+                          staticStyle: { background: "red", cursor: "pointer" },
+                          on: {
+                            click: function($event) {
+                              return _vm.removeImage(image)
+                            }
+                          }
+                        },
+                        [
+                          _c(
+                            "button",
+                            { staticClass: "btn btn-xs btn-danger" },
+                            [_vm._v("Remove")]
+                          )
+                        ]
+                      )
+                    ]
+                  )
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _vm.form.errors.has("image")
+                ? _c("span", {
+                    staticClass: "badge badge-danger",
+                    domProps: {
+                      textContent: _vm._s(_vm.form.errors.get("image"))
+                    }
+                  })
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+              [_vm._v("Submit")]
+            )
+          ]
+        )
+      ])
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("section", { staticClass: "bg-primary page-title" }, [
+      _c("h1", [_vm._v("Add Photo")])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -52923,6 +55728,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_dateSlider_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/dateSlider.vue */ "./resources/js/components/dateSlider.vue");
 /* harmony import */ var _components_Navbar_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Navbar.vue */ "./resources/js/components/Navbar.vue");
 /* harmony import */ var _components_activity_list_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/activity-list.vue */ "./resources/js/components/activity-list.vue");
+/* harmony import */ var _components_new_activity_picker_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/new-activity-picker.vue */ "./resources/js/components/new-activity-picker.vue");
+
 
 
 
@@ -52930,6 +55737,7 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component(_components_dateSlider_vue__WEBPACK_IMPORTED_MODULE_1__["default"].name, _components_dateSlider_vue__WEBPACK_IMPORTED_MODULE_1__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component(_components_Navbar_vue__WEBPACK_IMPORTED_MODULE_2__["default"].name, _components_Navbar_vue__WEBPACK_IMPORTED_MODULE_2__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component(_components_activity_list_vue__WEBPACK_IMPORTED_MODULE_3__["default"].name, _components_activity_list_vue__WEBPACK_IMPORTED_MODULE_3__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component(_components_new_activity_picker_vue__WEBPACK_IMPORTED_MODULE_4__["default"].name, _components_new_activity_picker_vue__WEBPACK_IMPORTED_MODULE_4__["default"]);
 
 /***/ }),
 
@@ -53465,6 +56273,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/new-activity-picker.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/new-activity-picker.vue ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _new_activity_picker_vue_vue_type_template_id_7821ad38___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./new-activity-picker.vue?vue&type=template&id=7821ad38& */ "./resources/js/components/new-activity-picker.vue?vue&type=template&id=7821ad38&");
+/* harmony import */ var _new_activity_picker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./new-activity-picker.vue?vue&type=script&lang=js& */ "./resources/js/components/new-activity-picker.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _new_activity_picker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _new_activity_picker_vue_vue_type_template_id_7821ad38___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _new_activity_picker_vue_vue_type_template_id_7821ad38___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/new-activity-picker.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/new-activity-picker.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/new-activity-picker.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_new_activity_picker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./new-activity-picker.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/new-activity-picker.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_new_activity_picker_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/new-activity-picker.vue?vue&type=template&id=7821ad38&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/new-activity-picker.vue?vue&type=template&id=7821ad38& ***!
+  \****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_new_activity_picker_vue_vue_type_template_id_7821ad38___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./new-activity-picker.vue?vue&type=template&id=7821ad38& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/new-activity-picker.vue?vue&type=template&id=7821ad38&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_new_activity_picker_vue_vue_type_template_id_7821ad38___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_new_activity_picker_vue_vue_type_template_id_7821ad38___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/routes.js":
 /*!********************************!*\
   !*** ./resources/js/routes.js ***!
@@ -53478,9 +56355,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _views_auth_LoginComponent_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./views/auth/LoginComponent.vue */ "./resources/js/views/auth/LoginComponent.vue");
 /* harmony import */ var _views_home_UserHome_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./views/home/UserHome.vue */ "./resources/js/views/home/UserHome.vue");
 /* harmony import */ var _views_holiday_HolidayView_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./views/holiday/HolidayView.vue */ "./resources/js/views/holiday/HolidayView.vue");
+/* harmony import */ var _views_holiday_messages_AddMessage_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./views/holiday/messages/AddMessage.vue */ "./resources/js/views/holiday/messages/AddMessage.vue");
+/* harmony import */ var _views_holiday_messages_EditMessage_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./views/holiday/messages/EditMessage.vue */ "./resources/js/views/holiday/messages/EditMessage.vue");
+/* harmony import */ var _views_holiday_flights_AddFlight_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/holiday/flights/AddFlight.vue */ "./resources/js/views/holiday/flights/AddFlight.vue");
+/* harmony import */ var _views_holiday_flights_EditFlight_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views/holiday/flights/EditFlight.vue */ "./resources/js/views/holiday/flights/EditFlight.vue");
+/* harmony import */ var _views_holiday_photos_AddPhoto_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./views/holiday/photos/AddPhoto.vue */ "./resources/js/views/holiday/photos/AddPhoto.vue");
 // Views
 
  // Holidays
+
+
+
+
+
 
 
 var routes = [{
@@ -53497,6 +56384,26 @@ var routes = [{
   path: '/holiday/:id',
   name: 'holiday.view',
   component: _views_holiday_HolidayView_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+}, {
+  path: '/holiday/:id/add/:day/message',
+  name: 'holiday.add.message',
+  component: _views_holiday_messages_AddMessage_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+}, {
+  path: '/holiday/:id/edit/:day/message/:commentId',
+  name: 'holiday.edit.message',
+  component: _views_holiday_messages_EditMessage_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
+}, {
+  path: '/holiday/:id/add/:day/flight',
+  name: 'holiday.add.flight',
+  component: _views_holiday_flights_AddFlight_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
+}, {
+  path: '/holiday/:id/edit/:day/flight/:flightId',
+  name: 'holiday.edit.flight',
+  component: _views_holiday_flights_EditFlight_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
+}, {
+  path: '/holiday/:id/add/:day/photo',
+  name: 'holiday.add.photo',
+  component: _views_holiday_photos_AddPhoto_vue__WEBPACK_IMPORTED_MODULE_7__["default"]
 }];
 
 /***/ }),
@@ -53634,6 +56541,351 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_HolidayView_vue_vue_type_template_id_15f31f97___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_HolidayView_vue_vue_type_template_id_15f31f97___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/flights/AddFlight.vue":
+/*!**********************************************************!*\
+  !*** ./resources/js/views/holiday/flights/AddFlight.vue ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AddFlight_vue_vue_type_template_id_07401b42___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AddFlight.vue?vue&type=template&id=07401b42& */ "./resources/js/views/holiday/flights/AddFlight.vue?vue&type=template&id=07401b42&");
+/* harmony import */ var _AddFlight_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AddFlight.vue?vue&type=script&lang=js& */ "./resources/js/views/holiday/flights/AddFlight.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _AddFlight_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AddFlight_vue_vue_type_template_id_07401b42___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AddFlight_vue_vue_type_template_id_07401b42___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/holiday/flights/AddFlight.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/flights/AddFlight.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/views/holiday/flights/AddFlight.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddFlight_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./AddFlight.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/flights/AddFlight.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddFlight_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/flights/AddFlight.vue?vue&type=template&id=07401b42&":
+/*!*****************************************************************************************!*\
+  !*** ./resources/js/views/holiday/flights/AddFlight.vue?vue&type=template&id=07401b42& ***!
+  \*****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddFlight_vue_vue_type_template_id_07401b42___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./AddFlight.vue?vue&type=template&id=07401b42& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/flights/AddFlight.vue?vue&type=template&id=07401b42&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddFlight_vue_vue_type_template_id_07401b42___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddFlight_vue_vue_type_template_id_07401b42___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/flights/EditFlight.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/views/holiday/flights/EditFlight.vue ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _EditFlight_vue_vue_type_template_id_02a80b9c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EditFlight.vue?vue&type=template&id=02a80b9c& */ "./resources/js/views/holiday/flights/EditFlight.vue?vue&type=template&id=02a80b9c&");
+/* harmony import */ var _EditFlight_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EditFlight.vue?vue&type=script&lang=js& */ "./resources/js/views/holiday/flights/EditFlight.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _EditFlight_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _EditFlight_vue_vue_type_template_id_02a80b9c___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _EditFlight_vue_vue_type_template_id_02a80b9c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/holiday/flights/EditFlight.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/flights/EditFlight.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/views/holiday/flights/EditFlight.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFlight_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./EditFlight.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/flights/EditFlight.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFlight_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/flights/EditFlight.vue?vue&type=template&id=02a80b9c&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/views/holiday/flights/EditFlight.vue?vue&type=template&id=02a80b9c& ***!
+  \******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFlight_vue_vue_type_template_id_02a80b9c___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./EditFlight.vue?vue&type=template&id=02a80b9c& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/flights/EditFlight.vue?vue&type=template&id=02a80b9c&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFlight_vue_vue_type_template_id_02a80b9c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditFlight_vue_vue_type_template_id_02a80b9c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/messages/AddMessage.vue":
+/*!************************************************************!*\
+  !*** ./resources/js/views/holiday/messages/AddMessage.vue ***!
+  \************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AddMessage_vue_vue_type_template_id_93e4dcfa___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AddMessage.vue?vue&type=template&id=93e4dcfa& */ "./resources/js/views/holiday/messages/AddMessage.vue?vue&type=template&id=93e4dcfa&");
+/* harmony import */ var _AddMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AddMessage.vue?vue&type=script&lang=js& */ "./resources/js/views/holiday/messages/AddMessage.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _AddMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AddMessage_vue_vue_type_template_id_93e4dcfa___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AddMessage_vue_vue_type_template_id_93e4dcfa___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/holiday/messages/AddMessage.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/messages/AddMessage.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/views/holiday/messages/AddMessage.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./AddMessage.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/messages/AddMessage.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/messages/AddMessage.vue?vue&type=template&id=93e4dcfa&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/views/holiday/messages/AddMessage.vue?vue&type=template&id=93e4dcfa& ***!
+  \*******************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddMessage_vue_vue_type_template_id_93e4dcfa___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./AddMessage.vue?vue&type=template&id=93e4dcfa& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/messages/AddMessage.vue?vue&type=template&id=93e4dcfa&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddMessage_vue_vue_type_template_id_93e4dcfa___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddMessage_vue_vue_type_template_id_93e4dcfa___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/messages/EditMessage.vue":
+/*!*************************************************************!*\
+  !*** ./resources/js/views/holiday/messages/EditMessage.vue ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _EditMessage_vue_vue_type_template_id_0cfc7590___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EditMessage.vue?vue&type=template&id=0cfc7590& */ "./resources/js/views/holiday/messages/EditMessage.vue?vue&type=template&id=0cfc7590&");
+/* harmony import */ var _EditMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EditMessage.vue?vue&type=script&lang=js& */ "./resources/js/views/holiday/messages/EditMessage.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _EditMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _EditMessage_vue_vue_type_template_id_0cfc7590___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _EditMessage_vue_vue_type_template_id_0cfc7590___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/holiday/messages/EditMessage.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/messages/EditMessage.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/views/holiday/messages/EditMessage.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./EditMessage.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/messages/EditMessage.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EditMessage_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/messages/EditMessage.vue?vue&type=template&id=0cfc7590&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/views/holiday/messages/EditMessage.vue?vue&type=template&id=0cfc7590& ***!
+  \********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditMessage_vue_vue_type_template_id_0cfc7590___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./EditMessage.vue?vue&type=template&id=0cfc7590& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/messages/EditMessage.vue?vue&type=template&id=0cfc7590&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditMessage_vue_vue_type_template_id_0cfc7590___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditMessage_vue_vue_type_template_id_0cfc7590___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/photos/AddPhoto.vue":
+/*!********************************************************!*\
+  !*** ./resources/js/views/holiday/photos/AddPhoto.vue ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AddPhoto_vue_vue_type_template_id_56e70ace___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AddPhoto.vue?vue&type=template&id=56e70ace& */ "./resources/js/views/holiday/photos/AddPhoto.vue?vue&type=template&id=56e70ace&");
+/* harmony import */ var _AddPhoto_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AddPhoto.vue?vue&type=script&lang=js& */ "./resources/js/views/holiday/photos/AddPhoto.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _AddPhoto_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AddPhoto_vue_vue_type_template_id_56e70ace___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AddPhoto_vue_vue_type_template_id_56e70ace___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/holiday/photos/AddPhoto.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/photos/AddPhoto.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/views/holiday/photos/AddPhoto.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddPhoto_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./AddPhoto.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/photos/AddPhoto.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AddPhoto_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/photos/AddPhoto.vue?vue&type=template&id=56e70ace&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/views/holiday/photos/AddPhoto.vue?vue&type=template&id=56e70ace& ***!
+  \***************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddPhoto_vue_vue_type_template_id_56e70ace___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./AddPhoto.vue?vue&type=template&id=56e70ace& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/photos/AddPhoto.vue?vue&type=template&id=56e70ace&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddPhoto_vue_vue_type_template_id_56e70ace___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AddPhoto_vue_vue_type_template_id_56e70ace___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

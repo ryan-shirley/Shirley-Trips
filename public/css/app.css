@@ -10672,6 +10672,7 @@ body {
 
 body {
   padding-top: 44px;
+  padding-bottom: 100px;
 }
 
 .navbar-light .offcanvas-collapse {
@@ -10759,6 +10760,20 @@ body {
   color: #fff;
   text-align: center;
   padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.page-title.bg-image {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.page-title.bg-image .overlay {
+  background: rgba(0, 0, 0, 0.25);
+  padding: 2rem 0;
 }
 
 .activity-card {
@@ -10820,6 +10835,7 @@ body {
 .owl-carousel {
   background: #fff;
   padding: 1rem 0;
+  margin-bottom: 2rem;
 }
 
 .owl-carousel .owl-item.center .day {
@@ -10833,5 +10849,17 @@ body {
 
 .owl-carousel .owl-item .day {
   line-height: 30px;
+}
+
+.owl-carousel .owl-item .letter {
+  display: block;
+  margin-bottom: 7px;
+  color: #A4AEB8;
+}
+
+.floating-activity-btn {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
 }
 

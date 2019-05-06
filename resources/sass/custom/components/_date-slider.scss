@@ -1,6 +1,7 @@
 .owl-carousel {
     background: $white;
     padding: $spacer 0;
+    margin-bottom: $spacer * 2;
 
     .owl-item {
         &.center {
@@ -16,6 +17,12 @@
 
         .day {
             line-height: 30px;
+        }
+
+        .letter {
+            display: block;
+            margin-bottom: 7px;
+            color: $text-alterate;
         }
 
     }

@@ -8,6 +8,17 @@
 
         <router-link to="/" class="navbar-brand">E &amp; R</router-link>
 
+        <div class="btn-group" v-if="editPermissions">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                ...
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+                <button class="dropdown-item" type="button" @click="editModeToggle()">Edit</button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" type="button">Delete Holiday</button>
+            </div>
+        </div>
+
         <div class="navbar-collapse offcanvas-collapse" v-bind:class="{ 'open': open }">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item" v-bind:class="{ 'active': checkActive('account.home') }">
@@ -26,14 +37,23 @@
 
     export default {
         name: 'navigation',
+        props: {
+            editPermissions: {
+                type: Boolean,
+                default: false
+            },
+        },
         data() {
             return {
-                open: false
+                open: false,
             }
         },
         methods: {
             toggleNav() {
                 this.open = !this.open;
+            },
+            editModeToggle() {
+                this.$emit('editModeToggle')  
             },
             checkActive(name) {
                 if(this.$route.name == name) {

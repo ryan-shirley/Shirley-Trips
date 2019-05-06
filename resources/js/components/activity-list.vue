@@ -3,29 +3,45 @@
 
         <h4>Day {{ day }}</h4>
 
-        <p v-if="hotel.name">You are saying at the {{ hotel.name }} in {{ hotel.location }} today</p>
+        <section v-if="hotel.name">
+             <p>You are saying at the {{ hotel.name }} in {{ hotel.location }} today</p>
+        </section>
+        <section v-else>
+            <p>It looks like you have no home for the day..</p>
+        </section>
+       <!--/.Hotel -->
 
-        <h3>Your activities are</h3>
-        <div v-for="activity in activities" :key="activity.id">
-            <div class="activity-card" v-if="activity.airline_id != null">
-                <div class="body">
-                    <h4>{{ activity.airline.name }}</h4>
-                    {{ activity.flightNumber }}
-                </div>
-            </div>
-            <!--/.Flight -->
+        <section class="activity-list" v-if="activities.length > 0">
 
-            <div class="activity-card" v-if="activity.title != null">
-                <div class="body">
-                    <h4>{{ activity.title }}</h4>
-                    {{ activity.subTitle }}
+            <h3>Your activities are</h3>
+            <div v-for="activity in activities" :key="activity.activity_id">
+                <div class="activity-card" v-if="activity.airline_id != null">
+                    <div class="body">
+                        <h4>{{ activity.airline.name }}</h4>
+                        {{ activity.flightNumber }}
+                        <router-link :to="{ name:'holiday.edit.flight', params: { 'day' : dayId, 'flightId' : activity.id } }" v-if="editMode" class="btn btn-secondary">Edit</router-link>
+                    </div>
                 </div>
-                <div v-for="image in activity.images" :key="'activity_image' + image.id">
+                <!--/.Flight -->
+
+                <div class="activity-card" v-if="activity.title != null">
+                    <div class="body">
+                        <h4>{{ activity.title }}</h4>
+                        {{ activity.subTitle }}
+                        <router-link :to="{ name:'holiday.edit.message', params: { 'day' : dayId, 'commentId' : activity.id } }" v-if="editMode" class="btn btn-secondary">Edit</router-link>
+                    </div>
+                    <div v-for="image in activity.images" :key="'activity_image' + image.id">
                         <img :src="image.path" />
                     </div>
+                </div>
+                <!--/.Comment -->
             </div>
-            <!--/.Comment -->
-        </div>
+        </section>
+        <section v-else>
+                <h3>You have no activities for this day..</h3>
+        </section>
+        <!--/.Activity-List -->
+
     </div> 
 </template>
 
@@ -35,7 +51,9 @@
         props: {
             activitiesRaw: Array,
             hotel: Object,
-            day: String
+            day: String,
+            editMode: Boolean,
+            dayId: Number
         },
         data() {
             return {
@@ -43,7 +61,6 @@
             }
         },
         mounted() {
-            console.log('Mounted')
             this.loadActivities()
         },
         methods: {
@@ -56,13 +73,12 @@
                     let activity = activitiesRaw[i]
 
                     if(activity.comment_id != null) {
-                        console.log('Loading Comment')
-
                         axios.get('/api/comment/' + activity.comment_id, {
                                 headers: { Authorization: "Bearer " + token }
                             })
                             .then(function (resp) {
                                 let data = resp.data
+                                data.activity_id = activity.id
 
                                 app.activities.push(data)
                             })
@@ -71,13 +87,12 @@
                             })
                     }
                     else if (activity.flight_id != null) {
-                        console.log('Loading Flight')
-
                         axios.get('/api/flight/' + activity.flight_id, {
                                 headers: { Authorization: "Bearer " + token }
                             })
                             .then(function (resp) {
                                 let data = resp.data
+                                data.activity_id = activity.id
 
                                 app.activities.push(data)
                             })
