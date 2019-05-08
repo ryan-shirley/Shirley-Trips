@@ -1,23 +1,32 @@
-.card.comment {
+.card {
+
+    &.comment {
     
-    &.double {
+        &.double {
+            img {
+                height: 240px;
+                object-fit: cover;
+            }
+    
+            .col-6:first-child img {
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+                border-bottom-left-radius: 0;
+                border-right: 1px solid $white;
+            }
+    
+            .col-6:last-child img {
+                border-top-left-radius: 0;
+                border-bottom-right-radius: 0;
+                border-bottom-left-radius: 0;
+                border-left: 1px solid $white;
+            }
+        }
+    }
+
+    &.image-only {
         img {
-            height: 240px;
-            object-fit: cover;
-        }
-
-        .col-6:first-child img {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-            border-bottom-left-radius: 0;
-            border-right: 1px solid $white;
-        }
-
-        .col-6:last-child img {
-            border-top-left-radius: 0;
-            border-bottom-right-radius: 0;
-            border-bottom-left-radius: 0;
-            border-left: 1px solid $white;
+            border-radius: $border-radius;
         }
     }
 }

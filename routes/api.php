@@ -56,4 +56,7 @@ Route::middleware('auth:api')->group(function () {
         'index', 'create', 'edit', 'update'
     ]);
 
+    // Activities
+    Route::put('activities/{id}', 'API\ActivityController@update');
+
 });

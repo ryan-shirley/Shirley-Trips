@@ -61,9 +61,19 @@
                 }
             }
         },
+        mounted() {
+            let app = this
+            $(".owl-item" ).click(function(event) {
+                var index = jQuery(this).index();
+                app.dayClicked(index)
+            });
+        },
         methods: {
             dayChanged(event) {
                 let index = event.property.value
+                this.$router.push({ name: 'holiday.view.day', params: { 'dayId' : this.days[index].id } })
+            },
+            dayClicked(index) {
                 this.$router.push({ name: 'holiday.view.day', params: { 'dayId' : this.days[index].id } })
             },
             getWeekDay(date){

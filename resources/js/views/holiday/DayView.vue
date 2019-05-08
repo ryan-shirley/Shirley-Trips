@@ -34,6 +34,8 @@
             })
             .then(function (resp) {
                 app.day = resp.data
+
+                app.day.activities.sort((a, b) => (a.order > b.order) ? 1 : -1)
             })
             .catch(function (resp) {
                 alert('Could not load day')

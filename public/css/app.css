@@ -10722,12 +10722,22 @@ body {
 
 .fixed-top {
   height: 44px;
+  box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-brand {
   text-align: center;
-  display: block;
+  width: 100px;
   margin: 0 auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.btn-group {
+  float: right;
+  right: 20px;
+  position: absolute;
 }
 
 .navbar-toggler {
@@ -10860,6 +10870,15 @@ body {
   border-radius: 100%;
 }
 
+.owl-carousel .owl-item:hover {
+  cursor: pointer;
+}
+
+.owl-carousel .owl-item:active {
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
+
 .owl-carousel .owl-item .day {
   line-height: 30px;
 }
@@ -10871,7 +10890,7 @@ body {
 }
 
 .floating-activity-btn {
-  position: absolute;
+  position: fixed;
   right: 20px;
   bottom: 20px;
 }
@@ -10894,6 +10913,10 @@ body {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
   border-left: 1px solid #fff;
+}
+
+.card.image-only img {
+  border-radius: 10px;
 }
 
 .card.flight .date {
@@ -10984,5 +11007,14 @@ body {
 
 .card .card-title {
   margin-bottom: 0;
+}
+
+.card-wrapper {
+  color: inherit;
+}
+
+.card-wrapper:hover {
+  text-decoration: none;
+  color: inherit;
 }
 

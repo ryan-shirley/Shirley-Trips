@@ -28,6 +28,14 @@
             }
         }
 
+        &:hover {
+            cursor: pointer;
+        }
+
+        &:active {
+            cursor: grabbing;
+        }
+
         .day {
             line-height: 30px;
         }

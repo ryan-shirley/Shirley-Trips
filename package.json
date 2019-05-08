@@ -26,6 +26,7 @@
     "dependencies": {
         "form-data": "^2.3.3",
         "vue-owl-carousel": "^2.0.3",
-        "vue-router": "^3.0.6"
+        "vue-router": "^3.0.6",
+        "vuedraggable": "^2.20.0"
     }
 }

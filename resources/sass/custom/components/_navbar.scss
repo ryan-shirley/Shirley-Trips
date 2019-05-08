@@ -44,15 +44,23 @@
 
 .fixed-top {
     height: 44px;
+    box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-brand {
     text-align: center;
-    display: block;
+    width: 100px;
     margin: 0 auto;
+    position: absolute;
+    left: 0;
+    right: 0;
 }
 
-
+.btn-group {
+    float: right;
+    right: 20px;
+    position: absolute;
+}
 
 
 .navbar-toggler {

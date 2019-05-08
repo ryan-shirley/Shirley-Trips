@@ -14,7 +14,7 @@
                 <div class="body">
                     <h4>{{ holiday.title }}</h4>
                     {{ holiday.subTitle }}
-                    <router-link :to="{ name:'holiday.view', params: { id:holiday.id }}" class="btn btn-primary">View</router-link>
+                    <router-link :to="{ name:'holiday.view', params: { 'holidayId' :holiday.id }}" class="btn btn-primary">View</router-link>
                     <span class="date">
                         <p class="number">{{ holiday.beginDate.slice(-2) }}</p>
                         <p class="month">{{ month_name(new Date(holiday.beginDate)) }}</p>

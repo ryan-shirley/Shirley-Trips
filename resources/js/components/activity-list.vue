@@ -15,25 +15,54 @@
 
         <section class="activity-list" v-if="activities">
 
-            <div v-for="activity in activities" :key="activity.activity_id">
+            <draggable 
+                v-model="activities" 
+                v-bind="dragOptions"
+                v-if="editMode"
+                @change="onReorderList"
+            >
+            <transition-group >
+                <div v-for="activity in activities" :key="activity.activity_id">
 
-                <flight-details 
-                    v-if="activity.airline_id != null"
-                    :flight='activity'
-                    :editMode="editMode"
-                    :dayId="dayId"
-                    v-on:flightDeleted="removeActivity"  
-                />
+                    <flight-details 
+                        v-if="activity.airline_id != null"
+                        :flight='activity'
+                        :editMode="editMode"
+                        :dayId="dayId"
+                        v-on:flightDeleted="removeActivity"  
+                    />
 
-                <comment-details 
-                    v-if="activity.title != null"
-                    :comment='activity'
-                    :editMode="editMode"
-                    :dayId="dayId"
-                    v-on:commentDeleted="removeActivity"  
-                />
+                    <comment-details 
+                        v-if="activity.title != null"
+                        :comment='activity'
+                        :editMode="editMode"
+                        :dayId="dayId"
+                        v-on:commentDeleted="removeActivity"  
+                    />
 
-            </div>
+                </div>
+            </transition-group>
+            </draggable>
+            <div v-for="activity in activities" :key="activity.activity_id" v-else>
+
+                    <flight-details 
+                        v-if="activity.airline_id != null"
+                        :flight='activity'
+                        :editMode="editMode"
+                        :dayId="dayId"
+                        v-on:flightDeleted="removeActivity"  
+                    />
+
+                    <comment-details 
+                        v-if="activity.title != null"
+                        :comment='activity'
+                        :editMode="editMode"
+                        :dayId="dayId"
+                        v-on:commentDeleted="removeActivity"  
+                    />
+
+                </div>
+
         </section>
         <section v-else>
                 <h3>You have no activities for this day..</h3>
@@ -44,6 +73,8 @@
 </template>
 
 <script>
+    import draggable from 'vuedraggable'
+
     export default {
         name: 'activity-list',
         props: {
@@ -110,7 +141,45 @@
                     return activity.activity_id == activity_id
                 })
                 app.activities.splice(index, 1)
+            },
+            onReorderList(event) {
+                let app = this
+                let token = localStorage.getItem('token')
+
+                for (var i = 0; i < app.activities.length; i++) {
+                    let activity = app.activities[i]
+                    
+                    axios.put('/api/activities/' + activity.activity_id, {
+                        'order': (i + 1) 
+                    }, {
+                        headers: { Authorization: "Bearer " + token }
+                    })
+                    .then(function (resp) {
+                        console.log('Updated')
+                    })
+                    .catch(function (resp) {
+                        alert('Could not sort activity list')
+                    })
+                }
+            }
+        },
+        components: {
+            draggable,
+        },
+        computed: {
+            dragOptions() {
+                return {
+                    animation: 600,
+                    group: "description",
+                    disabled: false,
+                    ghostClass: "ghost"
+                };
             }
         }
     }
 </script>
+<style scoped>
+    .ghost {
+        opacity: 0.5;
+    }
+</style>

@@ -1,15 +1,10 @@
 <template>
-    <div>
+    <router-link :to="{ name:'holiday.view.message', params: { 'commentId' :comment.id }}" class="card-wrapper" v-if="!editMode">
         <div class="card comment" v-if="comment.images.length == 1">
             <img :src="comment.images[0].path" class="card-img-top" :alt="comment.title">
             <div class="card-body">
                 <h5 class="card-title">{{ comment.title }}</h5>
                 <p class="card-text">{{ comment.subTitle }}</p>
-
-                <div v-if="editMode" >
-                    <router-link :to="{ name:'holiday.edit.message', params: { 'day' : dayId, 'commentId' : comment.id } }" class="btn btn-secondary">Edit</router-link>
-                    <button type="button" class="btn btn-danger" @click="deleteComment(comment.id)">Delete</button>
-                </div>
             </div>
         </div>
         <div class="card comment double" v-else-if="comment.images.length == 2">
@@ -21,31 +16,27 @@
             <div class="card-body">
                 <h5 class="card-title">{{ comment.title }}</h5>
                 <p class="card-text">{{ comment.subTitle }}</p>
-
-                <div v-if="editMode" >
-                    <router-link :to="{ name:'holiday.edit.message', params: { 'day' : dayId, 'commentId' : comment.id } }" class="btn btn-secondary">Edit</router-link>
-                    <button type="button" class="btn btn-danger" @click="deleteComment(comment.id)">Delete</button>
-                </div>
             </div>
         </div>
-
-        
-
         <div class="card comment" v-else>
             <div class="card-body">
                 <h4>{{ comment.title }}</h4>
                 <p class="card-text">{{ comment.subTitle }}</p>
-
-                <div v-if="editMode" >
-                    <router-link :to="{ name:'holiday.edit.message', params: { 'day' : dayId, 'commentId' : comment.id } }" class="btn btn-secondary">Edit</router-link>
-                    <button type="button" class="btn btn-danger" @click="deleteComment(comment.id)">Delete</button>
-                </div>
             </div>
             <div v-for="image in comment.images" :key="'activity_image' + image.id">
                 <img :src="image.path" />
             </div>
         </div>
         <!--/.Comment -->
+    </router-link>
+    <div class="activity-card" v-else>
+        <div class="body">
+            <h4>{{ comment.title }}</h4>
+            <p>{{ comment.subTitle }}</p>
+            <router-link :to="{ name:'holiday.edit.message', params: { 'day' : dayId, 'commentId' : comment.id } }" class="btn btn-secondary">Edit</router-link>
+            <button type="button" class="btn btn-danger" @click="deleteComment(comment.id)">Delete</button>
+        </div>
+        <img :src="comment.images[0].path" :alt="comment.title" v-if="comment.images[0]">
     </div>
 </template>
 

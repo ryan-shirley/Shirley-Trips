@@ -6,12 +6,16 @@ import UserHomeComponent from './views/home/UserHome.vue';
 import HolidayViewComponent from './views/holiday/HolidayView.vue';
 import DayViewComponent from './views/holiday/DayView.vue';
 
+// Messages
+import ViewMessageComponent from './views/holiday/messages/ViewMessage.vue';
 import AddMessageComponent from './views/holiday/messages/AddMessage.vue';
 import EditMessageComponent from './views/holiday/messages/EditMessage.vue';
 
+// Flights
 import AddFlightComponent from './views/holiday/flights/AddFlight.vue';
 import EditFlightComponent from './views/holiday/flights/EditFlight.vue';
 
+// Photos
 import AddPhotoComponent from './views/holiday/photos/AddPhoto.vue';
 
 export const routes = [
@@ -39,29 +43,37 @@ export const routes = [
             },
         ]
     },
+    // Messages
     {
-        path: '/holiday/:holidayId/add/:dayId/message',
+        path: '/holiday/:holidayId/day/:dayId/message/:commentId',
+        name: 'holiday.view.message',
+        component: ViewMessageComponent,
+    },
+    {
+        path: '/holiday/:holidayId/day/:dayId/message/add',
         name: 'holiday.add.message',
         component: AddMessageComponent,
     },
     {
-        path: '/holiday/:holidayId/edit/:dayId/message/:commentId',
+        path: '/holiday/:holidayId/day/:dayId/message/:commentId/edit',
         name: 'holiday.edit.message',
         component: EditMessageComponent,
     },
-    // {
-    //     path: '/holiday/:id/add/:day/flight',
-    //     name: 'holiday.add.flight',
-    //     component: AddFlightComponent,
-    // },
-    // {
-    //     path: '/holiday/:id/edit/:day/flight/:flightId',
-    //     name: 'holiday.edit.flight',
-    //     component: EditFlightComponent,
-    // },
-    // {
-    //     path: '/holiday/:id/add/:day/photo',
-    //     name: 'holiday.add.photo',
-    //     component: AddPhotoComponent,
-    // },
+    // Flights
+    {
+        path: '/holiday/:holidayId/day/:dayId/flight/add',
+        name: 'holiday.add.flight',
+        component: AddFlightComponent,
+    },
+    {
+        path: '/holiday/:holidayId/day/:dayId/flight/:flightId/edit',
+        name: 'holiday.edit.flight',
+        component: EditFlightComponent,
+    },
+    // Photo Messages
+    {
+        path: '/holiday/:holidayId/day/:dayId/photo/add',
+        name: 'holiday.add.photo',
+        component: AddPhotoComponent,
+    },
 ];

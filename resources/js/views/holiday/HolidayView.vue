@@ -47,10 +47,10 @@
                 
                 
                 if(app.$route.params.dayId != undefined) {
-                    app.$router.push({ name: 'holiday.view.day', params: { 'dayId' : app.$route.params.dayId } })
+                    app.$router.replace({ name: 'holiday.view.day', params: { 'dayId' : app.$route.params.dayId } })
                 }
                 else {
-                    app.$router.push({ name: 'holiday.view.day', params: { 'dayId' : app.holiday.days[0].id } })
+                    app.$router.replace({ name: 'holiday.view.day', params: { 'dayId' : app.holiday.days[0].id } })
                 }
             })
             .catch(function (resp) {
