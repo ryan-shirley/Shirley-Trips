@@ -2,7 +2,7 @@
     <div class="container mb-5">
 
         <hotel-details 
-            v-if="hotel.name"
+            v-if="hotel"
             :hotel='hotel'
             :editMode="editMode"
             :dayId="dayId"
@@ -12,9 +12,8 @@
             <p>It looks like you have no home for the day..</p>
         </section>
        <!--/.Hotel -->
-        
 
-        <section class="activity-list" v-if="activities.length > 0">
+        <section class="activity-list" v-if="activities">
 
             <div v-for="activity in activities" :key="activity.activity_id">
 
@@ -68,36 +67,38 @@
                 let token = localStorage.getItem('token')
                 let activitiesRaw = app.activitiesRaw
 
-                for (var i = 0; i < activitiesRaw.length; i++) {
-                    let activity = activitiesRaw[i]
+                if(activitiesRaw != undefined || activitiesRaw != null) {
+                    for (var i = 0; i < activitiesRaw.length; i++) {
+                        let activity = activitiesRaw[i]
 
-                    if(activity.comment_id != null) {
-                        axios.get('/api/comment/' + activity.comment_id, {
-                                headers: { Authorization: "Bearer " + token }
-                            })
-                            .then(function (resp) {
-                                let data = resp.data
-                                data.activity_id = activity.id
+                        if(activity.comment_id != null) {
+                            axios.get('/api/comment/' + activity.comment_id, {
+                                    headers: { Authorization: "Bearer " + token }
+                                })
+                                .then(function (resp) {
+                                    let data = resp.data
+                                    data.activity_id = activity.id
 
-                                app.activities.push(data)
-                            })
-                            .catch(function (resp) {
-                                alert('Could not load comment')
-                            })
-                    }
-                    else if (activity.flight_id != null) {
-                        axios.get('/api/flight/' + activity.flight_id, {
-                                headers: { Authorization: "Bearer " + token }
-                            })
-                            .then(function (resp) {
-                                let data = resp.data
-                                data.activity_id = activity.id
+                                    app.activities.push(data)
+                                })
+                                .catch(function (resp) {
+                                    alert('Could not load comment')
+                                })
+                        }
+                        else if (activity.flight_id != null) {
+                            axios.get('/api/flight/' + activity.flight_id, {
+                                    headers: { Authorization: "Bearer " + token }
+                                })
+                                .then(function (resp) {
+                                    let data = resp.data
+                                    data.activity_id = activity.id
 
-                                app.activities.push(data)
-                            })
-                            .catch(function (resp) {
-                                alert('Could not load flight')
-                            })
+                                    app.activities.push(data)
+                                })
+                                .catch(function (resp) {
+                                    alert('Could not load flight')
+                                })
+                        }
                     }
                 }
             },

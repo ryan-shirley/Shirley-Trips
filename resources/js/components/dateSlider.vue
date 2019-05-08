@@ -36,7 +36,7 @@
         props: {
             parentData: Array,
             startPosition: {
-                type: Number,
+                type: [String, Number]
             }
         },
         data() {
@@ -64,7 +64,7 @@
         methods: {
             dayChanged(event) {
                 let index = event.property.value
-                this.$emit('childToParent', this.days[index].id)
+                this.$router.push({ name: 'holiday.view.day', params: { 'dayId' : this.days[index].id } })
             },
             getWeekDay(date){
                 //Create an array containing each day, starting with Sunday.

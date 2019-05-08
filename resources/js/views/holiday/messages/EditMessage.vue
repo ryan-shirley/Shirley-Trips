@@ -3,7 +3,7 @@
         <navigation></navigation>
 
         <section class="bg-primary page-title">
-                <h1>Add Message</h1>
+                <h1>Edit Message</h1>
         </section>
 
         <section class="container">
@@ -39,7 +39,7 @@
                 form: new Form('/comment/' + this.$route.params.commentId, 'put', true, {
                     title: '',
                     subTitle: '',
-                    dayId: this.$route.params.day
+                    dayId: this.$route.params.dayId
                 }),
             }
         },
@@ -64,7 +64,7 @@
 
                 this.form.submit()
                     .then(data => {
-                        app.$router.push({name: 'holiday.view', params: { 'editMode': true, 'dayStartPosition' : app.form.dayId } })
+                        app.$router.push({name: 'holiday.view.day', params: { 'editMode': true } })
                     })
                     .catch(errors => console.log(errors))
             }

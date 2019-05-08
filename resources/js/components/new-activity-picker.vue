@@ -38,10 +38,7 @@
         name: 'new-acitvity-picker',
         props: {
             dayId: {
-                type: Number
-            },
-            day: {
-                type: String
+                type: [String, Number]
             }
         },
         methods: {
@@ -52,7 +49,7 @@
                     this.$router.push({ name: 'holiday.add.message', params: { 'day': this.dayId } })
                 }
                 else if (acitvity == 'flight') {
-                    this.$router.push({ name: 'holiday.add.flight', params: { 'day': this.dayId, 'dayString': this.day } })
+                    this.$router.push({ name: 'holiday.add.flight', params: { 'day': this.dayId } })
                 }
                 else if (acitvity == 'photo') {
                     this.$router.push({ name: 'holiday.add.photo', params: { 'day': this.dayId } })

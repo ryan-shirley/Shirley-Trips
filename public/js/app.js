@@ -1890,7 +1890,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'activity-list',
   props: {
@@ -1914,38 +1913,40 @@ __webpack_require__.r(__webpack_exports__);
       var token = localStorage.getItem('token');
       var activitiesRaw = app.activitiesRaw;
 
-      var _loop = function _loop() {
-        var activity = activitiesRaw[i];
+      if (activitiesRaw != undefined || activitiesRaw != null) {
+        var _loop = function _loop() {
+          var activity = activitiesRaw[i];
 
-        if (activity.comment_id != null) {
-          axios.get('/api/comment/' + activity.comment_id, {
-            headers: {
-              Authorization: "Bearer " + token
-            }
-          }).then(function (resp) {
-            var data = resp.data;
-            data.activity_id = activity.id;
-            app.activities.push(data);
-          })["catch"](function (resp) {
-            alert('Could not load comment');
-          });
-        } else if (activity.flight_id != null) {
-          axios.get('/api/flight/' + activity.flight_id, {
-            headers: {
-              Authorization: "Bearer " + token
-            }
-          }).then(function (resp) {
-            var data = resp.data;
-            data.activity_id = activity.id;
-            app.activities.push(data);
-          })["catch"](function (resp) {
-            alert('Could not load flight');
-          });
+          if (activity.comment_id != null) {
+            axios.get('/api/comment/' + activity.comment_id, {
+              headers: {
+                Authorization: "Bearer " + token
+              }
+            }).then(function (resp) {
+              var data = resp.data;
+              data.activity_id = activity.id;
+              app.activities.push(data);
+            })["catch"](function (resp) {
+              alert('Could not load comment');
+            });
+          } else if (activity.flight_id != null) {
+            axios.get('/api/flight/' + activity.flight_id, {
+              headers: {
+                Authorization: "Bearer " + token
+              }
+            }).then(function (resp) {
+              var data = resp.data;
+              data.activity_id = activity.id;
+              app.activities.push(data);
+            })["catch"](function (resp) {
+              alert('Could not load flight');
+            });
+          }
+        };
+
+        for (var i = 0; i < activitiesRaw.length; i++) {
+          _loop();
         }
-      };
-
-      for (var i = 0; i < activitiesRaw.length; i++) {
-        _loop();
       }
     },
     removeActivity: function removeActivity(activity_id) {
@@ -2104,7 +2105,7 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     parentData: Array,
     startPosition: {
-      type: Number
+      type: [String, Number]
     }
   },
   data: function data() {
@@ -2132,7 +2133,12 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     dayChanged: function dayChanged(event) {
       var index = event.property.value;
-      this.$emit('childToParent', this.days[index].id);
+      this.$router.push({
+        name: 'holiday.view.day',
+        params: {
+          'dayId': this.days[index].id
+        }
+      });
     },
     getWeekDay: function getWeekDay(date) {
       //Create an array containing each day, starting with Sunday.
@@ -2371,10 +2377,7 @@ __webpack_require__.r(__webpack_exports__);
   name: 'new-acitvity-picker',
   props: {
     dayId: {
-      type: Number
-    },
-    day: {
-      type: String
+      type: [String, Number]
     }
   },
   methods: {
@@ -2392,8 +2395,7 @@ __webpack_require__.r(__webpack_exports__);
         this.$router.push({
           name: 'holiday.add.flight',
           params: {
-            'day': this.dayId,
-            'dayString': this.day
+            'day': this.dayId
           }
         });
       } else if (acitvity == 'photo') {
@@ -2490,6 +2492,58 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/DayView.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/holiday/DayView.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    editMode: Boolean
+  },
+  data: function data() {
+    return {
+      day: {}
+    };
+  },
+  mounted: function mounted() {
+    var app = this;
+    var token = localStorage.getItem('token');
+    var id = app.$route.params.dayId;
+    axios.get('/api/day/' + id, {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    }).then(function (resp) {
+      app.day = resp.data;
+    })["catch"](function (resp) {
+      alert('Could not load day');
+    });
+  },
+  methods: {}
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/HolidayView.vue?vue&type=script&lang=js&":
 /*!*************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/holiday/HolidayView.vue?vue&type=script&lang=js& ***!
@@ -2531,21 +2585,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     var app = this;
-    var id = app.$route.params.id;
-    var dayStartPosition = app.$route.params.dayStartPosition;
+    var id = app.$route.params.holidayId;
     var token = localStorage.getItem('token');
     axios.get('/api/holiday/' + id, {
       headers: {
@@ -2555,10 +2598,20 @@ __webpack_require__.r(__webpack_exports__);
       app.holiday = resp.data;
       app.editPermission();
 
-      if (dayStartPosition != undefined) {
-        app.loadDay(dayStartPosition);
+      if (app.$route.params.dayId != undefined) {
+        app.$router.push({
+          name: 'holiday.view.day',
+          params: {
+            'dayId': app.$route.params.dayId
+          }
+        });
       } else {
-        app.loadDay(app.holiday.days[0].id);
+        app.$router.push({
+          name: 'holiday.view.day',
+          params: {
+            'dayId': app.holiday.days[0].id
+          }
+        });
       }
     })["catch"](function (resp) {
       alert('Could not load holiday');
@@ -2568,18 +2621,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       holiday: {},
       editPer: false,
-      editMode: false,
-      day: {
-        id: 0,
-        day: '',
-        hotel: {
-          name: '',
-          location: '',
-          checkIn: '',
-          checkOut: ''
-        },
-        activitiesRaw: []
-      }
+      editMode: false
     };
   },
   methods: {
@@ -2602,29 +2644,6 @@ __webpack_require__.r(__webpack_exports__);
     month_name: function month_name(dt) {
       var mlist = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
       return mlist[dt.getMonth()];
-    },
-    loadDay: function loadDay(day_id) {
-      var app = this;
-      var token = localStorage.getItem('token');
-      app.day.hotel = {};
-      app.day.activitiesRaw = [];
-      axios.get('/api/day/' + day_id, {
-        headers: {
-          Authorization: "Bearer " + token
-        }
-      }).then(function (resp) {
-        var day = resp.data;
-        app.day.id = day.id;
-        app.day.day = day.day;
-
-        if (day.hotel != null) {
-          app.day.hotel = day.hotel;
-        }
-
-        app.day.activitiesRaw = day.activities;
-      })["catch"](function (resp) {
-        alert('Could not load day');
-      });
     },
     editModeToggle: function editModeToggle() {
       this.editMode = !this.editMode;
@@ -3111,10 +3130,9 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
       this.form.submit().then(function (data) {
         app.$router.push({
-          name: 'holiday.view',
+          name: 'holiday.view.day',
           params: {
-            'editMode': true,
-            'dayStartPosition': app.form.dayId
+            'editMode': true
           }
         });
       })["catch"](function (errors) {
@@ -3175,7 +3193,7 @@ __webpack_require__.r(__webpack_exports__);
       form: new _classes_Form_js__WEBPACK_IMPORTED_MODULE_0__["default"]('/comment/' + this.$route.params.commentId, 'put', true, {
         title: '',
         subTitle: '',
-        dayId: this.$route.params.day
+        dayId: this.$route.params.dayId
       })
     };
   },
@@ -3200,10 +3218,9 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
       this.form.submit().then(function (data) {
         app.$router.push({
-          name: 'holiday.view',
+          name: 'holiday.view.day',
           params: {
-            'editMode': true,
-            'dayStartPosition': app.form.dayId
+            'editMode': true
           }
         });
       })["catch"](function (errors) {
@@ -38916,7 +38933,7 @@ var render = function() {
     "div",
     { staticClass: "container mb-5" },
     [
-      _vm.hotel.name
+      _vm.hotel
         ? _c("hotel-details", {
             attrs: {
               hotel: _vm.hotel,
@@ -38929,7 +38946,7 @@ var render = function() {
             _c("p", [_vm._v("It looks like you have no home for the day..")])
           ]),
       _vm._v(" "),
-      _vm.activities.length > 0
+      _vm.activities
         ? _c(
             "section",
             { staticClass: "activity-list" },
@@ -39732,6 +39749,48 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/DayView.vue?vue&type=template&id=339d104a&":
+/*!*************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/holiday/DayView.vue?vue&type=template&id=339d104a& ***!
+  \*************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row justify-content-md-center" }, [
+    _c(
+      "div",
+      { staticClass: "col-12 col-md-4" },
+      [
+        _c("activity-list", {
+          key: _vm.day.day,
+          attrs: {
+            activitiesRaw: _vm.day.activities,
+            hotel: _vm.day.hotel,
+            day: _vm.day.day,
+            dayId: _vm.day.id,
+            editMode: _vm.editMode
+          }
+        })
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/HolidayView.vue?vue&type=template&id=15f31f97&":
 /*!*****************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/holiday/HolidayView.vue?vue&type=template&id=15f31f97& ***!
@@ -39788,37 +39847,22 @@ var render = function() {
       _vm._v(" "),
       _vm.holiday.days
         ? _c("date-slider", {
-            key: "day_" + _vm.day.id,
-            attrs: { parentData: _vm.holiday.days, startPosition: _vm.day.id },
-            on: { childToParent: _vm.loadDay }
+            key: "day_" + _vm.$route.params.dayId,
+            attrs: {
+              parentData: _vm.holiday.days,
+              startPosition: _vm.$route.params.dayId
+            }
           })
         : _vm._e(),
       _vm._v(" "),
-      _c("div", { staticClass: "row justify-content-md-center" }, [
-        _c(
-          "div",
-          { staticClass: "col-12 col-md-4" },
-          [
-            _vm.day.activitiesRaw.length || _vm.day.day.length
-              ? _c("activity-list", {
-                  key: _vm.day.day,
-                  attrs: {
-                    activitiesRaw: _vm.day.activitiesRaw,
-                    hotel: _vm.day.hotel,
-                    day: _vm.day.day,
-                    dayId: _vm.day.id,
-                    editMode: _vm.editMode
-                  }
-                })
-              : _vm._e()
-          ],
-          1
-        )
-      ]),
+      _c("router-view", {
+        key: "dayId_" + _vm.$route.params.dayId,
+        attrs: { editMode: _vm.editMode }
+      }),
       _vm._v(" "),
       _vm.editMode
         ? _c("new-acitvity-picker", {
-            attrs: { dayId: _vm.day.id, day: _vm.day.day }
+            attrs: { dayId: _vm.$route.params.dayId }
           })
         : _vm._e()
     ],
@@ -41162,7 +41206,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("section", { staticClass: "bg-primary page-title" }, [
-      _c("h1", [_vm._v("Add Message")])
+      _c("h1", [_vm._v("Edit Message")])
     ])
   }
 ]
@@ -57191,14 +57235,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _views_auth_LoginComponent_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./views/auth/LoginComponent.vue */ "./resources/js/views/auth/LoginComponent.vue");
 /* harmony import */ var _views_home_UserHome_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./views/home/UserHome.vue */ "./resources/js/views/home/UserHome.vue");
 /* harmony import */ var _views_holiday_HolidayView_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./views/holiday/HolidayView.vue */ "./resources/js/views/holiday/HolidayView.vue");
-/* harmony import */ var _views_holiday_messages_AddMessage_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./views/holiday/messages/AddMessage.vue */ "./resources/js/views/holiday/messages/AddMessage.vue");
-/* harmony import */ var _views_holiday_messages_EditMessage_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./views/holiday/messages/EditMessage.vue */ "./resources/js/views/holiday/messages/EditMessage.vue");
-/* harmony import */ var _views_holiday_flights_AddFlight_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/holiday/flights/AddFlight.vue */ "./resources/js/views/holiday/flights/AddFlight.vue");
-/* harmony import */ var _views_holiday_flights_EditFlight_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views/holiday/flights/EditFlight.vue */ "./resources/js/views/holiday/flights/EditFlight.vue");
-/* harmony import */ var _views_holiday_photos_AddPhoto_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./views/holiday/photos/AddPhoto.vue */ "./resources/js/views/holiday/photos/AddPhoto.vue");
+/* harmony import */ var _views_holiday_DayView_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./views/holiday/DayView.vue */ "./resources/js/views/holiday/DayView.vue");
+/* harmony import */ var _views_holiday_messages_AddMessage_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./views/holiday/messages/AddMessage.vue */ "./resources/js/views/holiday/messages/AddMessage.vue");
+/* harmony import */ var _views_holiday_messages_EditMessage_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/holiday/messages/EditMessage.vue */ "./resources/js/views/holiday/messages/EditMessage.vue");
+/* harmony import */ var _views_holiday_flights_AddFlight_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views/holiday/flights/AddFlight.vue */ "./resources/js/views/holiday/flights/AddFlight.vue");
+/* harmony import */ var _views_holiday_flights_EditFlight_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./views/holiday/flights/EditFlight.vue */ "./resources/js/views/holiday/flights/EditFlight.vue");
+/* harmony import */ var _views_holiday_photos_AddPhoto_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./views/holiday/photos/AddPhoto.vue */ "./resources/js/views/holiday/photos/AddPhoto.vue");
 // Views
 
  // Holidays
+
 
 
 
@@ -57217,29 +57263,22 @@ var routes = [{
   name: 'account.home',
   component: _views_home_UserHome_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
 }, {
-  path: '/holiday/:id',
+  path: '/holiday/:holidayId',
   name: 'holiday.view',
-  component: _views_holiday_HolidayView_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+  component: _views_holiday_HolidayView_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+  children: [{
+    path: 'day/:dayId',
+    name: 'holiday.view.day',
+    component: _views_holiday_DayView_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+  }]
 }, {
-  path: '/holiday/:id/add/:day/message',
+  path: '/holiday/:holidayId/add/:dayId/message',
   name: 'holiday.add.message',
-  component: _views_holiday_messages_AddMessage_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+  component: _views_holiday_messages_AddMessage_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
 }, {
-  path: '/holiday/:id/edit/:day/message/:commentId',
+  path: '/holiday/:holidayId/edit/:dayId/message/:commentId',
   name: 'holiday.edit.message',
-  component: _views_holiday_messages_EditMessage_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
-}, {
-  path: '/holiday/:id/add/:day/flight',
-  name: 'holiday.add.flight',
-  component: _views_holiday_flights_AddFlight_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
-}, {
-  path: '/holiday/:id/edit/:day/flight/:flightId',
-  name: 'holiday.edit.flight',
-  component: _views_holiday_flights_EditFlight_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
-}, {
-  path: '/holiday/:id/add/:day/photo',
-  name: 'holiday.add.photo',
-  component: _views_holiday_photos_AddPhoto_vue__WEBPACK_IMPORTED_MODULE_7__["default"]
+  component: _views_holiday_messages_EditMessage_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
 }];
 
 /***/ }),
@@ -57308,6 +57347,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LoginComponent_vue_vue_type_template_id_ce3daf68___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LoginComponent_vue_vue_type_template_id_ce3daf68___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/DayView.vue":
+/*!************************************************!*\
+  !*** ./resources/js/views/holiday/DayView.vue ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DayView_vue_vue_type_template_id_339d104a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DayView.vue?vue&type=template&id=339d104a& */ "./resources/js/views/holiday/DayView.vue?vue&type=template&id=339d104a&");
+/* harmony import */ var _DayView_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DayView.vue?vue&type=script&lang=js& */ "./resources/js/views/holiday/DayView.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _DayView_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _DayView_vue_vue_type_template_id_339d104a___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _DayView_vue_vue_type_template_id_339d104a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/holiday/DayView.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/DayView.vue?vue&type=script&lang=js&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/views/holiday/DayView.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DayView_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./DayView.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/DayView.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DayView_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/holiday/DayView.vue?vue&type=template&id=339d104a&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/views/holiday/DayView.vue?vue&type=template&id=339d104a& ***!
+  \*******************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DayView_vue_vue_type_template_id_339d104a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./DayView.vue?vue&type=template&id=339d104a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/holiday/DayView.vue?vue&type=template&id=339d104a&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DayView_vue_vue_type_template_id_339d104a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DayView_vue_vue_type_template_id_339d104a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
