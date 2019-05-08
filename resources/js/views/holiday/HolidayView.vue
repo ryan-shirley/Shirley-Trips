@@ -18,19 +18,22 @@
             :startPosition="day.id"
             v-on:childToParent="loadDay"  
             v-if="holiday.days"
-            :key="day.id"
+            :key="'day_' + day.id"
         ></date-slider>
 
-        <activity-list 
-            :activitiesRaw="day.activitiesRaw" 
-            :hotel="day.hotel"
-            :day="day.day"
-            :dayId="day.id"
-            :editMode="editMode"
-            v-if="day.activitiesRaw.length || day.day.length"
-            :key="day.day"
-        >
-        </activity-list>
+        <div class="row justify-content-md-center">
+            <div class="col-12 col-md-4">
+                <activity-list 
+                    :activitiesRaw="day.activitiesRaw" 
+                    :hotel="day.hotel"
+                    :day="day.day"
+                    :dayId="day.id"
+                    :editMode="editMode"
+                    v-if="day.activitiesRaw.length || day.day.length"
+                    :key="day.day"
+                />
+            </div>
+        </div>
 
         <new-acitvity-picker :dayId="day.id" :day="day.day" v-if="editMode"></new-acitvity-picker>
         
@@ -117,10 +120,7 @@
                     app.day.day = day.day
 
                     if(day.hotel != null) {
-                        app.day.hotel.name = day.hotel.name
-                        app.day.hotel.location = day.hotel.location
-                        app.day.hotel.checkIn = day.hotel.checkIn
-                        app.day.hotel.checkOut = day.hotel.checkOut
+                        app.day.hotel = day.hotel
                     }
 
                     app.day.activitiesRaw = day.activities

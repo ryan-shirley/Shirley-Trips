@@ -33,12 +33,12 @@ Route::middleware('auth:api')->group(function () {
 
     // Comments
     Route::resource('comment', 'API\CommentController')->except([
-        'create', 'edit'
+        'index', 'create', 'edit'
     ]);
 
     // Flights
     Route::resource('flight', 'API\FlightController')->except([
-        'create', 'edit'
+        'index', 'create', 'edit'
     ]);
 
     // Airlines
@@ -48,7 +48,12 @@ Route::middleware('auth:api')->group(function () {
 
     // Comment Images
     Route::resource('comment-images', 'API\CommentImageController')->except([
-        'create', 'edit'
+        'index', 'create', 'edit', 'update'
+    ]);
+
+    // Images
+    Route::resource('images', 'API\ImagesController')->except([
+        'index', 'create', 'edit', 'update'
     ]);
 
 });

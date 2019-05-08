@@ -103,4 +103,24 @@ class FlightController extends Controller
 
         return $flight;
     }
+
+    public function destroy(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'activity_id' => 'required|numeric|exists:activities,id',
+        ]);
+
+        // Check if user has permission to actuall save this... ******
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        Activity::destroy($request->input('activity_id'));
+        
+        $flight = Flight::findOrFail($id);
+        $flight->delete();
+
+        return response()->json(['message' => 'Successfully deleted flight.'], 200);
+    }
 }

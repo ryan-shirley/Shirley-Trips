@@ -1,5 +1,6 @@
 // Body
 $body-bg: #F2F3F6;
+$body-color: #605D6C;
 
 // Typography
 $font-size-base: 0.9rem;
@@ -21,9 +22,8 @@ $cyan: #6cb2eb;
 // Theme Colours
 $primary: $purple;
 $primary-dark: darken( $primary, 10% );
-$text-primary: #605D6C;
+$text-primary: $body-color;
 $text-alterate: #A4AEB8;
-
 
 // Spacing
 $spacer: 1rem;

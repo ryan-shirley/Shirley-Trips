@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Validator;
 Use App\Comment;
 Use App\Activity;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
@@ -63,5 +65,31 @@ class CommentController extends Controller
         $comment->save();
 
         return $comment;
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'activity_id' => 'required|numeric|exists:activities,id',
+        ]);
+
+        // Check if user has permission to actuall save this... ******
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        Activity::destroy($request->input('activity_id'));
+
+        $images = DB::table('comment_images')->where('comment_id','=', $id)->pluck('path');
+        foreach($images as $path) {
+            Storage::disk('public')->delete(substr($path, 8));
+        }
+        DB::table('comment_images')->where('comment_id', '=', $id)->delete();
+        
+        $comment = Comment::findOrFail($id);
+        $comment->delete();
+
+        return response()->json(['message' => 'Successfully deleted comment.'], 200);
     }
 }

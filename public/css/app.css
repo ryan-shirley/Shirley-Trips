@@ -70,7 +70,7 @@ body {
   font-size: 0.9rem;
   font-weight: 400;
   line-height: 1.6;
-  color: #212529;
+  color: #605D6C;
   text-align: left;
   background-color: #F2F3F6;
 }
@@ -1620,7 +1620,7 @@ pre code {
 .table {
   width: 100%;
   margin-bottom: 1rem;
-  color: #212529;
+  color: #605D6C;
 }
 
 .table th,
@@ -1670,7 +1670,7 @@ pre code {
 }
 
 .table-hover tbody tr:hover {
-  color: #212529;
+  color: #605D6C;
   background-color: rgba(0, 0, 0, 0.075);
 }
 
@@ -2070,7 +2070,7 @@ select.form-control:focus::-ms-value {
   padding-bottom: 0.375rem;
   margin-bottom: 0;
   line-height: 1.6;
-  color: #212529;
+  color: #605D6C;
   background-color: transparent;
   border: solid transparent;
   border-width: 1px 0;
@@ -2517,7 +2517,7 @@ textarea.form-control.is-invalid {
 .btn {
   display: inline-block;
   font-weight: 400;
-  color: #212529;
+  color: #605D6C;
   text-align: center;
   vertical-align: middle;
   -webkit-user-select: none;
@@ -2540,7 +2540,7 @@ textarea.form-control.is-invalid {
 }
 
 .btn:hover {
-  color: #212529;
+  color: #605D6C;
   text-decoration: none;
 }
 
@@ -3274,7 +3274,7 @@ input[type=button].btn-block {
   padding: 0.5rem 0;
   margin: 0.125rem 0 0;
   font-size: 0.9rem;
-  color: #212529;
+  color: #605D6C;
   text-align: left;
   list-style: none;
   background-color: #fff;
@@ -5539,7 +5539,7 @@ a.badge-dark.focus {
 }
 
 .list-group-item-action:active {
-  color: #212529;
+  color: #605D6C;
   background-color: #e9ecef;
 }
 
@@ -6442,7 +6442,7 @@ a.close.disabled {
 
 .popover-body {
   padding: 0.5rem 0.75rem;
-  color: #212529;
+  color: #605D6C;
 }
 
 .carousel {
@@ -10520,7 +10520,7 @@ a.text-dark:focus {
 }
 
 .text-body {
-  color: #212529 !important;
+  color: #605D6C !important;
 }
 
 .text-muted {
@@ -10838,6 +10838,19 @@ body {
   margin-bottom: 2rem;
 }
 
+.owl-carousel:before {
+  content: "";
+  background: #A4AEB8;
+  width: 3px;
+  height: 3px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  bottom: 5px;
+  border-radius: 5px;
+}
+
 .owl-carousel .owl-item.center .day {
   background: rgba(164, 174, 184, 0.1);
   height: 30px;
@@ -10861,5 +10874,115 @@ body {
   position: absolute;
   right: 20px;
   bottom: 20px;
+}
+
+.card.comment.double img {
+  height: 240px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.card.comment.double .col-6:first-child img {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-right: 1px solid #fff;
+}
+
+.card.comment.double .col-6:last-child img {
+  border-top-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: 1px solid #fff;
+}
+
+.card.flight .date {
+  color: #fff;
+  text-align: center;
+  line-height: 17px;
+  padding: 4px 0;
+  float: left;
+}
+
+.card.flight .date p {
+  margin: 0;
+}
+
+.card.flight .date .number {
+  font-size: 18px;
+}
+
+.card.flight .date .month {
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+.card.flight .airline-name {
+  display: block;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.card.flight .airline-logo img {
+  width: 50px;
+  height: 50px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 5px;
+  float: right;
+}
+
+.card.flight .card-header {
+  position: relative;
+}
+
+.card.flight .card-header:before,
+.card.flight .card-header:after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  background: #F2F3F6;
+  position: absolute;
+  border-radius: 20px;
+  bottom: -10px;
+}
+
+.card.flight .card-header:before {
+  left: -10px;
+}
+
+.card.flight .card-header:after {
+  right: -10px;
+}
+
+.card.flight .details p {
+  margin: 0;
+}
+
+.card.flight .details .ar-long {
+  color: #A4AEB8;
+}
+
+.card.flight .details .ar-short {
+  font-weight: bold;
+  font-size: 3rem;
+  line-height: 3rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  border: none;
+  box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.1);
+}
+
+.card .card-text {
+  color: #A4AEB8;
+}
+
+.card .card-title {
+  margin-bottom: 0;
 }
 

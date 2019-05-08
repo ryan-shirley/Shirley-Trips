@@ -1,0 +1,79 @@
+.card.flight {
+
+    .date {
+        color: $white;
+        text-align: center;
+        line-height: 17px;
+        padding: 4px 0;
+        float: left;
+
+        p {
+            margin: 0;
+        }
+
+        .number {
+            font-size: 18px;
+        }
+
+        .month {
+            text-transform: uppercase;
+            font-size: 10px;
+        }
+    }
+
+    .airline-name {
+        display: block;
+        text-align: center;
+        font-weight: 600;
+        font-size: $font-size-lg;
+    }
+
+    .airline-logo {
+        img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+            float: right;
+        }
+    }
+
+    .card-header {
+        position: relative;
+
+        &:before, &:after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            background: $body-bg;
+            position: absolute;
+            border-radius: 20px;
+            bottom: -10px;
+        }
+
+        &:before {
+            left: -10px;
+        }
+
+        &:after {
+            right: -10px;
+        }
+    }
+
+    .details {
+        p {
+            margin: 0;
+        }
+
+        .ar-long {
+            color: $text-alterate;
+        }
+    
+        .ar-short {
+            font-weight: bold;
+            font-size: 3rem;
+            line-height: 3rem;
+        }
+    }
+
+}

@@ -30,7 +30,7 @@
                     <input type="file" multiple="multiple" id="images" @change="uploadFieldChange">
                     <hr>
                     <div class="col-md-12">
-                        <div class="attachment-holder animated fadeIn" v-cloak v-for="(image, index) in images"> 
+                        <div class="attachment-holder animated fadeIn" v-cloak v-for="image in images" :key="image.path"> 
                             <span class="label label-primary">{{ image.name + ' (' + Number((image.size / 1024 / 1024).toFixed(1)) + 'MB)'}}</span> 
                             <span class="" style="background: red; cursor: pointer;" @click="removeImage(image)"><button class="btn btn-xs btn-danger">Remove</button></span>
                         </div>
