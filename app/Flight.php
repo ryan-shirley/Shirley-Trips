@@ -21,4 +21,12 @@ class Flight extends Model
     {
         return $this->belongsTo('App\Activity');
     }
+
+    /**
+     * Get the connecting flight for the flight.
+     */
+    public function connectingFlight()
+    {
+        return $this->hasOne('App\Flight', 'id');
+    }
 }

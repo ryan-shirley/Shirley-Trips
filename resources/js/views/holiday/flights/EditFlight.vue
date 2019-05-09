@@ -3,11 +3,38 @@
         <navigation></navigation>
 
         <section class="bg-primary page-title">
-                <h1>Add Flight</h1>
+                <h1>Edit Flight</h1>
         </section>
 
         <section class="container">
             <form @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
+
+                <div class="row" v-if="isConnectingFlight">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="airline">Previous Flight</label>
+
+                            <select class="form-control" v-model="form.connectingFlightId">
+                                <option v-for="flight in previousFlights" :value="flight.id" :key="flight.id">
+                                    {{ flight.originAirportShort }} - {{ flight.destinationAirportShort }}
+                                </option>
+                            </select>
+
+                            <span class="badge badge-danger" v-text="form.errors.get('connectingFlightId')" v-if="form.errors.has('connectingFlightId')"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="layoverLength">Layover Length (mins)</label>
+
+                            <input type="text" name="flightNumber" class="form-control" v-model="form.layoverLength" />
+
+                            <span class="badge badge-danger" v-text="form.errors.get('layoverLength')" v-if="form.errors.has('layoverLength')"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
 
                 <div class="row">
                     <div class="col-6">
@@ -146,9 +173,13 @@
                     destinationTime: '',
                     destinationAirportShort: '',
                     destinationAirportLong: '',
-                    dayId: this.$route.params.day
+                    connectingFlightId: '',
+                    layoverLength: '',
+                    dayId: this.$route.params.dayId
                 }),
-                airlines: []
+                isConnectingFlight: false,
+                airlines: [],
+                previousFlights: []
             }
         },
         mounted() {
@@ -184,6 +215,12 @@
                 let destinationDayTime = new Date(resp.data.destinationDayTime)
                 app.form.destinationDate = destinationDayTime.getFullYear() + "-" + app.appendLeadingZeroes(destinationDayTime.getMonth() + 1) + "-" + app.appendLeadingZeroes(destinationDayTime.getDate());
                 app.form.destinationTime = app.appendLeadingZeroes(destinationDayTime.getHours()) + ":" + app.appendLeadingZeroes(destinationDayTime.getMinutes())
+
+                app.form.connectingFlightId = resp.data.connectingFlightId
+                if(resp.data.connectingFlightId != null) {
+                    app.isConnectingFlight = true
+                    app.form.layoverLength = resp.data.layoverLength
+                }
             })
             .catch(errors => alert('Could not load flight'))
         },
@@ -203,6 +240,24 @@
                 }
                 return n
             }
+        },
+        watch: {
+            isConnectingFlight: function (connecting) {
+            let app = this
+            let token = localStorage.getItem('token')
+
+                if(connecting && (this.previousFlights != undefined || this.previousFlights.length == 0)) {
+                    console.log('Loading connecting flights')
+                    // Load Flights for a day
+                    axios.get('/api/day/' + app.$route.params.dayId + '/flights', {
+                        headers: { Authorization: "Bearer " + token }
+                    })
+                    .then(resp => {
+                        app.previousFlights = resp.data
+                    })
+                    .catch(errors => alert('Could not load flights'))
+                }
+            },
         }
     }
 </script>

@@ -23,6 +23,9 @@
                 <img :src="holiday.image.path">
             </div>
         </section>
+        <section v-else>
+            <h2>Oops looks like you have no holidays yet. Why not try creating one?</h2>
+        </section>
     </div>
 </template>
 

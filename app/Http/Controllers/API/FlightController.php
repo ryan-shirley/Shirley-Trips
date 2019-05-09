@@ -31,7 +31,9 @@ class FlightController extends Controller
             'destinationTime' => 'required|date_format:H:i',
             'destinationAirportShort' => 'required|string|max:50',
             'destinationAirportLong' => 'required|string|max:150',
-            'dayId' => 'required|numeric|exists:days,id'
+            'dayId' => 'required|numeric|exists:days,id',
+            'connectingFlightId' => 'nullable|numeric|exists:flights,id',
+            'layoverLength' => 'required_with:connectingFlightId',
         ]);
 
         // Check if user has permission to actuall save this... ******
@@ -53,6 +55,10 @@ class FlightController extends Controller
         $flight->originAirportLong = $request->input('originAirportLong');
         $flight->destinationAirportShort = $request->input('destinationAirportShort');
         $flight->destinationAirportLong = $request->input('destinationAirportLong');
+        
+        // Layover + Connecting Flight
+        $flight->connectingFlightId = $request->input('connectingFlightId');
+        $flight->layoverLength = $request->input('layoverLength');
         $flight->save();
 
         $activity = new Activity();
@@ -77,7 +83,9 @@ class FlightController extends Controller
             'destinationTime' => 'required|date_format:H:i',
             'destinationAirportShort' => 'required|string|max:50',
             'destinationAirportLong' => 'required|string|max:150',
-            'dayId' => 'required|numeric|exists:days,id'
+            'dayId' => 'required|numeric|exists:days,id',
+            'connectingFlightId' => 'nullable|numeric|exists:flights,id',
+            'layoverLength' => 'required_with:connectingFlightId',
         ]);
 
         // Check if user has permission to actuall save this... ******
@@ -99,6 +107,10 @@ class FlightController extends Controller
         $flight->originAirportLong = $request->input('originAirportLong');
         $flight->destinationAirportShort = $request->input('destinationAirportShort');
         $flight->destinationAirportLong = $request->input('destinationAirportLong');
+        
+        // Layover + Connecting Flight
+        $flight->connectingFlightId = $request->input('connectingFlightId');
+        $flight->layoverLength = $request->input('layoverLength');
         $flight->save();
 
         return $flight;

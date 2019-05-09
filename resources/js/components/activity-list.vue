@@ -18,8 +18,8 @@
             <draggable 
                 v-model="activities" 
                 v-bind="dragOptions"
-                v-if="editMode"
                 @change="onReorderList"
+                :sort="editMode"
             >
             <transition-group >
                 <div v-for="activity in activities" :key="activity.activity_id">
@@ -43,26 +43,6 @@
                 </div>
             </transition-group>
             </draggable>
-            <div v-for="activity in activities" :key="activity.activity_id" v-else>
-
-                    <flight-details 
-                        v-if="activity.airline_id != null"
-                        :flight='activity'
-                        :editMode="editMode"
-                        :dayId="dayId"
-                        v-on:flightDeleted="removeActivity"  
-                    />
-
-                    <comment-details 
-                        v-if="activity.title != null"
-                        :comment='activity'
-                        :editMode="editMode"
-                        :dayId="dayId"
-                        v-on:commentDeleted="removeActivity"  
-                    />
-
-                </div>
-
         </section>
         <section v-else>
                 <h3>You have no activities for this day..</h3>
@@ -111,6 +91,7 @@
                                     data.activity_id = activity.id
 
                                     app.activities.push(data)
+                                    app.checkAllActivitiesLoaded()
                                 })
                                 .catch(function (resp) {
                                     alert('Could not load comment')
@@ -125,8 +106,10 @@
                                     data.activity_id = activity.id
 
                                     app.activities.push(data)
+                                    app.checkAllActivitiesLoaded()
                                 })
                                 .catch(function (resp) {
+                                    console.log(resp)
                                     alert('Could not load flight')
                                 })
                         }
@@ -161,7 +144,12 @@
                         alert('Could not sort activity list')
                     })
                 }
-            }
+            },
+            checkAllActivitiesLoaded() {
+                if(this.activitiesRaw.length == this.activities.length) {
+                    // Do someting
+                }
+            },
         },
         components: {
             draggable,

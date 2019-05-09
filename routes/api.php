@@ -30,6 +30,7 @@ Route::middleware('auth:api')->group(function () {
 
     // Days
     Route::get('day/{id}', 'API\DayController@show');
+    Route::get('day/{id}/flights', 'API\DayController@flights');
 
     // Comments
     Route::resource('comment', 'API\CommentController')->except([

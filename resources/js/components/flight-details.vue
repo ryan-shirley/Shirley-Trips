@@ -25,8 +25,9 @@
                     <p>{{ tConvert(flight.originDayTime.slice(11, -3)) }}</p>
                 </div>
                 <div class="col-4">
-                    <p>{{ flight.duration }}</p>
-                    <p>{{ flight.flightNumber }}</p>
+                    <p>Duration - {{ flight.duration }}</p>
+                    <p>Flight Number {{ flight.flightNumber }}</p>
+                    <p v-if="flight.layoverLength">Layover length {{ flight.layoverLength }}</p>
                 </div>
                 <div class="col-4">
                     <p class="ar-long">{{ flight.destinationAirportLong }}</p>

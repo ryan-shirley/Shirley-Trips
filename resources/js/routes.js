@@ -4,6 +4,7 @@ import UserHomeComponent from './views/home/UserHome.vue';
 
 // Holidays
 import HolidayViewComponent from './views/holiday/HolidayView.vue';
+import HolidayCreateComponent from './views/holiday/HolidayCreate.vue';
 import DayViewComponent from './views/holiday/DayView.vue';
 
 // Messages
@@ -42,6 +43,11 @@ export const routes = [
                 component: DayViewComponent
             },
         ]
+    },
+    {
+        path: '/createHoliday',
+        name: 'holiday.create',
+        component: HolidayCreateComponent,
     },
     // Messages
     {

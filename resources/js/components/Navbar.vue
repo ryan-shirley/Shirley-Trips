@@ -15,7 +15,7 @@
             <div class="dropdown-menu dropdown-menu-right">
                 <button class="dropdown-item" type="button" @click="editModeToggle()">Edit</button>
                 <div class="dropdown-divider"></div>
-                <button class="dropdown-item" type="button">Delete Holiday</button>
+                <button class="dropdown-item" type="button" @click="deleteHoliday()">Delete Holiday</button>
             </div>
         </div>
 
@@ -24,6 +24,10 @@
                 <li class="nav-item" v-bind:class="{ 'active': checkActive('account.home') }">
                     <router-link :to="{ name: 'account.home' }" class="nav-link">Home</router-link>
                 </li>
+                <li class="nav-item" v-bind:class="{ 'active': checkActive('holiday.create') }">
+                     <router-link :to="{ name:'holiday.create'}" class="nav-link">Create Holiday</router-link>
+                </li>
+               
                 <li class="nav-item">
                     <button @click="logout()" class="nav-link">Logout</button>
                 </li>
@@ -64,6 +68,20 @@
             logout() {
                 let token = localStorage.removeItem('token')
                 this.$router.push({ name: 'login' })
+            },
+            deleteHoliday(id) {
+                if(confirm("Are you sure you want to delete this holiday?")) {
+                    let app = this
+                    let token = localStorage.getItem('token')
+                    
+                    axios.delete('/api/holiday/' + this.$route.params.holidayId, {
+                        headers: { Authorization: "Bearer " + token }
+                    })
+                    .then(resp => {
+                        app.$router.push({ name: 'account.home' })
+                    })
+                    .catch(error => alert("Could not delete holiday"))
+                }
             }
         }
     }

@@ -31,10 +31,12 @@
     </router-link>
     <div class="activity-card" v-else>
         <div class="body">
+            <div class="float-right">
+                <router-link :to="{ name:'holiday.edit.message', params: { 'day' : dayId, 'commentId' : comment.id } }" class="btn btn-secondary">Edit</router-link>
+                <button type="button" class="btn btn-danger" @click="deleteComment(comment.id)">Delete</button>
+            </div>
             <h4>{{ comment.title }}</h4>
             <p>{{ comment.subTitle }}</p>
-            <router-link :to="{ name:'holiday.edit.message', params: { 'day' : dayId, 'commentId' : comment.id } }" class="btn btn-secondary">Edit</router-link>
-            <button type="button" class="btn btn-danger" @click="deleteComment(comment.id)">Delete</button>
         </div>
         <img :src="comment.images[0].path" :alt="comment.title" v-if="comment.images[0]">
     </div>

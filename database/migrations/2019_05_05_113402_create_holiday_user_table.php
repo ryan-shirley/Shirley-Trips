@@ -18,7 +18,7 @@ class CreateHolidayUserTable extends Migration
             
             $table->bigInteger('holiday_id')->unsigned();
             $table->bigInteger('user_id')->unsigned();
-            $table->foreign('holiday_id')->references('id')->on('holidays');
+            $table->foreign('holiday_id')->references('id')->on('holidays')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users');
 
             $table->boolean('editPermission')->default(false);
