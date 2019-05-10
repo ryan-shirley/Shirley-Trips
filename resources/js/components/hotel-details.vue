@@ -1,11 +1,16 @@
 <template>
-    <div class="card hotel" v-if="hotel.checkIn == day">
-        <img v-if="hotelImagePath" :src="hotelImagePath" class="card-img-top" :alt="hotel.name">
-        <div class="card-body">
-            <h5 class="card-title">{{ hotel.name }}</h5>
-            <p class="card-text">{{ hotel.location }}</p>
+    <router-link 
+        :to="{ name: 'holiday.hotel.view', params: { 'hotelId' :hotel.id } }"
+        class="card-wrapper" 
+        v-if="hotel.checkIn == day" >
+        <div class="card hotel">
+            <img v-if="hotelImagePath" :src="hotelImagePath" class="card-img-top" :alt="hotel.name">
+            <div class="card-body">
+                <h5 class="card-title">{{ hotel.name }}</h5>
+                <p class="card-text">{{ hotel.location }}</p>
+            </div>
         </div>
-    </div>
+    </router-link>
     <div v-else class="text-center">
         <p>You are staying at the {{ hotel.name }} in {{ hotel.location }} today.</p>
     </div>
@@ -37,9 +42,6 @@
                 app.hotelImagePath = resp.data.path
             })
             .catch(error => alert("Could not get image for hotel"))
-        },
-        methods: {
-
         }
     }
 </script>

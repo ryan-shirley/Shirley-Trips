@@ -19,7 +19,7 @@ class CreateCommentImagesTable extends Migration
             $table->integer('order');
 
             $table->bigInteger('comment_id')->unsigned();
-            $table->foreign('comment_id')->references('id')->on('comments')->onDelete('cascade');
+            $table->foreign('comment_id')->references('id')->on('comments');
 
             $table->timestamps();
         });

@@ -54,6 +54,9 @@
                 else if (acitvity == 'photo') {
                     this.$router.push({ name: 'holiday.add.photo', params: { 'day': this.dayId } })
                 }
+                else if (acitvity == 'hotel') {
+                    this.$router.push({ name: 'holiday.add.hotel', params: { 'day': this.dayId } })
+                }
             }
         }
     }

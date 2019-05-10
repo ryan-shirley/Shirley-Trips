@@ -48,9 +48,10 @@ class PassportController extends Controller
         ];
         if (auth()->attempt($credentials)) {
             $user = auth()->user();
-            $token = $user->createToken('Medical-Centre')->accessToken;
+            $token = $user->createToken('Shirley-Trips')->accessToken;
             return response()->json([
-                'name' => $user->name,
+                'first_name' => $user->first_name,
+                'isAdmin' => $user->hasRole('admin'),
                 'email' => $user->email,
                 'token' => $token
             ], 200);
@@ -62,7 +63,7 @@ class PassportController extends Controller
 
     public function user()
     {
-        return response()->json(['user' => auth()->user()], 200);
+        return response()->json(['user' => auth()->user()->load('roles')], 200);
     }
 
     public function logout(Request $request)

@@ -15,19 +15,19 @@ class HotelsTableSeeder extends Seeder
      */
     public function run()
     {
-        $image = Image::where('id', 1)->first();
+        $image = Image::where('id', 3)->first();
 
         
         $hotel = new Hotel();
         $hotel->name = 'Ibis Bali Legian Street';
         $hotel->location = 'Seminyak';
-        $hotel->checkIn = '2019-06-12';
+        $hotel->checkIn = '2019-06-11';
         $hotel->checkOut = '2019-06-20';
         $hotel->image_id = $image->id;
         $hotel->save();
 
         // Add Hotel to days for checkin to checkout.
-        $holiday = Holiday::where('id', '2')->first();
+        $holiday = Holiday::where('id', 1)->first();
         $holiday_id = $holiday->id;
         $all_holiday_days = $holiday->days;
 

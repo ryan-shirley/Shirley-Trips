@@ -10675,6 +10675,10 @@ body {
   padding-bottom: 100px;
 }
 
+.sticky-top {
+  top: 44px;
+}
+
 .navbar-light .offcanvas-collapse {
   position: fixed;
   top: 44px;

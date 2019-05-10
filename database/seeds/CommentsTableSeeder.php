@@ -19,7 +19,7 @@ class CommentsTableSeeder extends Seeder
         $comment->save();
 
         $activity = new Activity();
-        $activity->day_id = 25;
+        $activity->day_id = 1;
         $activity->comment_id = $comment->id;
         $activity->order = 2;
         $activity->save();

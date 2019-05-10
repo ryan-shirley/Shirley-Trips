@@ -13,7 +13,9 @@
                 ...
             </button>
             <div class="dropdown-menu dropdown-menu-right">
-                <button class="dropdown-item" type="button" @click="editModeToggle()">Edit</button>
+                <button class="dropdown-item" type="button" @click="editModeToggle()">Toggle Edit Mode</button>
+                <div class="dropdown-divider"></div>
+                <router-link :to="{ name:'holiday.edit', params: { 'holidayId' :$route.params.holidayId } }" class="dropdown-item">Edit Holiday</router-link>
                 <div class="dropdown-divider"></div>
                 <button class="dropdown-item" type="button" @click="deleteHoliday()">Delete Holiday</button>
             </div>
@@ -25,7 +27,10 @@
                     <router-link :to="{ name: 'account.home' }" class="nav-link">Home</router-link>
                 </li>
                 <li class="nav-item" v-bind:class="{ 'active': checkActive('holiday.create') }">
-                     <router-link :to="{ name:'holiday.create'}" class="nav-link">Create Holiday</router-link>
+                    <router-link :to="{ name:'holiday.create'}" class="nav-link">Create Holiday</router-link>
+                </li>
+                <li class="nav-item" v-bind:class="{ 'active': checkActive('admin.home') }">
+                    <router-link :to="{ name:'admin.home'}" class="nav-link">Admin Dashboard</router-link>
                 </li>
                
                 <li class="nav-item">
@@ -67,6 +72,7 @@
             },
             logout() {
                 let token = localStorage.removeItem('token')
+                let isAdmin = localStorage.removeItem('isAdmin')
                 this.$router.push({ name: 'login' })
             },
             deleteHoliday(id) {

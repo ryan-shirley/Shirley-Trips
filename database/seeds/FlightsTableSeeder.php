@@ -29,7 +29,7 @@ class FlightsTableSeeder extends Seeder
         $flight->save();
 
         $activity = new Activity();
-        $activity->day_id = 25;
+        $activity->day_id = 1;
         $activity->flight_id = $flight->id;
         $activity->order = 1;
         $activity->save();

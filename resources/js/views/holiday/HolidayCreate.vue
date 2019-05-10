@@ -26,6 +26,7 @@
                 <div class="form-group">
                     <label for="image">Image</label>
                     <br />
+
                     <input type="file" @change="uploadFieldChange">
 
                     <span class="badge badge-danger" v-text="form.errors.get('image')" v-if="form.errors.has('image')"></span>
@@ -68,7 +69,7 @@
     export default {
         data() {
             return {
-                form: new Form('/holiday', 'post', true, true, {
+                form: new Form('/holiday', 'post', true, {
                     title: '',
                     subTitle: '',
                     image: '',

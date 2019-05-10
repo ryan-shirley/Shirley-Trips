@@ -13,7 +13,7 @@ class AirlinesTableSeeder extends Seeder
      */
     public function run()
     {
-        $image = Image::where('id', 1)->first();
+        $image = Image::where('id', 2)->first();
 
         $airline = new Airline();
         $airline->name = 'Lufthansa';

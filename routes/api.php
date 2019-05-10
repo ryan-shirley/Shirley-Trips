@@ -29,8 +29,13 @@ Route::middleware('auth:api')->group(function () {
     ]);
 
     // Days
-    Route::get('day/{id}', 'API\DayController@show');
-    Route::get('day/{id}/flights', 'API\DayController@flights');
+    Route::get('day/{id}', 'API\DayController@show')->name('day.show');
+    Route::get('day/{id}/flights', 'API\DayController@flights')->name('day.flights');
+
+    // Hotels
+    Route::resource('hotels', 'API\HotelController')->except([
+        'create', 'edit'
+    ]);
 
     // Comments
     Route::resource('comment', 'API\CommentController')->except([
@@ -43,9 +48,9 @@ Route::middleware('auth:api')->group(function () {
     ]);
 
     // Airlines
-    Route::resource('airlines', 'API\AirlineController')->except([
-        'create', 'edit'
-    ]);
+    Route::get('airlines', 'API\AirlineController@index')->name('airlines.index');
+    Route::get('airlines/{airline}', 'API\AirlineController@show')->name('airlines.show');
+    
 
     // Comment Images
     Route::resource('comment-images', 'API\CommentImageController')->except([
@@ -59,5 +64,13 @@ Route::middleware('auth:api')->group(function () {
 
     // Activities
     Route::put('activities/{id}', 'API\ActivityController@update');
+
+
+    Route::middleware('admin')->group(function () {
+        // Airline CRUD
+        Route::resource('airlines', 'API\AirlineController')->except([
+            'create', 'edit', 'show', 'index'
+        ]);
+    });
 
 });

@@ -39,7 +39,7 @@
                 form: new Form('/comment', 'post', true, {
                     title: '',
                     subTitle: '',
-                    dayId: this.$route.params.day
+                    dayId: this.$route.params.dayId
                 }),
             }
         },

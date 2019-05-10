@@ -4,8 +4,13 @@ import UserHomeComponent from './views/home/UserHome.vue';
 
 // Holidays
 import HolidayViewComponent from './views/holiday/HolidayView.vue';
+import HolidayEditComponent from './views/holiday/HolidayEdit.vue';
 import HolidayCreateComponent from './views/holiday/HolidayCreate.vue';
+// Day
 import DayViewComponent from './views/holiday/DayView.vue';
+// Hotel
+import HotelViewComponent from './views/holiday/hotel/HotelView.vue';
+import HotelAddComponent from './views/holiday/hotel/HotelAdd.vue';
 
 // Messages
 import ViewMessageComponent from './views/holiday/messages/ViewMessage.vue';
@@ -19,6 +24,40 @@ import EditFlightComponent from './views/holiday/flights/EditFlight.vue';
 // Photos
 import AddPhotoComponent from './views/holiday/photos/AddPhoto.vue';
 
+// Admin
+import AdminHomeComponent from './views/admin/AdminHomeComponent.vue';
+// Admin - Airlines
+import AirlinesListComponent from './views/admin/airlines/AirlinesList.vue';
+import AirlinesAddComponent from './views/admin/airlines/AirlinesAdd.vue';
+
+
+// Middleware
+import multiguard from 'vue-router-multiguard';
+
+const state = {
+    token: localStorage.getItem('token') || '',
+    isAdmin: localStorage.getItem('isAdmin') || false,
+  }
+
+const isLoggedIn = (to, from, next) => {
+    if(state.token) {
+        next()
+    }
+    else {
+        next({ name: 'login' }); // go to '/login';
+    }
+}
+
+const isAdmin = (to, from, next) => {
+    if(state.isAdmin) {
+        next()
+    }
+    else {
+        localStorage.removeItem('token')
+        next({ name: 'login' })
+    }
+}
+
 export const routes = [
     {
         path: '/',
@@ -31,16 +70,19 @@ export const routes = [
         path: '/home',
         name: 'account.home',
         component: UserHomeComponent,
+        beforeEnter: isLoggedIn
     },
     {
         path: '/holiday/:holidayId',
         name: 'holiday.view',
         component: HolidayViewComponent,
+        beforeEnter: isLoggedIn,
         children: [
             {
                 path: 'day/:dayId',
                 name: 'holiday.view.day',
-                component: DayViewComponent
+                component: DayViewComponent,
+                beforeEnter: isLoggedIn,
             },
         ]
     },
@@ -49,37 +91,83 @@ export const routes = [
         name: 'holiday.create',
         component: HolidayCreateComponent,
     },
+    {
+        path: '/holiday/:holidayId/edit',
+        name: 'holiday.edit',
+        component: HolidayEditComponent,
+        beforeEnter: isLoggedIn,
+    },
     // Messages
     {
         path: '/holiday/:holidayId/day/:dayId/message/:commentId',
         name: 'holiday.view.message',
         component: ViewMessageComponent,
+        beforeEnter: isLoggedIn,
     },
     {
         path: '/holiday/:holidayId/day/:dayId/message/add',
         name: 'holiday.add.message',
         component: AddMessageComponent,
+        beforeEnter: isLoggedIn,
     },
     {
         path: '/holiday/:holidayId/day/:dayId/message/:commentId/edit',
         name: 'holiday.edit.message',
         component: EditMessageComponent,
+        beforeEnter: isLoggedIn,
     },
     // Flights
     {
         path: '/holiday/:holidayId/day/:dayId/flight/add',
         name: 'holiday.add.flight',
         component: AddFlightComponent,
+        beforeEnter: isLoggedIn,
     },
     {
         path: '/holiday/:holidayId/day/:dayId/flight/:flightId/edit',
         name: 'holiday.edit.flight',
         component: EditFlightComponent,
+        beforeEnter: isLoggedIn,
     },
     // Photo Messages
     {
         path: '/holiday/:holidayId/day/:dayId/photo/add',
         name: 'holiday.add.photo',
         component: AddPhotoComponent,
+        beforeEnter: isLoggedIn,
     },
+    // Hotel
+    {
+        path: '/holiday/:holidayId/day/:dayId/hotel/:hotelId',
+        name: 'holiday.hotel.view',
+        component: HotelViewComponent,
+        beforeEnter: isLoggedIn,
+    },
+    {
+        path: '/holiday/:holidayId/day/:dayId/add/hotel/',
+        name: 'holiday.add.hotel',
+        component: HotelAddComponent,
+        beforeEnter: isLoggedIn,
+    },
+    // Admin Dashboard
+    {
+        path: '/admin',
+        name: 'admin.home',
+        component: AdminHomeComponent,
+        beforeEnter: multiguard([isLoggedIn, isAdmin]),
+        children: [
+            // Airlines
+            {
+                path: 'airlines',
+                name: 'admin.airlines.list',
+                component: AirlinesListComponent,
+            },
+            {
+                path: 'airlines/add',
+                name: 'admin.airlines.add',
+                component: AirlinesAddComponent,
+            },
+        ]
+    },
+    
 ];

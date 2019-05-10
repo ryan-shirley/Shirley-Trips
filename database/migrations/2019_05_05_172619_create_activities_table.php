@@ -23,7 +23,7 @@ class CreateActivitiesTable extends Migration
             $table->foreign('flight_id')->references('id')->on('flights');
 
             $table->bigInteger('comment_id')->unsigned()->nullable();
-            $table->foreign('comment_id')->references('id')->on('comments');
+            $table->foreign('comment_id')->references('id')->on('comments')->onDelete('cascade');
 
             $table->integer('order');
 

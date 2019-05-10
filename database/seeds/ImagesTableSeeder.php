@@ -13,7 +13,15 @@ class ImagesTableSeeder extends Seeder
     public function run()
     {
         $image = new Image();
-        $image->path = 'storage/holidays/holiday-image.jpg';
+        $image->path = 'storage/holidays/holiday.jpg';
+        $image->save();
+
+        $image = new Image();
+        $image->path = 'storage/airlines/Lufthansa-logo.jpg';
+        $image->save();
+
+        $image = new Image();
+        $image->path = 'storage/hotels/hotel.jpg';
         $image->save();
     }
 }

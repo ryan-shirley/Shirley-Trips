@@ -35,19 +35,8 @@
             let app = this
             let token = localStorage.getItem('token')
 
-            axios.get('/api/user', {
-                headers: { Authorization: "Bearer " + token }
-            })
-            .then(function (resp) {
-                let data = resp.data.user
-
-                app.user.first_name = data.first_name
-                app.user.last_name = data.last_name
-                app.user.email = data.email
-            })
-            .catch(function (resp) {
-                alert('Could not load user')
-            })
+            app.user.first_name = localStorage.getItem('first_name')
+            app.user.isAdmin = localStorage.getItem('isAdmin')
 
             axios.get('/api/inspiration', {
                 headers: { Authorization: "Bearer " + token }
@@ -73,8 +62,7 @@
             return {
                 user: {
                     first_name: '',
-                    last_name: '',
-                    email: '',
+                    isAdmin: false
                 },
                 inspiration: '',
                 holidays: []
