@@ -10679,6 +10679,16 @@ body {
   top: 44px;
 }
 
+::-moz-selection {
+  background: #450C88;
+  color: #fff;
+}
+
+::selection {
+  background: #450C88;
+  color: #fff;
+}
+
 .navbar-light .offcanvas-collapse {
   position: fixed;
   top: 44px;
@@ -10768,6 +10778,10 @@ body {
 
 .navbar-toggler:focus {
   outline: none;
+}
+
+.second-toggler {
+  padding: 10px;
 }
 
 .page-title {
@@ -10897,6 +10911,58 @@ body {
   position: fixed;
   right: 20px;
   bottom: 20px;
+  box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.1);
+}
+
+.new-activity .modal-content {
+  background: #F2F3F6;
+}
+
+.new-activity .card {
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.new-activity .card:hover {
+  cursor: pointer;
+  -webkit-transform: scale(1.04);
+          transform: scale(1.04);
+}
+
+.new-activity i {
+  background: rgba(96, 93, 108, 0.2);
+  color: #605D6C;
+  width: 50px;
+  height: 50px;
+  padding: 13px 0;
+  font-size: 22px;
+  border-radius: 50%;
+  border: 1px solid #605D6C;
+  margin-bottom: 1rem;
+}
+
+.new-activity i.flight {
+  background: rgba(69, 12, 136, 0.2);
+  color: #450C88;
+  border-color: #450C88;
+}
+
+.new-activity i.message {
+  background: rgba(52, 144, 220, 0.2);
+  color: #3490dc;
+  border-color: #3490dc;
+}
+
+.new-activity i.hotel {
+  background: rgba(56, 193, 114, 0.2);
+  color: #38c172;
+  border-color: #38c172;
+}
+
+.new-activity i.video {
+  background: rgba(246, 109, 155, 0.2);
+  color: #f66D9b;
+  border-color: #f66D9b;
 }
 
 .card.comment.double img {
@@ -10919,8 +10985,41 @@ body {
   border-left: 1px solid #fff;
 }
 
+.card.comment.tripple img {
+  height: 240px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.card.comment.tripple .left img {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-right: 1px solid #fff;
+}
+
+.card.comment.tripple .right img {
+  height: 119px;
+  border-left: 1px solid #fff;
+}
+
+.card.comment.tripple .right img:first-child {
+  margin-bottom: 2px;
+  border-top-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.card.comment.tripple .right img:last-child {
+  border-radius: 0;
+}
+
 .card.image-only img {
   border-radius: 10px;
+}
+
+.comment .description {
+  white-space: pre-wrap;
 }
 
 .card.flight .date {
@@ -10993,8 +11092,32 @@ body {
 
 .card.flight .details .ar-short {
   font-weight: bold;
-  font-size: 3rem;
-  line-height: 3rem;
+  font-size: 2rem;
+  line-height: 2rem;
+}
+
+.holiday .card {
+  color: #fff;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+  height: 344px;
+}
+
+.holiday .card .overlay {
+  background: rgba(0, 0, 0, 0.25);
+  padding: 2rem;
+  height: 100%;
+}
+
+.holiday .card .date {
+  position: absolute;
+  bottom: 2rem;
+}
+
+.holiday:hover {
+  text-decoration: none !important;
 }
 
 .card {
@@ -11020,5 +11143,9 @@ body {
 .card-wrapper:hover {
   text-decoration: none;
   color: inherit;
+}
+
+button:focus {
+  outline: none;
 }
 

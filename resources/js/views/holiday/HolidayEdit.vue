@@ -3,7 +3,7 @@
         <navigation></navigation>
 
         <section class="bg-primary page-title">
-            <h1>Create A Holiday!</h1>
+            <h1>Edit holiday</h1>
         </section>
 
         <section class="container">

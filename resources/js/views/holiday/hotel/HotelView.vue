@@ -1,6 +1,10 @@
 <template>
     <div>
-        <navigation></navigation>
+        <navigation
+            :viewing='true'
+            v-on:edit="switchToEditHotel"
+            v-on:delete="deleteHotel"
+        />
 
         <section v-if="hotel.image" class="bg-primary page-title bg-image mb-5" :style="{ 'background-image': 'url(' + hotel.image.path + ')' }">
             <div class="overlay">
@@ -74,6 +78,23 @@
                 var day = date.getDay();
                 //Return the element that corresponds to that index.
                 return weekdays[day];
+            },
+            switchToEditHotel() {
+                this.$router.push({name: 'holiday.edit.hotel', params: { 'dayId': this.$route.params.dayId, 'hotelId': this.hotel.id } })
+            },
+            deleteHotel() {
+                if(confirm("Are you sure you want to delete this hotel?")) {
+                    let app = this
+                    let token = localStorage.getItem('token')
+                    
+                    axios.delete('/api/hotels/' + app.hotel.id, {
+                        headers: { Authorization: "Bearer " + token }
+                    })
+                    .then(resp => {
+                       app.$router.push({name: 'holiday.view.day', params: { 'dayId': app.$route.params.dayId } })
+                    })
+                    .catch(error => alert("Could not delete hotel"))
+                }
             }
         }
     }

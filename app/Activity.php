@@ -23,6 +23,14 @@ class Activity extends Model
     }
 
     /**
+     * Get the videos for the activity.
+     */
+    public function videos()
+    {
+        return $this->hasMany('App\Video');
+    }
+
+    /**
      * Get the day for the activity.
      */
     public function day()

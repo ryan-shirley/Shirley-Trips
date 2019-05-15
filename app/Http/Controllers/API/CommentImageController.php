@@ -14,6 +14,7 @@ class CommentImageController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'image' => 'required|file|image',
+            'order' => 'required|numeric',
             'commentId' => 'required|numeric|exists:comments,id',
         ]);
 
@@ -26,13 +27,12 @@ class CommentImageController extends Controller
         $image = $request->file('image');
         $originalFileName = $image->getClientOriginalName();
         $extension = $image->getClientOriginalExtension();
-        // $filename = date('Y-m-d-His') . '_' . $request->input('name') . '.' . $extension;
-        $filename = $originalFileName . '-' . date('Y-m-d-His') . '.' . $extension;
+        $filename = date('Y-m-d-His') . '-' . $originalFileName;
         $path = $image->storeAs('comments', $filename, 'public');
 
         $image = new CommentImage();
         $image->path = 'storage/' . $path;
-        $image->order = 1;
+        $image->order = $request->input('order');
         $image->comment_id = $request->input('commentId');
         $image->save();
 

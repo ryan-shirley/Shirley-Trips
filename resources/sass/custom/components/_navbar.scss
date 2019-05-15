@@ -39,7 +39,6 @@
             }
         }
     }
-    
 }
 
 .fixed-top {
@@ -87,4 +86,8 @@
     &:focus {
         outline: none;
     }
+}
+
+.second-toggler {
+    padding: 10px;
 }

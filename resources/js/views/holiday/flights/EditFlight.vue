@@ -230,7 +230,7 @@
 
                 this.form.submit()
                     .then(data => {
-                        app.$router.push({name: 'holiday.view.day', params: { 'editMode': true } })
+                        app.$router.push({name: 'holiday.view.day'})
                     })
                     .catch(errors => console.log(errors))
             },

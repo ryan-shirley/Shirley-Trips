@@ -1,9 +1,9 @@
 <template>
     <div>
-        <navigation></navigation>
+        <navigation />
 
         <section class="bg-primary page-title">
-            <h1>Add Hotel</h1>
+            <h1>Edit Hotel</h1>
         </section>
 
         <section class="container">
@@ -26,7 +26,7 @@
                 <div class="form-group">
                     <label for="image">Image</label>
                     <br />
-
+                    <img :src="imagePath" class="img-thumbnail" style="max-width: 200px" />
                     <input type="file" @change="uploadFieldChange">
 
                     <span class="badge badge-danger" v-text="form.errors.get('image')" v-if="form.errors.has('image')"></span>
@@ -67,20 +67,22 @@
     import Form from '../../../classes/Form.js'
     // Uploading Image
     import FormData from 'form-data'
-import { parse } from 'path';
+    import { parse } from 'path';
 
     export default {
         data() {
             return {
-                form: new Form('/hotels', 'post', true, {
+                form: new Form('/hotels/' + this.$route.params.hotelId, 'put', true, {
                     name: '',
                     location: '',
-                    image: '',
-                    dayCheckInId: parseInt(this.$route.params.dayId),
+                    imageId: '',
+                    dayCheckInId: '',
                     dayCheckOutId: '',
                     holidayId: this.$route.params.holidayId
                 }),
-                days: []
+                days: [],
+                imagePath: '',
+                imageToUpload: ''
             }
         },
         mounted() {
@@ -94,6 +96,32 @@ import { parse } from 'path';
             })
             .then(resp => {
                 app.days = resp.data.days
+
+
+                // Load Hotel
+                axios.get('/api/hotels/' + this.$route.params.hotelId, {
+                    headers: { Authorization: "Bearer " + token }
+                })
+                .then(resps => {
+                    app.form.name = resps.data.name
+                    app.form.location = resps.data.location
+                    app.imagePath = resp.data.image.path
+
+                    for (var i = 0; i < app.days.length; i++) {
+                        let day = app.days[i]
+
+                        if(day.day == resps.data.checkIn) {
+                            app.form.dayCheckInId = day.id
+                        }
+                        else if (day.day == resps.data.checkOut) {
+                            app.form.dayCheckOutId = day.id
+                        }
+                    }
+                })
+                .catch(errors => {
+                    // alert('Could not load hotel')
+                    console.log(errors)
+                })
             })
             .catch(errors => alert('Could not load holiday days'))
         },
@@ -113,32 +141,53 @@ import { parse } from 'path';
                     return;
                 }
 
-                let data = new FormData()
-                data.append('name', app.form.name)
-                data.append('location', app.form.location)
-                data.append('image', app.form.image)
-                data.append('dayCheckInId', app.form.dayCheckInId)
-                data.append('dayCheckOutId', app.form.dayCheckOutId)
-                data.append('holidayId', app.form.holidayId)
+                if(app.imageToUpload) {
+                    // New image to upload
+                    app.uploadImage()
+                        .then(data => {
+                            app.form.imageId = data.id
 
-                axios.post('/api/hotels', data, {
-                    headers: { 
-                        Authorization: "Bearer " + token,
-                        'Content-Type': 'multipart/form-data'
-                    }
-                })
-                .then(function (resp) {
-                    console.log(resp)
-                    app.$router.push({name: 'holiday.view.day', params: { 'dayId': app.$route.params.dayId } })
-                })
-                .catch(function (resp) {
-                    // alert('Could not save holiday')
-                    console.log(resp)
-                    app.form.errors.record(resp.response.data)
-                })
+                            // Submit Main Form
+                            this.form.submit()
+                                .then(data => {
+                                    app.$router.push({name: 'holiday.view.day', params: { 'dayId': app.$route.params.dayId } })
+                                })
+                                .catch(errors => console.log(errors))
+                                })
+                }
+                else {
+                    // Submit Main Form
+                    this.form.submit()
+                        .then(data => {
+                            app.$router.push({name: 'holiday.view.day', params: { 'dayId': app.$route.params.dayId } })
+                        })
+                        .catch(errors => console.log(errors))
+                }
             },
             uploadFieldChange(event) {
-                this.form.image = event.target.files[0]
+                this.imageToUpload = event.target.files[0]
+            },
+            uploadImage() {
+                let app = this
+                let token = localStorage.getItem('token')
+                
+                let data = new FormData()
+                data.append('image', app.imageToUpload)
+                data.append('folder', 'hotels')
+
+                return new Promise((resolve, reject) => {
+                    axios.post('/api/images', data, {
+                            headers: { 
+                                Authorization: "Bearer " + token,
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        })
+                        .then(response => resolve(response.data) )
+                        .catch(error => {
+                            app.form.errors.record(error.response.data)
+                            reject(error.response.data)
+                        })
+                })
             }
         },
     }

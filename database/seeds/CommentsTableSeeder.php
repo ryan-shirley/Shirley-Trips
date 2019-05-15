@@ -16,6 +16,7 @@ class CommentsTableSeeder extends Seeder
         $comment = new Comment();
         $comment->title = 'Beach day with amazing view!';
         $comment->subTitle = 'Seminyak';
+        $comment->description = 'This is some text that I wanted to display here';
         $comment->save();
 
         $activity = new Activity();

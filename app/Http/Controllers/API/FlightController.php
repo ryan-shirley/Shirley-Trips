@@ -15,7 +15,7 @@ class FlightController extends Controller
     {
         $flight = Flight::findOrFail($id);
 
-        return $flight->load('airline');
+        return $flight->load('airline', 'activity');
     }
 
     public function store(Request $request)

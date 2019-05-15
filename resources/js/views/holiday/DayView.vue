@@ -6,7 +6,7 @@
                 :hotel="day.hotel"
                 :day="day.day"
                 :dayId="day.id"
-                :editMode="editMode"
+                :reOrderMode="reOrderMode"
                 :key="day.day"
             />
         </div>
@@ -17,7 +17,7 @@
 
     export default {
         props: {
-            editMode: Boolean,
+            reOrderMode: Boolean,
         },
         data() {
             return {

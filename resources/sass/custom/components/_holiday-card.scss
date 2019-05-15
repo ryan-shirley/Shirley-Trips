@@ -1,0 +1,27 @@
+.holiday {
+
+    .card {
+        color: $white;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        overflow: hidden;
+        height: 344px;
+    
+        .overlay {
+            background: rgba(0, 0, 0, 0.25);
+            padding: $spacer * 2;
+            height: 100%;
+        }
+    
+        .date {
+            position: absolute;
+            bottom: $spacer * 2;
+        }
+    
+    }
+
+    &:hover {
+        text-decoration: none !important; 
+    }
+}

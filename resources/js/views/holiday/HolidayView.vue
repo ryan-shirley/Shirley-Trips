@@ -2,7 +2,8 @@
     <div>
         <navigation 
             :editPermissions="editPer"
-            v-on:editModeToggle="editModeToggle"
+            :owner="owner"
+            v-on:reOrderModeToggle="reOrderModeToggle"
         ></navigation>
 
         <section v-if="holiday.image" class="bg-primary page-title bg-image" :style="{ 'background-image': 'url(' + holiday.image.path + ')' }">
@@ -21,11 +22,11 @@
         ></date-slider>
 
         <router-view 
-            :editMode="editMode"
+            :reOrderMode="reOrderMode"
             :key="'dayId_' + $route.params.dayId"
         ></router-view>
 
-        <new-acitvity-picker :dayId="$route.params.dayId" v-if="editMode"></new-acitvity-picker>
+        <new-acitvity-picker :dayId="$route.params.dayId" v-if="editPer"></new-acitvity-picker>
         
     </div>
 </template>
@@ -44,6 +45,7 @@
             .then(function (resp) {
                 app.holiday = resp.data
                 app.editPermission()
+                app.checkIsOwner()
                 
                 
                 if(app.$route.params.dayId != undefined) {
@@ -61,7 +63,8 @@
             return {
                 holiday: {},
                 editPer: false,
-                editMode: false,
+                reOrderMode: false,
+                owner: false
             }
         },
         methods: {
@@ -72,10 +75,17 @@
                 for (var i = 0; i < users.length ; i++) {
                     if(users[i].pivot.editPermission == true) {
                         app.editPer = true;
+                        return;
+                    }
+                }
+            },
+            checkIsOwner() {
+                let app = this
+                let users = app.holiday.users
 
-                        if(app.$route.params.editMode == true) {
-                            app.editMode = true
-                        }
+                for (var i = 0; i < users.length ; i++) {
+                    if(users[i].pivot.owner == true) {
+                        app.owner = true;
                         return;
                     }
                 }
@@ -84,8 +94,8 @@
                 let mlist = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
                 return mlist[dt.getMonth()];
             },
-            editModeToggle () {
-                this.editMode = !this.editMode
+            reOrderModeToggle () {
+                this.reOrderMode = !this.reOrderMode
             }
         }
     }

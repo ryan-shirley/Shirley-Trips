@@ -6,11 +6,14 @@ import UserHomeComponent from './views/home/UserHome.vue';
 import HolidayViewComponent from './views/holiday/HolidayView.vue';
 import HolidayEditComponent from './views/holiday/HolidayEdit.vue';
 import HolidayCreateComponent from './views/holiday/HolidayCreate.vue';
+
 // Day
 import DayViewComponent from './views/holiday/DayView.vue';
+
 // Hotel
 import HotelViewComponent from './views/holiday/hotel/HotelView.vue';
 import HotelAddComponent from './views/holiday/hotel/HotelAdd.vue';
+import HotelEditComponent from './views/holiday/hotel/HotelEdit.vue';
 
 // Messages
 import ViewMessageComponent from './views/holiday/messages/ViewMessage.vue';
@@ -20,9 +23,11 @@ import EditMessageComponent from './views/holiday/messages/EditMessage.vue';
 // Flights
 import AddFlightComponent from './views/holiday/flights/AddFlight.vue';
 import EditFlightComponent from './views/holiday/flights/EditFlight.vue';
+import ViewFlightComponent from './views/holiday/flights/ViewFlight.vue';
 
-// Photos
-import AddPhotoComponent from './views/holiday/photos/AddPhoto.vue';
+// Videos
+import VideoAddComponent from './views/holiday/videos/AddVideo.vue';
+import VideoEditComponent from './views/holiday/videos/EditVideo.vue';
 
 // Admin
 import AdminHomeComponent from './views/admin/AdminHomeComponent.vue';
@@ -105,7 +110,7 @@ export const routes = [
         beforeEnter: isLoggedIn,
     },
     {
-        path: '/holiday/:holidayId/day/:dayId/message/add',
+        path: '/holiday/:holidayId/day/:dayId/add/message',
         name: 'holiday.add.message',
         component: AddMessageComponent,
         beforeEnter: isLoggedIn,
@@ -118,6 +123,12 @@ export const routes = [
     },
     // Flights
     {
+        path: '/holiday/:holidayId/day/:dayId/flight/:flightId',
+        name: 'holiday.view.flight',
+        component: ViewFlightComponent,
+        beforeEnter: isLoggedIn,
+    },
+    {
         path: '/holiday/:holidayId/day/:dayId/flight/add',
         name: 'holiday.add.flight',
         component: AddFlightComponent,
@@ -129,13 +140,6 @@ export const routes = [
         component: EditFlightComponent,
         beforeEnter: isLoggedIn,
     },
-    // Photo Messages
-    {
-        path: '/holiday/:holidayId/day/:dayId/photo/add',
-        name: 'holiday.add.photo',
-        component: AddPhotoComponent,
-        beforeEnter: isLoggedIn,
-    },
     // Hotel
     {
         path: '/holiday/:holidayId/day/:dayId/hotel/:hotelId',
@@ -144,9 +148,28 @@ export const routes = [
         beforeEnter: isLoggedIn,
     },
     {
-        path: '/holiday/:holidayId/day/:dayId/add/hotel/',
+        path: '/holiday/:holidayId/day/:dayId/add/hotel',
         name: 'holiday.add.hotel',
         component: HotelAddComponent,
+        beforeEnter: isLoggedIn,
+    },
+    {
+        path: '/holiday/:holidayId/day/:dayId/hotel/:hotelId/edit',
+        name: 'holiday.edit.hotel',
+        component: HotelEditComponent,
+        beforeEnter: isLoggedIn,
+    },
+    // Video
+    {
+        path: '/holiday/:holidayId/day/:dayId/add/video',
+        name: 'holiday.add.video',
+        component: VideoAddComponent,
+        beforeEnter: isLoggedIn,
+    },
+    {
+        path: '/holiday/:holidayId/day/:dayId/video/:videoId/edit',
+        name: 'holiday.edit.video',
+        component: VideoEditComponent,
         beforeEnter: isLoggedIn,
     },
     // Admin Dashboard

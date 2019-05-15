@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(FlightsTableSeeder::class);
         $this->call(CommentsTableSeeder::class);
         $this->call(CommentImagesTableSeeder::class);
+        $this->call(VideosTableSeeder::class);
     }
 }

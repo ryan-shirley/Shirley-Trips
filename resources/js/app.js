@@ -11,10 +11,6 @@ import VueRouter from 'vue-router';
 import { routes } from './routes';
 import globalComponents from './GlobalComponents'
 
-// Date Range Picker
-import VueRangedatePicker from 'vue-rangedate-picker'
-Vue.use(VueRangedatePicker)
-
 // Routes
 Vue.use(VueRouter);
 

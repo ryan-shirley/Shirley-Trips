@@ -12,7 +12,9 @@
         </div>
     </router-link>
     <div v-else class="text-center">
-        <p>You are staying at the {{ hotel.name }} in {{ hotel.location }} today.</p>
+        <p>You are staying at the <router-link 
+        :to="{ name: 'holiday.hotel.view', params: { 'hotelId' :hotel.id } }"
+        class="card-wrapper">{{ hotel.name }} in {{ hotel.location }}</router-link> today.</p>
     </div>
     <!--/.Hotel -->
 </template>
@@ -42,6 +44,6 @@
                 app.hotelImagePath = resp.data.path
             })
             .catch(error => alert("Could not get image for hotel"))
-        }
+        },
     }
 </script>

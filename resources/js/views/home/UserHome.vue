@@ -10,18 +10,16 @@
         <section class="container" v-if="holidays.length != 0">
             <h2 class="mb-3">Your Last Holidays</h2>
 
-            <div class="activity-card" v-for="holiday in holidays" :key="holiday.id">
-                <div class="body">
-                    <h4>{{ holiday.title }}</h4>
-                    {{ holiday.subTitle }}
-                    <router-link :to="{ name:'holiday.view', params: { 'holidayId' :holiday.id }}" class="btn btn-primary">View</router-link>
-                    <span class="date">
-                        <p class="number">{{ holiday.beginDate.slice(-2) }}</p>
-                        <p class="month">{{ month_name(new Date(holiday.beginDate)) }}</p>
-                    </span>
+            <router-link class="holiday" :to="{ name:'holiday.view', params: { 'holidayId' :holiday.id }}" v-for="holiday in holidays" :key="holiday.id">
+                <div class="card" :style="{ 'background-image': 'url(' + holiday.image.path + ')' }">
+                    <div class="overlay">
+                        <h2 class="title">{{ holiday.title }}</h2>
+                        <p class="subTitle">{{ holiday.subTitle }}</p>
+                        <p class="date">{{ holiday.beginDate.slice(-2) }} {{ month_name(new Date(holiday.beginDate)) }} - {{ holiday.endDate.slice(-2) }} {{ month_name(new Date(holiday.endDate)) }}</p>
+                    </div>
                 </div>
-                <img :src="holiday.image.path">
-            </div>
+            </router-link>
+
         </section>
         <section v-else>
             <h2>Oops looks like you have no holidays yet. Why not try creating one?</h2>

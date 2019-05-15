@@ -19,7 +19,7 @@ class Flight extends Model
      */
     public function activity()
     {
-        return $this->belongsTo('App\Activity');
+        return $this->belongsTo('App\Activity', 'id', 'flight_id');
     }
 
     /**

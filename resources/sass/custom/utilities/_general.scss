@@ -1,14 +1,19 @@
 html,
 body {
-  overflow-x: hidden; /* Prevent scroll on narrow devices */
+    overflow-x: hidden; /* Prevent scroll on narrow devices */
 }
 
 /* since the navbar is fixed we need to add some space to the body */
 body {
-  padding-top: 44px;
-  padding-bottom: 100px;
+    padding-top: 44px;
+    padding-bottom: 100px;
 }
 
 .sticky-top {
-  top: 44px;
+    top: 44px;
+}
+
+::selection {
+    background: $primary;
+    color: $white;
 }

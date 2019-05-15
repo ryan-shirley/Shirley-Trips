@@ -22,11 +22,49 @@
                 border-left: 1px solid $white;
             }
         }
+
+        &.tripple {
+            img {
+                height: 240px;
+                object-fit: cover;
+            }
+
+            .left img {
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+                border-bottom-left-radius: 0;
+                border-right: 1px solid $white;
+            }
+            
+            .right {
+                img {
+                    height: 119px;
+                    border-left: 1px solid $white;
+
+                    &:first-child {
+                        margin-bottom: 2px;
+                        border-top-left-radius: 0;
+                        border-bottom-right-radius: 0;
+                        border-bottom-left-radius: 0;
+                    }
+
+                    &:last-child {
+                        border-radius: 0;
+                    }
+                }
+            }
+        }
     }
 
     &.image-only {
         img {
             border-radius: $border-radius;
         }
+    }
+}
+
+.comment {
+    .description {
+        white-space: pre-wrap;
     }
 }

@@ -42,6 +42,11 @@ Route::middleware('auth:api')->group(function () {
         'index', 'create', 'edit'
     ]);
 
+    // Videos
+    Route::resource('videos', 'API\VideoController')->except([
+        'index', 'create', 'edit'
+    ]);
+
     // Flights
     Route::resource('flight', 'API\FlightController')->except([
         'index', 'create', 'edit'

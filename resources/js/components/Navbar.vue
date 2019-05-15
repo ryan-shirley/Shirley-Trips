@@ -8,16 +8,19 @@
 
         <router-link to="/" class="navbar-brand">E &amp; R</router-link>
 
-        <div class="btn-group" v-if="editPermissions">
-            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                ...
-            </button>
-            <div class="dropdown-menu dropdown-menu-right">
-                <button class="dropdown-item" type="button" @click="editModeToggle()">Toggle Edit Mode</button>
+        <div class="btn-group" v-if="editPermissions || viewing">
+            <i class="fas fa-ellipsis-h second-toggler" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+            <div class="dropdown-menu dropdown-menu-right" v-if="!viewing">
+                <button class="dropdown-item" type="button" @click="reOrderModeToggle()">Toggle ReOrder Mode</button>
                 <div class="dropdown-divider"></div>
                 <router-link :to="{ name:'holiday.edit', params: { 'holidayId' :$route.params.holidayId } }" class="dropdown-item">Edit Holiday</router-link>
                 <div class="dropdown-divider"></div>
-                <button class="dropdown-item" type="button" @click="deleteHoliday()">Delete Holiday</button>
+                <button v-if="owner" class="dropdown-item" type="button" @click="deleteHoliday()">Delete Holiday</button>
+            </div>
+            <div class="dropdown-menu dropdown-menu-right" v-else>
+                <button class="dropdown-item" type="button" @click="$emit('edit')">Edit</button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" type="button" @click="$emit('delete')">Delete</button>
             </div>
         </div>
 
@@ -29,7 +32,7 @@
                 <li class="nav-item" v-bind:class="{ 'active': checkActive('holiday.create') }">
                     <router-link :to="{ name:'holiday.create'}" class="nav-link">Create Holiday</router-link>
                 </li>
-                <li class="nav-item" v-bind:class="{ 'active': checkActive('admin.home') }">
+                <li class="nav-item" v-bind:class="{ 'active': checkActive('admin.home') }" v-if="isAdmin">
                     <router-link :to="{ name:'admin.home'}" class="nav-link">Admin Dashboard</router-link>
                 </li>
                
@@ -51,6 +54,11 @@
                 type: Boolean,
                 default: false
             },
+            owner: {
+                type: Boolean,
+                default: false
+            },
+            viewing: Boolean,
         },
         data() {
             return {
@@ -61,8 +69,8 @@
             toggleNav() {
                 this.open = !this.open;
             },
-            editModeToggle() {
-                this.$emit('editModeToggle')  
+            reOrderModeToggle() {
+                this.$emit('reOrderModeToggle')  
             },
             checkActive(name) {
                 if(this.$route.name == name) {
@@ -87,6 +95,16 @@
                         app.$router.push({ name: 'account.home' })
                     })
                     .catch(error => alert("Could not delete holiday"))
+                }
+            }
+        },
+        computed: {
+            isAdmin() {
+                if(localStorage.getItem('isAdmin')) {
+                    return true
+                }
+                else {
+                    return false
                 }
             }
         }

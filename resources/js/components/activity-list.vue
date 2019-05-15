@@ -4,9 +4,10 @@
         <hotel-details 
             v-if="hotel"
             :hotel='hotel'
-            :editMode="editMode"
+            :reOrderMode="reOrderMode"
             :dayId="dayId"
             :day="day"
+            v-on:hotelDeleted="removeHotel"
         />
         <section v-else class="text-center">
             <p>It looks like you have no home for the day..</p>
@@ -19,7 +20,7 @@
                 v-model="activities" 
                 v-bind="dragOptions"
                 @change="onReorderList"
-                :sort="editMode"
+                :sort="reOrderMode"
             >
             <transition-group >
                 <div v-for="activity in activities" :key="activity.activity_id">
@@ -27,7 +28,7 @@
                     <flight-details 
                         v-if="activity.airline_id != null"
                         :flight='activity'
-                        :editMode="editMode"
+                        :reOrderMode="reOrderMode"
                         :dayId="dayId"
                         v-on:flightDeleted="removeActivity"  
                     />
@@ -35,9 +36,16 @@
                     <comment-details 
                         v-if="activity.title != null"
                         :comment='activity'
-                        :editMode="editMode"
+                        :reOrderMode="reOrderMode"
                         :dayId="dayId"
                         v-on:commentDeleted="removeActivity"  
+                    />
+
+                    <video-card 
+                        v-if="activity.url != null"
+                        :video='activity'
+                        :reOrderMode="reOrderMode"
+                        v-on:videoDeleted="removeActivity"  
                     />
 
                 </div>
@@ -61,7 +69,7 @@
             activitiesRaw: Array,
             hotel: Object,
             day: String,
-            editMode: Boolean,
+            reOrderMode: Boolean,
             dayId: Number
         },
         data() {
@@ -113,6 +121,22 @@
                                     alert('Could not load flight')
                                 })
                         }
+                        else if (activity.video_id != null) {
+                            axios.get('/api/videos/' + activity.video_id, {
+                                    headers: { Authorization: "Bearer " + token }
+                                })
+                                .then(function (resp) {
+                                    let data = resp.data
+                                    data.activity_id = activity.id
+
+                                    app.activities.push(data)
+                                    app.checkAllActivitiesLoaded()
+                                })
+                                .catch(function (resp) {
+                                    console.log(resp)
+                                    alert('Could not load video')
+                                })
+                        }
                     }
                 }
             },
@@ -124,6 +148,10 @@
                     return activity.activity_id == activity_id
                 })
                 app.activities.splice(index, 1)
+            },
+            removeHotel() {
+                console.log('Removing Hotel')
+                this.hotel = {}
             },
             onReorderList(event) {
                 let app = this

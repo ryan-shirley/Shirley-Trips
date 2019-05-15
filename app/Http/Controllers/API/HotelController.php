@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 Use App\Hotel;
 Use App\Day;
 Use App\Image;
@@ -80,5 +82,80 @@ class HotelController extends Controller
         }
 
         return $holiday;
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:50',
+            'location' => 'required|string|max:50',
+            'imageId' => 'nullable|file|image',
+            'dayCheckInId' => 'required|numeric|exists:days,id',
+            'dayCheckOutId' => 'required|numeric|exists:days,id',
+            'holidayId' => 'required|numeric|exists:holidays,id',
+        ]);
+
+        // Check if user has permission to actuall save this... ******
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        // Update Hotel
+        $hotel = Hotel::findOrFail($id);
+        $hotel->name = $request->input('name');
+        $hotel->location = $request->input('location');
+
+        $hotel->checkIn = Day::find($request->input('dayCheckInId'))->day;
+        $hotel->checkOut = Day::find($request->input('dayCheckOutId'))->day;
+        $hotel->save();
+
+        // Update Days for hotel
+        // Remove old days
+        DB::table('days')
+            ->where('hotel_id', $hotel->id)
+            ->update(['hotel_id' => null]);
+
+        // Add Hotel to days for checkin to checkout.
+        $holiday = Holiday::where('id', $request->input('holidayId'))->first();
+        $holiday_id = $holiday->id;
+        $all_holiday_days = $holiday->days;
+
+        while (strtotime($hotel->checkIn) <= strtotime("-1 day", strtotime($hotel->checkOut))) {
+
+            foreach ($all_holiday_days as $d) {
+                // If holiday day = a day when in the hotel update
+                if($d->day == $hotel->checkIn) {
+                    $day_toUpdate = Day::where('id', $d->id)->first();
+                    $day_toUpdate->hotel_id = $hotel->id;
+                    $day_toUpdate->save();
+                }
+            }
+
+            $hotel->checkIn = date ("Y-m-d", strtotime("+1 day", strtotime($hotel->checkIn)));
+        }
+
+        return $hotel;
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        // Check if use has permission to delete this..
+        $hotel = Hotel::findOrFail($id);
+
+        // Update days to show no hotel
+        DB::table('days')
+            ->where('hotel_id', $hotel->id)
+            ->update(['hotel_id' => null]);
+
+        // Delete image for hotel
+        $image = Image::find($hotel->image_id);
+        Storage::disk('public')->delete(substr($image->path, 8));
+        $image->delete();
+
+        // Delete Hotel
+        $hotel->delete();
+
+        return response()->json(['message' => 'Successfully deleted hotel.'], 200);
     }
 }

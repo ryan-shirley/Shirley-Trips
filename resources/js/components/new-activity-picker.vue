@@ -6,7 +6,7 @@
         </button>
 
         <!-- Modal -->
-        <div class="modal fade" id="newActivityModal" tabindex="-1" role="dialog" aria-labelledby="newActivityModalTitle" aria-hidden="true">
+        <div class="modal fade new-activity" id="newActivityModal" tabindex="-1" role="dialog" aria-labelledby="newActivityModalTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -16,15 +16,42 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <ul class="list-group">
-                            <button type="button" class="list-group-item list-group-item-action" @click="newActivitySelected('flight')">Flight</button>
-                            <button type="button" class="list-group-item list-group-item-action" @click="newActivitySelected('photo')">Photo</button>
-                            <button type="button" class="list-group-item list-group-item-action" @click="newActivitySelected('message')">Message</button>
-                            <button type="button" class="list-group-item list-group-item-action" @click="newActivitySelected('hotel')">Hotel</button>
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="card" @click="newActivitySelected('flight')">
+                                    <div class="card-body">
+                                        <i class="fas fa-plane flight"></i>
+                                        <h4>Flight</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card" @click="newActivitySelected('message')">
+                                    <div class="card-body">
+                                        <i class="fas fa-camera message"></i>
+                                        <h4>Message</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="card" @click="newActivitySelected('hotel')">
+                                    <div class="card-body">
+                                        <i class="fas fa-hotel hotel"></i>
+                                        <h4>Hotel</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card" @click="newActivitySelected('video')">
+                                    <div class="card-body">
+                                        <i class="fas fa-video video"></i>
+                                        <h4>Video</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -51,11 +78,11 @@
                 else if (acitvity == 'flight') {
                     this.$router.push({ name: 'holiday.add.flight', params: { 'day': this.dayId } })
                 }
-                else if (acitvity == 'photo') {
-                    this.$router.push({ name: 'holiday.add.photo', params: { 'day': this.dayId } })
-                }
                 else if (acitvity == 'hotel') {
                     this.$router.push({ name: 'holiday.add.hotel', params: { 'day': this.dayId } })
+                }
+                else if (acitvity == 'video') {
+                    this.$router.push({ name: 'holiday.add.video', params: { 'day': this.dayId } })
                 }
             }
         }

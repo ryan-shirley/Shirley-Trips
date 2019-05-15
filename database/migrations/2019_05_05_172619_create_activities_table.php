@@ -25,6 +25,9 @@ class CreateActivitiesTable extends Migration
             $table->bigInteger('comment_id')->unsigned()->nullable();
             $table->foreign('comment_id')->references('id')->on('comments')->onDelete('cascade');
 
+            $table->bigInteger('video_id')->unsigned()->nullable();
+            $table->foreign('video_id')->references('id')->on('videos')->onDelete('cascade');
+
             $table->integer('order');
 
             $table->timestamps();
