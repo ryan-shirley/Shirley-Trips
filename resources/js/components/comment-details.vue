@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="card comment tripple" v-else>
-            <div class="row no-gutters">
+            <div class="row no-gutters" v-if="comment.images.length > 0">
                 <div class="col-8 left">
                     <img :src="orderedImages[0].path" class="card-img" />
                 </div>
@@ -40,10 +40,9 @@
             <h4>{{ comment.title }}</h4>
             <p>{{ comment.subTitle }}</p>
         </div>
-        <img :src="comment.images[0].path" :alt="comment.title" v-if="comment.images.length">
+        <img v-if="comment.images.length > 0" :src="comment.images[0].path" :alt="comment.title">
     </div>
 </template>
-
 <script>
     export default {
         name: 'comment-details',

@@ -81,6 +81,7 @@
             logout() {
                 let token = localStorage.removeItem('token')
                 let isAdmin = localStorage.removeItem('isAdmin')
+                let first_name = localStorage.removeItem('first_name')
                 this.$router.push({ name: 'login' })
             },
             deleteHoliday(id) {

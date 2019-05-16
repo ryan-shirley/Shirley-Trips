@@ -39,17 +39,21 @@ import AirlinesAddComponent from './views/admin/airlines/AirlinesAdd.vue';
 // Middleware
 import multiguard from 'vue-router-multiguard';
 
-const state = {
+let state = {
     token: localStorage.getItem('token') || '',
     isAdmin: localStorage.getItem('isAdmin') || false,
   }
 
 const isLoggedIn = (to, from, next) => {
+    console.log('Checking login state')
     if(state.token) {
         next()
     }
     else {
-        next({ name: 'login' }); // go to '/login';
+        if(!checkLoginState(next)) {
+            console.log('Not logged in. Routing to login page')
+            next({ name: 'login' }); // go to '/login';
+        }
     }
 }
 
@@ -63,13 +67,31 @@ const isAdmin = (to, from, next) => {
     }
 }
 
+function checkLoginState(next) { 
+    console.log('Updating login state')
+    if(localStorage.getItem('token')) {
+        state.token = true
+
+        if(localStorage.getItem('isAdmin')) {
+            state.isAdmin = true
+        }
+
+        next({ name: 'account.home' })
+
+        return true
+    }
+    else {
+        return false
+    }
+}
+
 export const routes = [
     {
         path: '/',
         components: {
             default: LoginComponent
         },
-        name: 'login'
+        name: 'login',
     },
     {
         path: '/home',
@@ -129,7 +151,7 @@ export const routes = [
         beforeEnter: isLoggedIn,
     },
     {
-        path: '/holiday/:holidayId/day/:dayId/flight/add',
+        path: '/holiday/:holidayId/day/:dayId/add/flight',
         name: 'holiday.add.flight',
         component: AddFlightComponent,
         beforeEnter: isLoggedIn,

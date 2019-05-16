@@ -96,7 +96,7 @@
                 data.append('beginDate', app.form.beginDate)
                 data.append('endDate', app.form.endDate)
 
-                axios.post('/api/holiday/', data, {
+                axios.post('/api/holiday', data, {
                     headers: { 
                         Authorization: "Bearer " + token,
                         'Content-Type': 'multipart/form-data'
