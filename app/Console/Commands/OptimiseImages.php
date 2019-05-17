@@ -6,11 +6,13 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use App\Image;
 use App\CommentImage;
+use App\Classes\TinyPNG;
 
 \Tinify\setKey(env("TINY_PNG_API_KEY"));
 
 class OptimiseImages extends Command
 {
+
     /**
      * The name and signature of the console command.
      *
@@ -57,7 +59,8 @@ class OptimiseImages extends Command
             foreach($comment_images as $image) {
                 
                 // Get image
-                $source = \Tinify\fromFile($image->path);
+                $source = \Tinify\fromFile('/home/ryanshir/public_html/subdomains/itinerary/public/' . $image->path);
+                // $source = \Tinify\fromUrl("https://itinerary.ryanshirley.ie/" . $image->path);
 
                 // Resize and optimise
                 $resized = $source->resize(array(
@@ -66,7 +69,8 @@ class OptimiseImages extends Command
                 ));
 
                 // Save image
-                $resized->toFile($image->path);
+                $resized->toFile('/home/ryanshir/public_html/subdomains/itinerary/public/' . $image->path);
+                // $resized->toFile('/home/ryanshir/public_html/subdomains/itinerary/public/' . $image->path);
 
                 // Update as optimised
                 CommentImage::where('id', $image->id)
@@ -80,7 +84,8 @@ class OptimiseImages extends Command
             foreach($images as $image) {
                 
                 // Get image
-                $source = \Tinify\fromFile($image->path);
+                $source = \Tinify\fromFile('/home/ryanshir/public_html/subdomains/itinerary/public/' . $image->path);
+                // $source = \Tinify\fromUrl("https://itinerary.ryanshirley.ie/" . $image->path);
 
                 // Resize and optimise
                 $resized = $source->resize(array(
@@ -89,7 +94,8 @@ class OptimiseImages extends Command
                 ));
 
                 // Save image
-                $resized->toFile($image->path);
+                $resized->toFile('/home/ryanshir/public_html/subdomains/itinerary/public/' . $image->path);
+                // $resized->toFile('/home/ryanshir/public_html/subdomains/itinerary/public/' . $image->path);
 
                 // Update as optimised
                 Image::where('id', $image->id)

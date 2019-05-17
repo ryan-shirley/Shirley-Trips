@@ -1,8 +1,8 @@
 <template>
-    <div class="row justify-content-md-center">
+    <div class="row justify-content-md-center" v-if="day.activities">
         <div class="col-12 col-md-4">
             <activity-list 
-                :activitiesRaw="day.activities" 
+                :activitiesRaw="sortedActivities" 
                 :hotel="day.hotel"
                 :day="day.day"
                 :dayId="day.id"
@@ -35,13 +35,16 @@
             .then(function (resp) {
                 app.day = resp.data
 
-                app.day.activities.sort((a, b) => (a.order > b.order) ? 1 : -1)
+                // app.day.activities.sort((a, b) => (a.order > b.order) ? 1 : -1)
             })
             .catch(function (resp) {
                 alert('Could not load day')
             })
         },
-        methods: {
+        computed: {
+            sortedActivities() {
+                return this.day.activities.sort((a, b) => (a.order > b.order) ? 1 : -1)
+            }
         }
     }
 </script>

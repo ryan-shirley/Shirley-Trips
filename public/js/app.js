@@ -2960,15 +2960,18 @@ __webpack_require__.r(__webpack_exports__);
         Authorization: "Bearer " + token
       }
     }).then(function (resp) {
-      app.day = resp.data;
-      app.day.activities.sort(function (a, b) {
-        return a.order > b.order ? 1 : -1;
-      });
+      app.day = resp.data; // app.day.activities.sort((a, b) => (a.order > b.order) ? 1 : -1)
     })["catch"](function (resp) {
       alert('Could not load day');
     });
   },
-  methods: {}
+  computed: {
+    sortedActivities: function sortedActivities() {
+      return this.day.activities.sort(function (a, b) {
+        return a.order > b.order ? 1 : -1;
+      });
+    }
+  }
 });
 
 /***/ }),
@@ -45725,25 +45728,27 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row justify-content-md-center" }, [
-    _c(
-      "div",
-      { staticClass: "col-12 col-md-4" },
-      [
-        _c("activity-list", {
-          key: _vm.day.day,
-          attrs: {
-            activitiesRaw: _vm.day.activities,
-            hotel: _vm.day.hotel,
-            day: _vm.day.day,
-            dayId: _vm.day.id,
-            reOrderMode: _vm.reOrderMode
-          }
-        })
-      ],
-      1
-    )
-  ])
+  return _vm.day.activities
+    ? _c("div", { staticClass: "row justify-content-md-center" }, [
+        _c(
+          "div",
+          { staticClass: "col-12 col-md-4" },
+          [
+            _c("activity-list", {
+              key: _vm.day.day,
+              attrs: {
+                activitiesRaw: _vm.sortedActivities,
+                hotel: _vm.day.hotel,
+                day: _vm.day.day,
+                dayId: _vm.day.id,
+                reOrderMode: _vm.reOrderMode
+              }
+            })
+          ],
+          1
+        )
+      ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
