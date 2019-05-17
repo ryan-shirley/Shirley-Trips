@@ -45,7 +45,6 @@ let state = {
   }
 
 const isLoggedIn = (to, from, next) => {
-    console.log('Checking login state')
     if(state.token) {
         next()
     }

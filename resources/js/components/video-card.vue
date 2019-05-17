@@ -10,8 +10,15 @@
         <div class="video">
             <iframe :src="video.url" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
-        <router-link :to="{ name:'holiday.edit.video', params: { 'day' : dayId, 'videoId' : video.id } }" class="btn btn-secondary">Edit</router-link>
-        <button type="button" class="btn btn-danger" @click="deleteVideo(video.id)">Delete</button>
+        <div class="row">
+            <br />
+            <div class="col">
+                <router-link :to="{ name:'holiday.edit.video', params: { 'day' : dayId, 'videoId' : video.id } }" class="btn btn-secondary btn-block">Edit</router-link>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-danger btn-block" @click="deleteVideo(video.id)">Delete</button>
+            </div>
+        </div>
     </div>
 </template>
 

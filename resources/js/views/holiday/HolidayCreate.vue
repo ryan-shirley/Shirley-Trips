@@ -52,9 +52,13 @@
                         </div>
                     </div>
                 </div>
+                
+                <button v-if="!loading" type="submit" class="btn btn-primary">Submit</button>
 
-
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button v-if="loading" class="btn btn-primary" type="button" disabled>
+                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    Submitting...
+                </button>
             </form>
         </section>
 
@@ -76,12 +80,26 @@
                     beginDate: '',
                     endDate: ''
                 }),
+                loading: false
             }
         },
         methods: {
             onSubmit() {
                 let app = this
                 let token = localStorage.getItem('token')
+                app.loading = true
+
+                // Ensure check out is after checkin
+                if(app.form.beginDate >= app.form.endDate) {
+                    console.log('Begin is before end')
+                    app.form.errors.record({
+                        'endDate': [
+                            "End date must be after begin date"
+                        ]
+                    })
+                    app.loading = false
+                    return;
+                }
 
                 // this.form.submit()
                 //     .then(data => {
@@ -110,6 +128,7 @@
                     // alert('Could not save holiday')
                     console.log(resp)
                     app.form.errors.record(resp.response.data)
+                    app.loading = false
                 })
             },
             uploadFieldChange(event) {

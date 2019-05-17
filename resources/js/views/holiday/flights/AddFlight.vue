@@ -167,8 +167,12 @@
                     </div>
                 </div>
                 
+                <button v-if="!loading" type="submit" class="btn btn-primary">Submit</button>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button v-if="loading" class="btn btn-primary" type="button" disabled>
+                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    Submitting...
+                </button>
             </form>
         </section>
     </div>
@@ -197,7 +201,8 @@
                 }),
                 isConnectingFlight: false,
                 airlines: [],
-                previousFlights: []
+                previousFlights: [],
+                loading: false
             }
         },
         mounted() {
@@ -216,12 +221,16 @@
         methods: {
             onSubmit() {
                 let app = this
+                app.loading = true
 
                 this.form.submit()
                     .then(data => {
                         app.$router.push({name: 'holiday.view.day'})
                     })
-                    .catch(errors => console.log(errors))
+                    .catch(errors => {
+                        console.log(errors)
+                        app.loading = false
+                    })
             }
         },
         watch: {

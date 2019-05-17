@@ -9,7 +9,7 @@
         <router-link to="/" class="navbar-brand">E &amp; R</router-link>
 
         <div class="btn-group" v-if="editPermissions || viewing">
-            <i class="fas fa-ellipsis-h second-toggler" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
+            <button class="second-toggler" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></button>
             <div class="dropdown-menu dropdown-menu-right" v-if="!viewing">
                 <button class="dropdown-item" type="button" @click="reOrderModeToggle()">Toggle ReOrder Mode</button>
                 <div class="dropdown-divider"></div>

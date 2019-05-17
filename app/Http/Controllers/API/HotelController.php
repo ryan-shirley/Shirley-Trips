@@ -89,7 +89,7 @@ class HotelController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:50',
             'location' => 'required|string|max:50',
-            'imageId' => 'nullable|file|image',
+            'imageId' => 'nullable',
             'dayCheckInId' => 'required|numeric|exists:days,id',
             'dayCheckOutId' => 'required|numeric|exists:days,id',
             'holidayId' => 'required|numeric|exists:holidays,id',
@@ -106,9 +106,23 @@ class HotelController extends Controller
         $hotel->name = $request->input('name');
         $hotel->location = $request->input('location');
 
+        // If new Image id was sent
+        if($request->input('imageId')) {
+            // Get old image (delete later)
+            $old_image = $hotel->image;
+            // Same new image to holiday
+            $hotel->image_id = $request->input('imageId');
+        }
+
         $hotel->checkIn = Day::find($request->input('dayCheckInId'))->day;
         $hotel->checkOut = Day::find($request->input('dayCheckOutId'))->day;
         $hotel->save();
+
+        // Delete old image if available
+        if(isset($old_image)) {
+            Storage::disk('public')->delete(substr($old_image->path, 8));
+            $old_image->delete();
+        }
 
         // Update Days for hotel
         // Remove old days

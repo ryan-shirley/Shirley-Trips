@@ -55,8 +55,12 @@
                     </div>
                 </div>
 
+                <button v-if="!loading" type="submit" class="btn btn-primary">Submit</button>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button v-if="loading" class="btn btn-primary" type="button" disabled>
+                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    Submitting...
+                </button>
             </form>
         </section>
 
@@ -80,7 +84,8 @@ import { parse } from 'path';
                     dayCheckOutId: '',
                     holidayId: this.$route.params.holidayId
                 }),
-                days: []
+                days: [],
+                loading: false
             }
         },
         mounted() {
@@ -101,6 +106,7 @@ import { parse } from 'path';
             onSubmit() {
                 let app = this
                 let token = localStorage.getItem('token')
+                app.loading = true
 
                 // Ensure check out is after checkin
                 if(app.form.dayCheckInId >= app.form.dayCheckOutId) {
@@ -110,6 +116,7 @@ import { parse } from 'path';
                             "Check out must be after check in"
                         ]
                     })
+                    app.loading = false
                     return;
                 }
 
@@ -135,6 +142,7 @@ import { parse } from 'path';
                     // alert('Could not save holiday')
                     console.log(resp)
                     app.form.errors.record(resp.response.data)
+                    app.loading = false
                 })
             },
             uploadFieldChange(event) {

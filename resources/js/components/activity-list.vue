@@ -14,13 +14,12 @@
         </section>
        <!--/.Hotel -->
 
-        <section class="activity-list" v-if="activities">
+        <section class="activity-list" v-if="activities && reOrderMode">
 
             <draggable 
                 v-model="activities" 
                 v-bind="dragOptions"
                 @change="onReorderList"
-                :sort="reOrderMode"
             >
             <transition-group >
                 <div v-for="activity in activities" :key="activity.activity_id">
@@ -51,6 +50,34 @@
                 </div>
             </transition-group>
             </draggable>
+        </section>
+        <section class="activity-list" v-else-if="activities && !reOrderMode">
+            <div v-for="activity in activities" :key="activity.activity_id">
+
+                <flight-details 
+                    v-if="activity.airline_id != null"
+                    :flight='activity'
+                    :reOrderMode="reOrderMode"
+                    :dayId="dayId"
+                    v-on:flightDeleted="removeActivity"  
+                />
+
+                <comment-details 
+                    v-if="activity.title != null"
+                    :comment='activity'
+                    :reOrderMode="reOrderMode"
+                    :dayId="dayId"
+                    v-on:commentDeleted="removeActivity"  
+                />
+
+                <video-card 
+                    v-if="activity.url != null"
+                    :video='activity'
+                    :reOrderMode="reOrderMode"
+                    v-on:videoDeleted="removeActivity"  
+                />
+
+            </div>
         </section>
         <section v-else>
                 <h3>You have no activities for this day..</h3>

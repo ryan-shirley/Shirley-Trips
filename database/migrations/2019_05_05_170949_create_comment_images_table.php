@@ -17,6 +17,7 @@ class CreateCommentImagesTable extends Migration
             $table->bigIncrements('id');
             $table->string('path');
             $table->integer('order');
+            $table->boolean('optimised')->nullable();
 
             $table->bigInteger('comment_id')->unsigned();
             $table->foreign('comment_id')->references('id')->on('comments');

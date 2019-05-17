@@ -53,7 +53,12 @@
                     <span class="badge badge-danger" v-text="form.errors.get('image')" v-if="form.errors.has('image')"></span>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button v-if="!loading" type="submit" class="btn btn-primary">Submit</button>
+
+                <button v-if="loading" class="btn btn-primary" type="button" disabled>
+                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    Submitting...
+                </button>
             </form>
         </section>
     </div>
@@ -78,14 +83,15 @@
                 selectedFile: null,
                 images: [],
                 image_previews: [],
-                imageUploadCount: 0
+                imageUploadCount: 0,
+                loading: false
             }
         },
         methods: {
             onSubmit() {
                 let app = this
                 let token = localStorage.getItem('token')
-
+                app.loading = true
 
                 // Submit Comment
                 this.form.submit()
@@ -117,6 +123,7 @@
                                 .catch(function (resp) {
                                     alert('Could not save image')
                                     console.log(resp)
+                                    app.loading = false
                                 })
                             }
                     
@@ -126,7 +133,10 @@
                         }
 
                     })
-                    .catch(errors => console.log(errors))
+                    .catch(errors => {
+                        console.log(errors)
+                        app.loading = false
+                    })
             },
             // This function will be called every time you add a file
             uploadFieldChange(e) {

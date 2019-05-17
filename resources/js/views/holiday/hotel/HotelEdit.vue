@@ -54,9 +54,13 @@
                         </div>
                     </div>
                 </div>
+                
+                <button v-if="!loading" type="submit" class="btn btn-primary">Update</button>
 
-
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button v-if="loading" class="btn btn-primary" type="button" disabled>
+                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    Updating...
+                </button>
             </form>
         </section>
 
@@ -82,7 +86,8 @@
                 }),
                 days: [],
                 imagePath: '',
-                imageToUpload: ''
+                imageToUpload: '',
+                loading: false
             }
         },
         mounted() {
@@ -105,7 +110,7 @@
                 .then(resps => {
                     app.form.name = resps.data.name
                     app.form.location = resps.data.location
-                    app.imagePath = resp.data.image.path
+                    app.imagePath = resps.data.image.path
 
                     for (var i = 0; i < app.days.length; i++) {
                         let day = app.days[i]
@@ -129,6 +134,7 @@
             onSubmit() {
                 let app = this
                 let token = localStorage.getItem('token')
+                app.loading = true
 
                 // Ensure check out is after checkin
                 if(app.form.dayCheckInId >= app.form.dayCheckOutId) {
@@ -138,6 +144,7 @@
                             "Check out must be after check in"
                         ]
                     })
+                    app.loading = false
                     return;
                 }
 
@@ -152,8 +159,11 @@
                                 .then(data => {
                                     app.$router.push({name: 'holiday.view.day', params: { 'dayId': app.$route.params.dayId } })
                                 })
-                                .catch(errors => console.log(errors))
+                                .catch(errors => {
+                                    console.log(errors)
+                                    app.loading = false
                                 })
+                        })
                 }
                 else {
                     // Submit Main Form
@@ -161,7 +171,10 @@
                         .then(data => {
                             app.$router.push({name: 'holiday.view.day', params: { 'dayId': app.$route.params.dayId } })
                         })
-                        .catch(errors => console.log(errors))
+                        .catch(errors => {
+                        console.log(errors)
+                        app.loading = false
+                    })
                 }
             },
             uploadFieldChange(event) {

@@ -52,9 +52,13 @@
                         </div>
                     </div>
                 </div> -->
+                
+                <button v-if="!loading" type="submit" class="btn btn-primary">Update</button>
 
-
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button v-if="loading" class="btn btn-primary" type="button" disabled>
+                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    Updating...
+                </button>
             </form>
         </section>
 
@@ -77,7 +81,8 @@
                     // endDate: ''
                 }),
                 imagePath: '',
-                imageToUpload: ''
+                imageToUpload: '',
+                loading: false
             }
         },
         mounted() {
@@ -102,6 +107,7 @@
             onSubmit() {
                 let app = this
                 let token = localStorage.getItem('token')
+                app.loading = true
 
                 if(app.imageToUpload) {
                     app.uploadImage()
@@ -113,8 +119,11 @@
                                 .then(data => {
                                     app.$router.push({ name: 'holiday.view' })
                                 })
-                                .catch(errors => console.log(errors))
+                                .catch(errors => {
+                                    console.log(errors)
+                                    app.loading = false
                                 })
+                        })
                 }
                 else {
                     // Submit Main Form
@@ -122,7 +131,10 @@
                         .then(data => {
                             app.$router.push({ name: 'holiday.view' })
                         })
-                        .catch(errors => console.log(errors))
+                        .catch(errors => {
+                        console.log(errors)
+                        app.loading = false
+                    })
                 }
 
             },
