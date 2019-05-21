@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="{ name:'holiday.view.flight', params: { 'flightId' :flight.id }}" class="card-wrapper">
+    <router-link :to="{ name:'holiday.view.flight', params: { 'flightId' :flight.id }}" class="card-wrapper" v-cloak>
         <div class="card flight">
             <div class="card-header bg-primary text-white">
                 <div class="row align-items-center">

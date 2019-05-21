@@ -24,7 +24,7 @@ class CommentController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:50',
-            'subTitle' => 'required|string|max:50',
+            'subTitle' => 'nullable|string|max:50',
             'description' => 'nullable|string',
             'dayId' => 'required|numeric|exists:days,id',
         ]);
@@ -54,7 +54,7 @@ class CommentController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:50',
-            'subTitle' => 'required|string|max:50',
+            'subTitle' => 'nullable|string|max:50',
             'description' => 'nullable|string',
             'imagesUploaded' => 'nullable|array',
             'imagesToDelete' => 'nullable|array',

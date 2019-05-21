@@ -42,8 +42,8 @@
             })
         },
         computed: {
-            sortedActivities() {
-                return this.day.activities.sort((a, b) => (a.order > b.order) ? 1 : -1)
+            sortedActivities: function () {
+                return _.orderBy(this.day.activities, 'order')
             }
         }
     }

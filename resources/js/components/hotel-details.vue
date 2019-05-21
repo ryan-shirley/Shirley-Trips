@@ -2,7 +2,8 @@
     <router-link 
         :to="{ name: 'holiday.hotel.view', params: { 'hotelId' :hotel.id } }"
         class="card-wrapper" 
-        v-if="hotel.checkIn == day" >
+        v-if="hotel.checkIn == day" 
+        v-cloak >
         <div class="card hotel">
             <img v-if="hotelImagePath" :src="hotelImagePath" class="card-img-top" :alt="hotel.name">
             <div class="card-body">

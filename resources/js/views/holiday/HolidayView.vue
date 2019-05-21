@@ -6,7 +6,7 @@
             v-on:reOrderModeToggle="reOrderModeToggle"
         ></navigation>
 
-        <section v-if="holiday.image" class="bg-primary page-title bg-image" :style="{ 'background-image': 'url(' + holiday.image.path + ')' }">
+        <section v-if="holiday.image" class="bg-primary page-title bg-image" :style="{ 'background-image': 'url(' + holiday.image.path + ')' }" v-once>
             <div class="overlay">
                 <h1>{{ holiday.title }}</h1>
                 <p>{{ holiday.subTitle }}</p>
@@ -19,6 +19,7 @@
             :startPosition="$route.params.dayId"
             v-if="holiday.days"
             :key="'day_' + $route.params.dayId"
+            v-once
         ></date-slider>
 
         <router-view 

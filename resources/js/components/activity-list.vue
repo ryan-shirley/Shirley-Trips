@@ -8,13 +8,14 @@
             :dayId="dayId"
             :day="day"
             v-on:hotelDeleted="removeHotel"
+            v-cloak
         />
         <section v-else class="text-center">
             <p>It looks like you have no home for the day..</p>
         </section>
        <!--/.Hotel -->
 
-        <section class="activity-list" v-if="activities && reOrderMode">
+        <section class="activity-list" v-if="sortedActivities && reOrderMode">
 
             <draggable 
                 v-model="activities" 
@@ -51,15 +52,15 @@
             </transition-group>
             </draggable>
         </section>
-        <section class="activity-list" v-else-if="activities && !reOrderMode">
-            <div v-for="activity in activities" :key="activity.activity_id">
+        <section class="activity-list" v-else-if="sortedActivities && !reOrderMode">
+            <div v-for="activity in sortedActivities" :key="activity.activity_id">
 
                 <flight-details 
                     v-if="activity.airline_id != null"
                     :flight='activity'
                     :reOrderMode="reOrderMode"
                     :dayId="dayId"
-                    v-on:flightDeleted="removeActivity"  
+                    v-on:flightDeleted="removeActivity"
                 />
 
                 <comment-details 
@@ -124,6 +125,7 @@
                                 .then(function (resp) {
                                     let data = resp.data
                                     data.activity_id = activity.id
+                                    data.order = activity.order
 
                                     app.activities.push(data)
                                     app.checkAllActivitiesLoaded()
@@ -139,6 +141,7 @@
                                 .then(function (resp) {
                                     let data = resp.data
                                     data.activity_id = activity.id
+                                    data.order = activity.order
 
                                     app.activities.push(data)
                                     app.checkAllActivitiesLoaded()
@@ -155,6 +158,7 @@
                                 .then(function (resp) {
                                     let data = resp.data
                                     data.activity_id = activity.id
+                                    data.order = activity.order
 
                                     app.activities.push(data)
                                     app.checkAllActivitiesLoaded()
@@ -217,6 +221,9 @@
                     disabled: false,
                     ghostClass: "ghost"
                 };
+            },
+            sortedActivities: function () {
+                return _.orderBy(this.activities, 'order')
             }
         }
     }

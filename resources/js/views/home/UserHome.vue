@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-cloak>
         <navigation></navigation>
 
         <section class="bg-primary page-title">

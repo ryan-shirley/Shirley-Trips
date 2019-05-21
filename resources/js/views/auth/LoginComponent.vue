@@ -18,7 +18,12 @@
                                 <input type="password" id="password" name="password" class="form-control" v-model="form.password" />
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button v-if="!loading" type="submit" class="btn btn-primary">Submit</button>
+
+                            <button v-if="loading" class="btn btn-primary" type="button" disabled>
+                                <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                                Logging in...
+                            </button>
 
                             <br /><br /><span class="badge badge-danger" v-text="form.errors.getOne('error')" v-if="form.errors.has('error')"></span>
                         </form>
@@ -47,12 +52,14 @@
                 form: new Form('/login', 'post', false, {
                     email: '',
                     password: ''
-                })
+                }),
+                loading: false
             }
         },
         methods: {
             onSubmit() {
                 let app = this
+                app.loading = true
 
                 this.form.submit()
                     .then(data => {
@@ -61,7 +68,10 @@
                         localStorage.setItem('isAdmin', data.isAdmin)
                         app.$router.push({name: 'account.home'})
                     })
-                    .catch(errors => console.log(errors))
+                    .catch(errors => {
+                        console.log(errors)
+                        app.loading = false 
+                    })
             }
         }
     }

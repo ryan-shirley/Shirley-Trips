@@ -1981,6 +1981,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'activity-list',
@@ -2017,6 +2018,7 @@ __webpack_require__.r(__webpack_exports__);
             }).then(function (resp) {
               var data = resp.data;
               data.activity_id = activity.id;
+              data.order = activity.order;
               app.activities.push(data);
               app.checkAllActivitiesLoaded();
             })["catch"](function (resp) {
@@ -2030,6 +2032,7 @@ __webpack_require__.r(__webpack_exports__);
             }).then(function (resp) {
               var data = resp.data;
               data.activity_id = activity.id;
+              data.order = activity.order;
               app.activities.push(data);
               app.checkAllActivitiesLoaded();
             })["catch"](function (resp) {
@@ -2044,6 +2047,7 @@ __webpack_require__.r(__webpack_exports__);
             }).then(function (resp) {
               var data = resp.data;
               data.activity_id = activity.id;
+              data.order = activity.order;
               app.activities.push(data);
               app.checkAllActivitiesLoaded();
             })["catch"](function (resp) {
@@ -2105,6 +2109,9 @@ __webpack_require__.r(__webpack_exports__);
         disabled: false,
         ghostClass: "ghost"
       };
+    },
+    sortedActivities: function sortedActivities() {
+      return _.orderBy(this.activities, 'order');
     }
   }
 });
@@ -2406,6 +2413,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -2879,6 +2887,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -2896,12 +2909,14 @@ __webpack_require__.r(__webpack_exports__);
       form: new _classes_Form_js__WEBPACK_IMPORTED_MODULE_0__["default"]('/login', 'post', false, {
         email: '',
         password: ''
-      })
+      }),
+      loading: false
     };
   },
   methods: {
     onSubmit: function onSubmit() {
       var app = this;
+      app.loading = true;
       this.form.submit().then(function (data) {
         localStorage.setItem('token', data.token);
         localStorage.setItem('first_name', data.first_name);
@@ -2910,7 +2925,8 @@ __webpack_require__.r(__webpack_exports__);
           name: 'account.home'
         });
       })["catch"](function (errors) {
-        return console.log(errors);
+        console.log(errors);
+        app.loading = false;
       });
     }
   }
@@ -2967,9 +2983,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     sortedActivities: function sortedActivities() {
-      return this.day.activities.sort(function (a, b) {
-        return a.order > b.order ? 1 : -1;
-      });
+      return _.orderBy(this.day.activities, 'order');
     }
   }
 });
@@ -3311,6 +3325,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -44521,7 +44536,7 @@ var render = function() {
             _c("p", [_vm._v("It looks like you have no home for the day..")])
           ]),
       _vm._v(" "),
-      _vm.activities && _vm.reOrderMode
+      _vm.sortedActivities && _vm.reOrderMode
         ? _c(
             "section",
             { staticClass: "activity-list" },
@@ -44594,11 +44609,11 @@ var render = function() {
             ],
             1
           )
-        : _vm.activities && !_vm.reOrderMode
+        : _vm.sortedActivities && !_vm.reOrderMode
         ? _c(
             "section",
             { staticClass: "activity-list" },
-            _vm._l(_vm.activities, function(activity) {
+            _vm._l(_vm.sortedActivities, function(activity) {
               return _c(
                 "div",
                 { key: activity.activity_id },
@@ -45677,14 +45692,35 @@ var render = function() {
                     })
                   ]),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: { type: "submit" }
-                    },
-                    [_vm._v("Submit")]
-                  ),
+                  !_vm.loading
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "submit" }
+                        },
+                        [_vm._v("Submit")]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.loading
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "button", disabled: "" }
+                        },
+                        [
+                          _c("span", {
+                            staticClass: "spinner-grow spinner-grow-sm",
+                            attrs: { role: "status", "aria-hidden": "true" }
+                          }),
+                          _vm._v(
+                            "\n                            Logging in...\n                        "
+                          )
+                        ]
+                      )
+                    : _vm._e(),
                   _vm._v(" "),
                   _c("br"),
                   _c("br"),
@@ -46218,46 +46254,9 @@ var render = function() {
         on: { reOrderModeToggle: _vm.reOrderModeToggle }
       }),
       _vm._v(" "),
-      _vm.holiday.image
-        ? _c(
-            "section",
-            {
-              staticClass: "bg-primary page-title bg-image",
-              style: {
-                "background-image": "url(" + _vm.holiday.image.path + ")"
-              }
-            },
-            [
-              _c("div", { staticClass: "overlay" }, [
-                _c("h1", [_vm._v(_vm._s(_vm.holiday.title))]),
-                _vm._v(" "),
-                _c("p", [_vm._v(_vm._s(_vm.holiday.subTitle))]),
-                _vm._v(" "),
-                _c("p", [
-                  _vm._v(
-                    _vm._s(_vm.holiday.beginDate.slice(-2)) +
-                      " " +
-                      _vm._s(_vm.month_name(new Date(_vm.holiday.beginDate))) +
-                      " - " +
-                      _vm._s(_vm.holiday.endDate.slice(-2)) +
-                      " " +
-                      _vm._s(_vm.month_name(new Date(_vm.holiday.endDate)))
-                  )
-                ])
-              ])
-            ]
-          )
-        : _vm._e(),
+      _vm.holiday.image ? _vm._m(0) : _vm._e(),
       _vm._v(" "),
-      _vm.holiday.days
-        ? _c("date-slider", {
-            key: "day_" + _vm.$route.params.dayId,
-            attrs: {
-              parentData: _vm.holiday.days,
-              startPosition: _vm.$route.params.dayId
-            }
-          })
-        : _vm._e(),
+      _vm.holiday.days ? _vm._m(1) : _vm._e(),
       _vm._v(" "),
       _c("router-view", {
         key: "dayId_" + _vm.$route.params.dayId,
@@ -46273,7 +46272,51 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "section",
+      {
+        staticClass: "bg-primary page-title bg-image",
+        style: { "background-image": "url(" + _vm.holiday.image.path + ")" }
+      },
+      [
+        _c("div", { staticClass: "overlay" }, [
+          _c("h1", [_vm._v(_vm._s(_vm.holiday.title))]),
+          _vm._v(" "),
+          _c("p", [_vm._v(_vm._s(_vm.holiday.subTitle))]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v(
+              _vm._s(_vm.holiday.beginDate.slice(-2)) +
+                " " +
+                _vm._s(_vm.month_name(new Date(_vm.holiday.beginDate))) +
+                " - " +
+                _vm._s(_vm.holiday.endDate.slice(-2)) +
+                " " +
+                _vm._s(_vm.month_name(new Date(_vm.holiday.endDate)))
+            )
+          ])
+        ])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("date-slider", {
+      key: "day_" + _vm.$route.params.dayId,
+      attrs: {
+        parentData: _vm.holiday.days,
+        startPosition: _vm.$route.params.dayId
+      }
+    })
+  }
+]
 render._withStripped = true
 
 
@@ -49501,6 +49544,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    {},
     [
       _c("navigation"),
       _vm._v(" "),

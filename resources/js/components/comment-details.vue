@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="{ name:'holiday.view.message', params: { 'commentId' :comment.id }}" class="card-wrapper" v-if="!reOrderMode">
+    <router-link :to="{ name:'holiday.view.message', params: { 'commentId' :comment.id }}" class="card-wrapper" v-if="!reOrderMode" v-cloak>
         <div class="card comment" v-if="comment.images.length == 1">
             <img :src="comment.images[0].path" class="card-img-top" :alt="comment.title">
             <div class="card-body">
