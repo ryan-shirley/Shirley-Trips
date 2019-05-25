@@ -137,6 +137,42 @@ class HolidayController extends Controller
         return $holiday;
     }
 
+    public function updatePermissions(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'users' => 'required|array'
+        ]);
+
+        // Check if user has permission to actuall update this... ******
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        // Holiday
+        $holiday = Holiday::findOrFail($id);
+
+        $users = $request->input('users');
+
+        foreach($users as $user) {
+            $u = User::findOrFail($user['id']);
+            $holiday->users()->detach($u);
+
+            if($user['can_edit']) {
+                $u = User::findOrFail($user['id']);
+                $holiday->users()->attach($u, ['editPermission' => true]);
+            }
+            else if ($user['can_view']) {
+                $u = User::findOrFail($user['id']);
+                $holiday->users()->attach($u, ['editPermission' => false]);
+            }
+        }
+
+        return $holiday;
+    }
+
+    
+
     public function destroy(Request $request, $id)
     {
         // Check if use has permission to delete this..

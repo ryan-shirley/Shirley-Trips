@@ -16,5 +16,10 @@ class RolesTableSeeder extends Seeder
         $admin->name = 'admin';
         $admin->description = 'Administrator';
         $admin->save();
+
+        $user = new Role();
+        $user->name = 'user';
+        $user->description = 'User';
+        $user->save();
     }
 }

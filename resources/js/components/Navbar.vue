@@ -14,6 +14,7 @@
                 <button class="dropdown-item" type="button" @click="reOrderModeToggle()">Toggle ReOrder Mode</button>
                 <div class="dropdown-divider"></div>
                 <router-link :to="{ name:'holiday.edit', params: { 'holidayId' :$route.params.holidayId } }" class="dropdown-item">Edit Holiday</router-link>
+                <router-link :to="{ name:'holiday.edit.permissions', params: { 'holidayId' :$route.params.holidayId } }" class="dropdown-item" v-if="owner">Edit Permissions</router-link>
                 <div class="dropdown-divider"></div>
                 <button v-if="owner" class="dropdown-item" type="button" @click="deleteHoliday()">Delete Holiday</button>
             </div>

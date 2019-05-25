@@ -17,9 +17,13 @@ use Illuminate\Foundation\Inspiring;
 Route::post('login', 'API\PassportController@login');
 Route::post('register', 'API\PassportController@register');
 
+Route::get('realtimeflight/{id}', 'API\RealTimeFlights@show');
+
 Route::middleware('auth:api')->group(function () {
     Route::get('user', 'API\PassportController@user');
     Route::get('logout', 'API\PassportController@logout');
+
+    Route::get('users', 'API\UsersController@index');
 
     Route::get('inspiration', function () { return Inspiring::quote(); });
 
@@ -27,6 +31,7 @@ Route::middleware('auth:api')->group(function () {
     Route::resource('holiday', 'API\HolidayController')->except([
         'create', 'edit'
     ]);
+    Route::put('holiday/{id}/permissions', 'API\HolidayController@updatePermissions');
 
     // Days
     Route::get('day/{id}', 'API\DayController@show')->name('day.show');

@@ -19,7 +19,6 @@
             :startPosition="$route.params.dayId"
             v-if="holiday.days"
             :key="'day_' + $route.params.dayId"
-            v-once
         ></date-slider>
 
         <router-view 
@@ -27,7 +26,7 @@
             :key="'dayId_' + $route.params.dayId"
         ></router-view>
 
-        <new-acitvity-picker :dayId="$route.params.dayId" v-if="editPer"></new-acitvity-picker>
+        <new-acitvity-picker :dayId="$route.params.dayId" v-if="editPer" v-once></new-acitvity-picker>
         
     </div>
 </template>
@@ -40,28 +39,40 @@
             let id = app.$route.params.holidayId
             let token = localStorage.getItem('token')
 
-            axios.get('/api/holiday/' + id, {
+            axios.get('/api/user', {
                 headers: { Authorization: "Bearer " + token }
             })
             .then(function (resp) {
-                app.holiday = resp.data
-                app.editPermission()
-                app.checkIsOwner()
-                
-                
-                if(app.$route.params.dayId != undefined) {
-                    app.$router.replace({ name: 'holiday.view.day', params: { 'dayId' : app.$route.params.dayId } })
-                }
-                else {
-                    app.$router.replace({ name: 'holiday.view.day', params: { 'dayId' : app.holiday.days[0].id } })
-                }
+                app.user = resp.data.user
+
+                axios.get('/api/holiday/' + id, {
+                    headers: { Authorization: "Bearer " + token }
+                })
+                .then(function (resp) {
+                    app.holiday = resp.data
+                    app.editPermission()
+                    app.checkIsOwner()
+                    
+                    
+                    if(app.$route.params.dayId != undefined) {
+                        app.$router.replace({ name: 'holiday.view.day', params: { 'dayId' : app.$route.params.dayId } })
+                    }
+                    else {
+                        app.$router.replace({ name: 'holiday.view.day', params: { 'dayId' : app.holiday.days[0].id } })
+                    }
+                })
+                .catch(function (resp) {
+                    alert('Could not load holiday')
+                })
             })
             .catch(function (resp) {
-                alert('Could not load holiday')
+                alert('Could not load user')
             })
+
         },
         data() {
             return {
+                user: {},
                 holiday: {},
                 editPer: false,
                 reOrderMode: false,
@@ -74,7 +85,7 @@
                 let users = app.holiday.users
 
                 for (var i = 0; i < users.length ; i++) {
-                    if(users[i].pivot.editPermission == true) {
+                    if(users[i].pivot.editPermission == true && users[i].id == app.user.id) {
                         app.editPer = true;
                         return;
                     }
@@ -85,7 +96,7 @@
                 let users = app.holiday.users
 
                 for (var i = 0; i < users.length ; i++) {
-                    if(users[i].pivot.owner == true) {
+                    if(users[i].pivot.owner == true && users[i].id == app.user.id) {
                         app.owner = true;
                         return;
                     }

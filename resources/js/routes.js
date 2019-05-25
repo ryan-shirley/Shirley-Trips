@@ -6,6 +6,7 @@ import UserHomeComponent from './views/home/UserHome.vue';
 import HolidayViewComponent from './views/holiday/HolidayView.vue';
 import HolidayEditComponent from './views/holiday/HolidayEdit.vue';
 import HolidayCreateComponent from './views/holiday/HolidayCreate.vue';
+import HolidayEditPermissionsComponent from './views/holiday/HolidayEditPermissions.vue';
 
 // Day
 import DayViewComponent from './views/holiday/DayView.vue';
@@ -121,6 +122,12 @@ export const routes = [
         path: '/holiday/:holidayId/edit',
         name: 'holiday.edit',
         component: HolidayEditComponent,
+        beforeEnter: isLoggedIn,
+    },
+    {
+        path: '/holiday/:holidayId/permissions',
+        name: 'holiday.edit.permissions',
+        component: HolidayEditPermissionsComponent,
         beforeEnter: isLoggedIn,
     },
     // Messages
