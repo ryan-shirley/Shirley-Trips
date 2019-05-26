@@ -34,7 +34,7 @@
                     </div>
                 </div>
 
-                <hr />
+                <hr v-if="isConnectingFlight" />
 
                 <div class="row">
                     <div class="col-6">

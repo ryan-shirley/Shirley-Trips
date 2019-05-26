@@ -27,8 +27,7 @@
                     </div>
                     <div class="col-4">
                         <i class="fas fa-plane"></i>
-                        <p>Duration - {{ flight.duration }}</p>
-                        <p>Flight Number {{ flight.flightNumber }}</p>
+                        <p class="duration">{{ secondsToHm(flight.duration) }}</p>
                         <p v-if="flight.layoverLength">Layover length {{ flight.layoverLength }}</p>
                     </div>
                     <div class="col-4">
@@ -83,7 +82,17 @@
                     time[0] = +time[0] % 12 || 12; // Adjust hours
                 }
                 return time.join (''); // return adjusted time or original string
-            }
+            },
+            secondsToHm(d) {
+                d = Number(d);
+                var h = Math.floor(d / 3600);
+                var m = Math.floor(d % 3600 / 60);
+                var s = Math.floor(d % 3600 % 60);
+
+                var hDisplay = h > 0 ? h + (h == 1 ? " hour " : " hours ") : "";
+                var mDisplay = m > 0 ? m + (m == 1 ? " minute " : " minutes") : "";
+                return hDisplay + mDisplay; 
+            },
         }
     }
 </script>

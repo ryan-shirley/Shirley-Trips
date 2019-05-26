@@ -38,6 +38,13 @@
         }
     }
 
+    i {
+        font-size: 32px;
+        display: block;
+        margin-bottom: 10px;
+        margin-top: 15px;
+    }
+
     .card-header {
         position: relative;
 
@@ -61,6 +68,8 @@
     }
 
     .details {
+        text-align: center;
+
         p {
             margin: 0;
         }

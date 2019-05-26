@@ -2,7 +2,7 @@
     <div class="container mb-5">
 
         <hotel-details 
-            v-if="hotel"
+            v-if="hotel && !reOrderMode"
             :hotel='hotel'
             :reOrderMode="reOrderMode"
             :dayId="dayId"
@@ -10,7 +10,7 @@
             v-on:hotelDeleted="removeHotel"
             v-cloak
         />
-        <section v-else class="text-center">
+        <section v-else-if="!reOrderMode" class="text-center">
             <p>It looks like you have no home for the day..</p>
         </section>
        <!--/.Hotel -->

@@ -93,41 +93,6 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="originTime">Origin Time</label>
-
-                            <input type="time" name="originTime" class="form-control" v-model="form.originTime" />
-
-                            <span class="badge badge-danger" v-text="form.errors.get('originTime')" v-if="form.errors.has('originTime')"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="originAirportShort">Origin Airport Short</label>
-
-                            <input type="text" name="originAirportShort" class="form-control" v-model="form.originAirportShort" />
-
-                            <span class="badge badge-danger" v-text="form.errors.get('originAirportShort')" v-if="form.errors.has('originAirportShort')"></span>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="originAirportLong">Origin Airport Long</label>
-
-                            <input type="text" name="originAirportLong" class="form-control" v-model="form.originAirportLong" />
-
-                            <span class="badge badge-danger" v-text="form.errors.get('originAirportLong')" v-if="form.errors.has('originAirportLong')"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <hr />
-
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
                             <label for="destinationDate">Destination Date</label>
 
                             <input type="date" name="destinationDate" class="form-control" v-model="form.destinationDate" />
@@ -135,37 +100,11 @@
                             <span class="badge badge-danger" v-text="form.errors.get('destinationDate')" v-if="form.errors.has('destinationDate')"></span>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="destinationTime">Destination Time</label>
-
-                            <input type="time" name="destinationTime" class="form-control" v-model="form.destinationTime" />
-
-                            <span class="badge badge-danger" v-text="form.errors.get('destinationTime')" v-if="form.errors.has('destinationTime')"></span>
-                        </div>
-                    </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="destinationAirportShort">Destination Airport Short</label>
+                <hr />
 
-                            <input type="text" name="destinationAirportShort" class="form-control" v-model="form.destinationAirportShort" />
-
-                            <span class="badge badge-danger" v-text="form.errors.get('destinationAirportShort')" v-if="form.errors.has('destinationAirportShort')"></span>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="destinationAirportLong">Destination Airport Long</label>
-
-                            <input type="text" name="destinationAirportLong" class="form-control" v-model="form.destinationAirportLong" />
-
-                            <span class="badge badge-danger" v-text="form.errors.get('destinationAirportLong')" v-if="form.errors.has('destinationAirportLong')"></span>
-                        </div>
-                    </div>
-                </div>
+                <span class="badge badge-danger" v-text="flightsApiError" v-if="flightsApiError"></span><br />
                 
                 <button v-if="!loading" type="submit" class="btn btn-primary">Submit</button>
 
@@ -188,13 +127,7 @@
                     airlineId: '',
                     flightNumber: '',
                     originDate: this.$route.params.dayString,
-                    originTime: '',
-                    originAirportShort: '',
-                    originAirportLong: '',
                     destinationDate: '',
-                    destinationTime: '',
-                    destinationAirportShort: '',
-                    destinationAirportLong: '',
                     connectingFlightId: '',
                     layoverLength: '',
                     dayId: this.$route.params.dayId
@@ -202,7 +135,8 @@
                 isConnectingFlight: false,
                 airlines: [],
                 previousFlights: [],
-                loading: false
+                loading: false,
+                flightsApiError: ''
             }
         },
         mounted() {
@@ -210,7 +144,7 @@
             let token = localStorage.getItem('token')
 
             // Load Airlines
-            axios.get('/api/airlines/', {
+            axios.get('/api/airlines', {
                 headers: { Authorization: "Bearer " + token }
             })
             .then(resp => {
@@ -229,6 +163,8 @@
                     })
                     .catch(errors => {
                         console.log(errors)
+                        app.flightsApiError = errors[1]
+
                         app.loading = false
                     })
             }

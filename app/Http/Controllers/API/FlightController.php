@@ -8,9 +8,12 @@ use Validator;
 Use App\Flight;
 use App\Activity;
 use DateTime;
+use App\Traits\FlightAware;
 
 class FlightController extends Controller
 {
+    use FlightAware;
+
     public function show($id)
     {
         $flight = Flight::findOrFail($id);
@@ -24,13 +27,7 @@ class FlightController extends Controller
             'airlineId' => 'required|numeric|exists:airlines,id',
             'flightNumber' => 'required|string|max:50',
             'originDate' => 'required|date',
-            'originTime' => 'required|date_format:H:i',
-            'originAirportShort' => 'required|string|max:50',
-            'originAirportLong' => 'required|string|max:150',
             'destinationDate' => 'required|date',
-            'destinationTime' => 'required|date_format:H:i',
-            'destinationAirportShort' => 'required|string|max:50',
-            'destinationAirportLong' => 'required|string|max:150',
             'dayId' => 'required|numeric|exists:days,id',
             'connectingFlightId' => 'nullable|numeric|exists:flights,id',
             'layoverLength' => 'required_with:connectingFlightId',
@@ -42,19 +39,26 @@ class FlightController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
+        // Get live flight Info
+        $liveFlightInfoFull = json_decode($this->getFlightInfo($request->input('flightNumber')), true);
+
+        if($this->getFlightInfo($request->input('flightNumber')) == "Too many requests in a given amount of time.\n") {
+            return response()->json(['error', 'Too many requests in a given time. Please try again in a minute.'], 422);
+        }
+
+        $liveFlightInfo = $liveFlightInfoFull['FlightInfoStatusResult']['flights'][0];
+
+        // Create Flights
         $flight = new Flight();
         $flight->airline_id = $request->input('airlineId');
         $flight->flightNumber = $request->input('flightNumber');
-        $flight->originDayTime = new DateTime($request->input('originDate') . ' ' . $request->input('originTime'));
-        $flight->destinationDayTime =  new DateTime($request->input('destinationDate') . ' ' . $request->input('destinationTime'));
-
-        // Need to calculate the duration here..
-        $flight->duration = 0;
-
-        $flight->originAirportShort = $request->input('originAirportShort');
-        $flight->originAirportLong = $request->input('originAirportLong');
-        $flight->destinationAirportShort = $request->input('destinationAirportShort');
-        $flight->destinationAirportLong = $request->input('destinationAirportLong');
+        $flight->originDayTime = $request->input('originDate') . ' ' . date('H:i', $liveFlightInfo['filed_departure_time']['localtime']);
+        $flight->destinationDayTime = $request->input('destinationDate') . ' ' . date('H:i', $liveFlightInfo['filed_arrival_time']['localtime']);
+        $flight->duration = $liveFlightInfo['filed_ete'];
+        $flight->originAirportShort = $liveFlightInfo['origin']['alternate_ident'];
+        $flight->originAirportLong = $liveFlightInfo['origin']['city'];
+        $flight->destinationAirportShort = $liveFlightInfo['destination']['alternate_ident'];
+        $flight->destinationAirportLong = $liveFlightInfo['destination']['city'];
         
         // Layover + Connecting Flight
         $flight->connectingFlightId = $request->input('connectingFlightId');

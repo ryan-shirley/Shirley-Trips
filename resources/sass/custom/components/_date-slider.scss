@@ -17,11 +17,13 @@
     }
 
     .owl-item {
+        margin-bottom: 10px;
+
         &.center {
             .day {
                 background: rgba($text-alterate, .1);
-                height: 30px;
-                width: 30px;
+                height: 40px;
+                width: 40px;
                 display: block;
                 margin: 0 auto;
                 border-radius: 100%;
@@ -37,12 +39,13 @@
         }
 
         .day {
-            line-height: 30px;
+            line-height: 40px;
+            font-size: 16px;
         }
 
         .letter {
             display: block;
-            margin-bottom: 7px;
+            margin-bottom: 8px;
             color: $text-alterate;
         }
 

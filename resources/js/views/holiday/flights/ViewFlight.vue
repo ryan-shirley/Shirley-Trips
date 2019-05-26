@@ -6,22 +6,24 @@
             v-on:delete="deleteFlight"
         />
 
-        <section class="bg-primary page-title" v-if="flightInfo">
-                <h1>{{ getFlightInfo.origin.city }} - {{ getFlightInfo.destination.city }}</h1>
+        <section class="bg-primary page-title" v-if="flight">
+                <h1>{{ flight.originAirportLong }} - {{ flight.destinationAirportLong }}</h1>
                 <p>No. {{ flight.flightNumber }}</p>
-                <p>Status - {{ getFlightInfo.status }}</p>
+                <p v-if="flightInfo">{{ getFlightStatus }}</p>
         </section>
 
-        <section class="container" v-if="getFlightInfo">
+        <section class="container" v-if="flight">
             <div class="card">
                 <div class="card-body">
-                    <p>Duration - {{ secondsToHm(getFlightInfo.filed_ete) }}</p>
-                    <p>Estimated Depart date - {{ getFlightInfo.estimated_departure_time.date }}, time - {{ getFlightInfo.estimated_departure_time.time }} {{ getFlightInfo.estimated_departure_time.tz }}</p>
-                    <p>Estimated Arrive date - {{ getFlightInfo.estimated_arrival_time.date }}, time - {{ getFlightInfo.estimated_arrival_time.time }} {{ getFlightInfo.estimated_arrival_time.tz }}</p>
+                    <p>Duration - {{ secondsToHm(flight.duration) }}</p>
+                    <!-- <p>Origin - {{ flight.originDayTime }}</p>
+                    <p>Destination - {{ flight.destinationDayTime }}</p> -->
 
-                    <div v-if="getFlightInfo.actual_arrival_time.date && getFlightInfo.actual_departure_time.date">
-                        <p>Actual Depart date - {{ getFlightInfo.actual_arrival_time.date }}, time - {{ getFlightInfo.actual_arrival_time.time }} {{ getFlightInfo.actual_arrival_time.tz }}</p>
-                        <p>Actual Arrive date - {{ getFlightInfo.actual_departure_time.date }}, time - {{ getFlightInfo.actual_departure_time.time }} {{ getFlightInfo.actual_departure_time.tz }}</p>
+                    <div v-if="progress > 0">
+                        <h3 class="mb-3">Flight Progress</h3>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :style="'width: ' + progress + '%;'" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100">{{ progress }}%</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -36,7 +38,8 @@
             return {
                 flight: {},
                 activity_id: '',
-                flightInfo: {}
+                flightInfo: null,
+                progress: -1
             }
         },
         mounted() {
@@ -59,7 +62,9 @@
                 .then(resp => {
                     app.flightInfo = resp.data
                 })
-                .catch(errors => alert('Could not load flight information'))
+                .catch(errors => {
+                    console.log(errors)
+                })
             })
             .catch(errors => alert('Could not load flight'))
 
@@ -93,35 +98,34 @@
                 var mDisplay = m > 0 ? m + (m == 1 ? " minute " : " minutes") : "";
                 return hDisplay + mDisplay; 
             },
-            ConvertTimeformat(format, str) {
-                var time = str.slice(0, -2) + ' ' +  str.slice(-2)
-                var hours = Number(time.match(/^(\d+)/)[1]);
-                var minutes = Number(time.match(/:(\d+)/)[1]);
-                var AMPM = time.match(/\s(.*)$/)[1];
-                if (AMPM == "PM" && hours < 12) hours = hours + 12;
-                if (AMPM == "AM" && hours == 12) hours = hours - 12;
-                var sHours = hours.toString();
-                var sMinutes = minutes.toString();
-                if (hours < 10) sHours = "0" + sHours;
-                if (minutes < 10) sMinutes = "0" + sMinutes;
-                
-                return sHours + ":" + sMinutes;
-            }
         },
         computed: {
-            getFlightInfo() {
+            getFlightStatus() {
                 let app = this
-                let flights = app.flightInfo.FlightInfoStatusResult.flights
-                let pattern = /(\d{2})\/(\d{2})\/(\d{4})/
 
-                // Loop through live flight info to get flight for same day
-                for (var i = 0; i < flights.length ; i++) {
-                    if(new Date(flights[i].filed_departure_time.date.replace(pattern,'$3-$2-$1')).getDay() === new Date(app.flight.originDayTime).getDay()) {
-                        return flights[i]
+                // Check Flights Exist
+                if (typeof app.flightInfo.FlightInfoStatusResult.flights !== 'undefined') {
+                    let flights = app.flightInfo.FlightInfoStatusResult.flights
+                    let pattern = /(\d{2})\/(\d{2})\/(\d{4})/
+
+                    // Loop through live flight info to get flight for same day
+                    for (var i = 0; i < flights.length ; i++) {
+
+                        let date1 = new Date(flights[i].filed_departure_time.date.replace(pattern,'$3-$2-$1'))
+                        date1.setHours(0,0,0,0)
+                        let date2 = new Date(app.flight.originDayTime)
+                        date2.setHours(0,0,0,0)
+                        
+                        if (date1.getTime() === date2.getTime()) {
+                            app.progress = flights[i].progress_percent
+
+                            return 'Status - ' + flights[i].status
+                        }
+
                     }
                 }
 
-                return false;
+                return 'Flight Status not available';
             }
         }
     }
