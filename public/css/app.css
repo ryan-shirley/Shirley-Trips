@@ -10672,7 +10672,6 @@ body {
 
 body {
   padding-top: 44px;
-  padding-bottom: 100px;
 }
 
 .sticky-top {
@@ -10777,6 +10776,7 @@ body {
 .navbar-toggler {
   border: none;
   padding: 0;
+  border-radius: 0;
 }
 
 .navbar-toggler span {
@@ -10809,7 +10809,7 @@ body {
 .page-title {
   color: #fff;
   text-align: center;
-  padding: 2rem 0;
+  padding: 2rem 1rem;
   margin-bottom: 2rem;
 }
 
@@ -11162,6 +11162,62 @@ body {
   text-decoration: none !important;
 }
 
+.full-screen-slider {
+  margin-top: -44px;
+}
+
+.full-screen-slider .cover {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.full-screen-slider .cover:after {
+  background: rgba(0, 0, 0, 0.25);
+  height: 100%;
+  width: 100%;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+}
+
+.full-screen-slider .owl-carousel {
+  padding: 0;
+  margin: 0;
+}
+
+.full-screen-slider .owl-carousel:before {
+  display: none;
+}
+
+.full-screen-slider .owl-carousel .owl-slide {
+  position: relative;
+  height: 100vh;
+  background-color: lightgray;
+}
+
+.full-screen-slider .owl-carousel .owl-item {
+  margin: 0;
+}
+
+.full-screen-slider h2 {
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 72px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.full-screen-slider .container {
+  z-index: 9;
+}
+
+form .required {
+  color: #e3342f;
+}
+
 .card {
   background: #fff;
   border-radius: 10px;
@@ -11189,5 +11245,28 @@ body {
 
 button:focus {
   outline: none;
+}
+
+.btn-login {
+  position: absolute;
+  bottom: 60px;
+  right: 0;
+  left: 0;
+  width: 200px;
+  margin: 0 auto;
+  z-index: 9999;
+  color: white;
+  background: rgba(255, 255, 255, 0.4);
+  font-size: 16px;
+  padding: 10px 5px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.btn-login:hover,
+.btn-login:focus,
+.btn-login:active {
+  background: #fff;
+  color: #605D6C;
 }
 

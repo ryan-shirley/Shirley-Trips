@@ -10,7 +10,7 @@
             <form @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
 
                 <div class="form-group">
-                    <label for="title">Title</label>
+                    <label for="title">Title <span class="required">*</span></label>
 
                     <input type="text" name="title" class="form-control" v-model="form.title" />
 

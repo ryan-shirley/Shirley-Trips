@@ -10,21 +10,21 @@
             <form @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
 
                 <div class="form-group">
-                    <label for="title">Title</label>
+                    <label for="title">Title <span class="required">*</span></label>
 
                     <input type="text" name="title" class="form-control" v-model="form.title" />
 
                     <span class="badge badge-danger" v-text="form.errors.get('title')" v-if="form.errors.has('title')"></span>
                 </div>
                 <div class="form-group">
-                    <label for="subTitle">Sub Title</label>
+                    <label for="subTitle">Sub Title <span class="required">*</span></label>
 
                     <input type="text" name="title" class="form-control" v-model="form.subTitle" />
 
                     <span class="badge badge-danger" v-text="form.errors.get('subTitle')" v-if="form.errors.has('subTitle')"></span>
                 </div>
                 <div class="form-group">
-                    <label for="image">Image</label>
+                    <label for="image">Image <span class="required">*</span></label>
                     <br />
 
                     <input type="file" @change="uploadFieldChange">
@@ -35,7 +35,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="beginDate">Begin Date</label>
+                            <label for="beginDate">Begin Date <span class="required">*</span></label>
 
                             <input type="date" name="beginDate" class="form-control" v-model="form.beginDate" />
 
@@ -44,7 +44,7 @@
                     </div>
                    <div class="col-6">
                         <div class="form-group">
-                            <label for="endDate">End Date</label>
+                            <label for="endDate">End Date <span class="required">*</span></label>
 
                             <input type="date" name="endDate" class="form-control" v-model="form.endDate" />
 

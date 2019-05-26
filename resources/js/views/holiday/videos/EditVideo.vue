@@ -10,7 +10,7 @@
             <form @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
 
                 <div class="form-group">
-                    <label for="videoUrl">Url</label>
+                    <label for="videoUrl">Url <span class="required">*</span></label>
 
                     <input type="text" name="videoUrl" class="form-control" v-model="form.videoUrl" />
 

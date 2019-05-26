@@ -1,6 +1,7 @@
 // Views
 import LoginComponent from './views/auth/LoginComponent.vue';
 import UserHomeComponent from './views/home/UserHome.vue';
+import HomeComponent from './views/home/Home.vue';
 
 // Holidays
 import HolidayViewComponent from './views/holiday/HolidayView.vue';
@@ -88,9 +89,12 @@ function checkLoginState(next) {
 export const routes = [
     {
         path: '/',
-        components: {
-            default: LoginComponent
-        },
+        component: HomeComponent,
+        name: 'home',
+    },
+    {
+        path: '/login',
+        component: LoginComponent,
         name: 'login',
     },
     {

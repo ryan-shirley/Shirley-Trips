@@ -10,48 +10,27 @@
             <form @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
 
                 <div class="form-group">
-                    <label for="title">Title</label>
+                    <label for="title">Title <span class="required">*</span></label>
 
                     <input type="text" name="title" class="form-control" v-model="form.title" />
 
                     <span class="badge badge-danger" v-text="form.errors.get('title')" v-if="form.errors.has('title')"></span>
                 </div>
                 <div class="form-group">
-                    <label for="subTitle">Sub Title</label>
+                    <label for="subTitle">Sub Title <span class="required">*</span></label>
 
                     <input type="text" name="title" class="form-control" v-model="form.subTitle" />
 
                     <span class="badge badge-danger" v-text="form.errors.get('subTitle')" v-if="form.errors.has('subTitle')"></span>
                 </div>
                 <div class="form-group">
-                    <label for="image">Image</label>
+                    <label for="image">Image <span class="required">*</span></label>
                     <br />
                     <img :src="imagePath" class="img-thumbnail" style="max-width: 200px" />
                     <input type="file" @change="uploadFieldChange">
 
                     <span class="badge badge-danger" v-text="form.errors.get('image')" v-if="form.errors.has('image')"></span>
                 </div>
-
-                <!-- <div class="row">
-                    <div class="col-6">
-                        <div class="form-group">
-                            <label for="beginDate">Begin Date</label>
-
-                            <input type="date" name="beginDate" class="form-control" v-model="form.beginDate" />
-
-                            <span class="badge badge-danger" v-text="form.errors.get('beginDate')" v-if="form.errors.has('beginDate')"></span>
-                        </div>
-                    </div>
-                   <div class="col-6">
-                        <div class="form-group">
-                            <label for="endDate">End Date</label>
-
-                            <input type="date" name="endDate" class="form-control" v-model="form.endDate" />
-
-                            <span class="badge badge-danger" v-text="form.errors.get('endDate')" v-if="form.errors.has('endDate')"></span>
-                        </div>
-                    </div>
-                </div> -->
                 
                 <button v-if="!loading" type="submit" class="btn btn-primary">Update</button>
 
@@ -77,8 +56,6 @@
                     title: '',
                     subTitle: '',
                     imageId: '',
-                    // beginDate: '',
-                    // endDate: ''
                 }),
                 imagePath: '',
                 imageToUpload: '',

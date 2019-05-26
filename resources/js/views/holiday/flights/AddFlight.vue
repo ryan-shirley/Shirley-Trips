@@ -12,7 +12,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="form-group">
-                            <label for="airline">Connecting Flight</label>
+                            <label for="airline">Connecting Flight <span class="required">*</span></label>
                             <br />
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" v-model="isConnectingFlight" name="isConnectingFlight" :value="false" checked>
@@ -30,7 +30,7 @@
                 <div class="row" v-if="isConnectingFlight">
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="airline">Previous Flight</label>
+                            <label for="airline">Previous Flight <span class="required">*</span></label>
 
                             <select class="form-control" v-model="form.connectingFlightId">
                                 <option v-for="flight in previousFlights" :value="flight.id" :key="flight.id">
@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="layoverLength">Layover Length (mins)</label>
+                            <label for="layoverLength">Layover Length (mins) <span class="required">*</span></label>
 
                             <input type="text" name="flightNumber" class="form-control" v-model="form.layoverLength" />
 
@@ -57,7 +57,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="airline">Airline</label>
+                            <label for="airline">Airline <span class="required">*</span></label>
 
                             <select class="form-control" v-model="form.airlineId">
                                 <option v-for="airline in airlines" :value="airline.id" :key="airline.id">
@@ -70,7 +70,7 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="flightNumber">Flight Number</label>
+                            <label for="flightNumber">Flight Number <span class="required">*</span></label>
 
                             <input type="text" name="flightNumber" class="form-control" v-model="form.flightNumber" />
 
@@ -84,7 +84,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="originDate">Origin Date</label>
+                            <label for="originDate">Origin Date <span class="required">*</span></label>
 
                             <input type="date" name="originDate" class="form-control" v-model="form.originDate" />
 
@@ -93,7 +93,7 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="destinationDate">Destination Date</label>
+                            <label for="destinationDate">Destination Date <span class="required">*</span></label>
 
                             <input type="date" name="destinationDate" class="form-control" v-model="form.destinationDate" />
 
@@ -101,8 +101,6 @@
                         </div>
                     </div>
                 </div>
-
-                <hr />
 
                 <span class="badge badge-danger" v-text="flightsApiError" v-if="flightsApiError"></span><br />
                 

@@ -1,6 +1,6 @@
 <template>
     <div class="row justify-content-md-center" v-if="day.activities">
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-sm-6">
             <activity-list 
                 :activitiesRaw="sortedActivities" 
                 :hotel="day.hotel"

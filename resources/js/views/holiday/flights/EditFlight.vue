@@ -12,7 +12,7 @@
                 <div class="row" v-if="isConnectingFlight">
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="airline">Previous Flight</label>
+                            <label for="airline">Previous Flight <span class="required">*</span></label>
 
                             <select class="form-control" v-model="form.connectingFlightId">
                                 <option v-for="flight in previousFlights" :value="flight.id" :key="flight.id">
@@ -25,7 +25,7 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="layoverLength">Layover Length (mins)</label>
+                            <label for="layoverLength">Layover Length (mins) <span class="required">*</span></label>
 
                             <input type="text" name="flightNumber" class="form-control" v-model="form.layoverLength" />
 
@@ -39,7 +39,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="airline">Airline</label>
+                            <label for="airline">Airline <span class="required">*</span></label>
 
                             <select class="form-control" v-model="form.airlineId">
                                 <option v-for="airline in airlines" :value="airline.id" :key="airline.id">
@@ -52,7 +52,7 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="flightNumber">Flight Number</label>
+                            <label for="flightNumber">Flight Number <span class="required">*</span></label>
 
                             <input type="text" name="flightNumber" class="form-control" v-model="form.flightNumber" />
 
@@ -66,7 +66,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="originDate">Origin Date</label>
+                            <label for="originDate">Origin Date <span class="required">*</span></label>
 
                             <input type="date" name="originDate" class="form-control" v-model="form.originDate" />
 
@@ -75,7 +75,7 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="originTime">Origin Time</label>
+                            <label for="originTime">Origin Time <span class="required">*</span></label>
 
                             <input type="time" name="originTime" class="form-control" v-model="form.originTime" />
 
@@ -87,7 +87,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="originAirportShort">Origin Airport Short</label>
+                            <label for="originAirportShort">Origin Airport Short <span class="required">*</span></label>
 
                             <input type="text" name="originAirportShort" class="form-control" v-model="form.originAirportShort" />
 
@@ -96,7 +96,7 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="originAirportLong">Origin Airport Long</label>
+                            <label for="originAirportLong">Origin Airport Long <span class="required">*</span></label>
 
                             <input type="text" name="originAirportLong" class="form-control" v-model="form.originAirportLong" />
 
@@ -110,7 +110,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="destinationDate">Destination Date</label>
+                            <label for="destinationDate">Destination Date <span class="required">*</span></label>
 
                             <input type="date" name="destinationDate" class="form-control" v-model="form.destinationDate" />
 
@@ -119,7 +119,7 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="destinationTime">Destination Time</label>
+                            <label for="destinationTime">Destination Time <span class="required">*</span></label>
 
                             <input type="time" name="destinationTime" class="form-control" v-model="form.destinationTime" />
 
@@ -131,7 +131,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="destinationAirportShort">Destination Airport Short</label>
+                            <label for="destinationAirportShort">Destination Airport Short <span class="required">*</span></label>
 
                             <input type="text" name="destinationAirportShort" class="form-control" v-model="form.destinationAirportShort" />
 
@@ -140,7 +140,7 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="destinationAirportLong">Destination Airport Long</label>
+                            <label for="destinationAirportLong">Destination Airport Long <span class="required">*</span></label>
 
                             <input type="text" name="destinationAirportLong" class="form-control" v-model="form.destinationAirportLong" />
 

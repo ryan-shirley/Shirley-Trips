@@ -8,14 +8,14 @@
             <form @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
 
                 <div class="form-group">
-                    <label for="name">Name</label>
+                    <label for="name">Name <span class="required">*</span></label>
 
                     <input type="text" name="name" class="form-control" v-model="form.name" required />
 
                     <span class="badge badge-danger" v-text="form.errors.get('name')" v-if="form.errors.has('name')"></span>
                 </div>
                 <div class="form-group">
-                    <label for="image">Image</label>
+                    <label for="image">Image <span class="required">*</span></label>
                     <br />
                     <input type="file" @change="uploadFieldChange">
 

@@ -1,7 +1,7 @@
 .page-title {
     color: $white;
     text-align: center;
-    padding: ($spacer * 2) 0;
+    padding: ($spacer * 2) $spacer;
     margin-bottom: $spacer * 2;
 
     &.bg-image {

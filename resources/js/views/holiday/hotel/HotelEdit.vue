@@ -10,21 +10,21 @@
             <form @submit.prevent="onSubmit" @keydown="form.errors.clear($event.target.name)">
 
                 <div class="form-group">
-                    <label for="name">Name</label>
+                    <label for="name">Name <span class="required">*</span></label>
 
                     <input type="text" name="name" class="form-control" v-model="form.name" />
 
                     <span class="badge badge-danger" v-text="form.errors.get('name')" v-if="form.errors.has('name')"></span>
                 </div>
                 <div class="form-group">
-                    <label for="location">Location</label>
+                    <label for="location">Location <span class="required">*</span></label>
 
                     <input type="text" name="location" class="form-control" v-model="form.location" />
 
                     <span class="badge badge-danger" v-text="form.errors.get('location')" v-if="form.errors.has('location')"></span>
                 </div>
                 <div class="form-group">
-                    <label for="image">Image</label>
+                    <label for="image">Image <span class="required">*</span></label>
                     <br />
                     <img :src="imagePath" class="img-thumbnail" style="max-width: 200px" />
                     <input type="file" @change="uploadFieldChange">
@@ -35,7 +35,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <label>Check In</label>
+                            <label>Check In <span class="required">*</span></label>
                             <select class="form-control" v-model="form.dayCheckInId">
                                 <option  v-for="day in days" :key="'checkInDayId' + day.id" :value="day.id">{{ day.day }}</option>
                             </select>
@@ -45,7 +45,7 @@
                     </div>
                    <div class="col-6">
                         <div class="form-group">
-                            <label>Check Out</label>
+                            <label>Check Out <span class="required">*</span></label>
                             <select class="form-control" v-model="form.dayCheckOutId">
                                 <option  v-for="day in days" :key="'dayCheckOutId' + day.id" :value="day.id">{{ day.day }}</option>
                             </select>

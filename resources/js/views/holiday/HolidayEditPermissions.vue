@@ -8,7 +8,7 @@
 
         <section class="container">
             <div class="row justify-content-md-center">
-                <div class="col-6">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <h2>All users</h2>

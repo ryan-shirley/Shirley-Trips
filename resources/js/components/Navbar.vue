@@ -83,7 +83,7 @@
                 let token = localStorage.removeItem('token')
                 let isAdmin = localStorage.removeItem('isAdmin')
                 let first_name = localStorage.removeItem('first_name')
-                this.$router.push({ name: 'login' })
+                this.$router.push({ name: 'home' })
             },
             deleteHoliday(id) {
                 if(confirm("Are you sure you want to delete this holiday?")) {

@@ -1848,7 +1848,7 @@ __webpack_require__.r(__webpack_exports__);
       var isAdmin = localStorage.removeItem('isAdmin');
       var first_name = localStorage.removeItem('first_name');
       this.$router.push({
-        name: 'login'
+        name: 'home'
       });
     },
     deleteHoliday: function deleteHoliday(id) {
@@ -2901,6 +2901,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -3206,27 +3208,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
  // Uploading Image
 
 
@@ -3236,9 +3217,7 @@ __webpack_require__.r(__webpack_exports__);
       form: new _classes_Form_js__WEBPACK_IMPORTED_MODULE_0__["default"]('/holiday/' + this.$route.params.holidayId, 'put', true, {
         title: '',
         subTitle: '',
-        imageId: '' // beginDate: '',
-        // endDate: ''
-
+        imageId: ''
       }),
       imagePath: '',
       imageToUpload: '',
@@ -3633,8 +3612,6 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _classes_Form_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../classes/Form.js */ "./resources/js/classes/Form.js");
-//
-//
 //
 //
 //
@@ -4847,7 +4824,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
  // Uploading Image
 
  // Reorder Images
@@ -5554,6 +5530,58 @@ __webpack_require__.r(__webpack_exports__);
         app.loading = false;
       });
     }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/home/Home.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/home/Home.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue_owl_carousel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-owl-carousel */ "./node_modules/vue-owl-carousel/dist/vue-owl-carousel.js");
+/* harmony import */ var vue_owl_carousel__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue_owl_carousel__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'date-slider',
+  components: {
+    carousel: vue_owl_carousel__WEBPACK_IMPORTED_MODULE_0___default.a
   }
 });
 
@@ -45675,7 +45703,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "name" } }, [_vm._v("Name")]),
+              _vm._m(0),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -45710,7 +45738,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "image" } }, [_vm._v("Image")]),
+              _vm._m(1),
               _vm._v(" "),
               _c("br"),
               _vm._v(" "),
@@ -45741,7 +45769,26 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "name" } }, [
+      _vm._v("Name "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "image" } }, [
+      _vm._v("Image "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -45818,126 +45865,126 @@ var render = function() {
     [
       _c("navigation"),
       _vm._v(" "),
-      _c("div", { staticClass: "row mt-5 justify-content-md-center" }, [
-        _c("div", { staticClass: "col-md-3 col-12" }, [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-header" }, [_vm._v("Login")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _c(
-                "form",
-                {
-                  on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      return _vm.onSubmit($event)
-                    },
-                    keydown: function($event) {
-                      return _vm.form.errors.clear($event.target.name)
-                    }
-                  }
-                },
-                [
-                  _c("div", { staticClass: "form-group" }, [
-                    _c("label", { attrs: { for: "email" } }, [_vm._v("Email")]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.form.email,
-                          expression: "form.email"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: { type: "text", id: "email", name: "email" },
-                      domProps: { value: _vm.form.email },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.form, "email", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "form-group" }, [
-                    _c("label", { attrs: { for: "password" } }, [
-                      _vm._v("Password")
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.form.password,
-                          expression: "form.password"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      attrs: {
-                        type: "password",
-                        id: "password",
-                        name: "password"
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "row mt-5 justify-content-md-center" }, [
+          _c("div", { staticClass: "col-sm-6 col-12" }, [
+            _c("div", { staticClass: "card" }, [
+              _c("div", { staticClass: "card-header" }, [_vm._v("Login")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "card-body" }, [
+                _c(
+                  "form",
+                  {
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.onSubmit($event)
                       },
-                      domProps: { value: _vm.form.password },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.form, "password", $event.target.value)
-                        }
+                      keydown: function($event) {
+                        return _vm.form.errors.clear($event.target.name)
                       }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  !_vm.loading
-                    ? _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: { type: "submit" }
-                        },
-                        [_vm._v("Submit")]
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.loading
-                    ? _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-primary",
-                          attrs: { type: "button", disabled: "" }
-                        },
-                        [
-                          _c("span", {
-                            staticClass: "spinner-grow spinner-grow-sm",
-                            attrs: { role: "status", "aria-hidden": "true" }
-                          }),
-                          _vm._v(
-                            "\n                            Logging in...\n                        "
-                          )
-                        ]
-                      )
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _c("br"),
-                  _c("br"),
-                  _vm.form.errors.has("error")
-                    ? _c("span", {
-                        staticClass: "badge badge-danger",
-                        domProps: {
-                          textContent: _vm._s(_vm.form.errors.getOne("error"))
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "form-group" }, [
+                      _vm._m(0),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.email,
+                            expression: "form.email"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", id: "email", name: "email" },
+                        domProps: { value: _vm.form.email },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.form, "email", $event.target.value)
+                          }
                         }
                       })
-                    : _vm._e()
-                ]
-              )
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "form-group" }, [
+                      _vm._m(1),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.form.password,
+                            expression: "form.password"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: {
+                          type: "password",
+                          id: "password",
+                          name: "password"
+                        },
+                        domProps: { value: _vm.form.password },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.form, "password", $event.target.value)
+                          }
+                        }
+                      })
+                    ]),
+                    _vm._v(" "),
+                    !_vm.loading
+                      ? _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            attrs: { type: "submit" }
+                          },
+                          [_vm._v("Submit")]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.loading
+                      ? _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            attrs: { type: "button", disabled: "" }
+                          },
+                          [
+                            _c("span", {
+                              staticClass: "spinner-grow spinner-grow-sm",
+                              attrs: { role: "status", "aria-hidden": "true" }
+                            }),
+                            _vm._v(
+                              "\n                                Logging in...\n                            "
+                            )
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _c("br"),
+                    _c("br"),
+                    _vm.form.errors.has("error")
+                      ? _c("span", {
+                          staticClass: "badge badge-danger",
+                          domProps: {
+                            textContent: _vm._s(_vm.form.errors.getOne("error"))
+                          }
+                        })
+                      : _vm._e()
+                  ]
+                )
+              ])
             ])
           ])
         ])
@@ -45946,7 +45993,26 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "email" } }, [
+      _vm._v("Email "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "password" } }, [
+      _vm._v("Password "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -45972,7 +46038,7 @@ var render = function() {
     ? _c("div", { staticClass: "row justify-content-md-center" }, [
         _c(
           "div",
-          { staticClass: "col-12 col-md-4" },
+          { staticClass: "col-12 col-sm-6" },
           [
             _c("activity-list", {
               key: _vm.day.day,
@@ -46035,7 +46101,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "title" } }, [_vm._v("Title")]),
+              _vm._m(1),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -46070,9 +46136,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "subTitle" } }, [
-                _vm._v("Sub Title")
-              ]),
+              _vm._m(2),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -46107,7 +46171,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "image" } }, [_vm._v("Image")]),
+              _vm._m(3),
               _vm._v(" "),
               _c("br"),
               _vm._v(" "),
@@ -46129,9 +46193,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "beginDate" } }, [
-                    _vm._v("Begin Date")
-                  ]),
+                  _vm._m(4),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -46168,9 +46230,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "endDate" } }, [
-                    _vm._v("End Date")
-                  ]),
+                  _vm._m(5),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -46245,6 +46305,51 @@ var staticRenderFns = [
     return _c("section", { staticClass: "bg-primary page-title" }, [
       _c("h1", [_vm._v("Create A Holiday!")])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "title" } }, [
+      _vm._v("Title "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "subTitle" } }, [
+      _vm._v("Sub Title "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "image" } }, [
+      _vm._v("Image "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "beginDate" } }, [
+      _vm._v("Begin Date "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "endDate" } }, [
+      _vm._v("End Date "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
   }
 ]
 render._withStripped = true
@@ -46291,7 +46396,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "title" } }, [_vm._v("Title")]),
+              _vm._m(1),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -46326,9 +46431,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "subTitle" } }, [
-                _vm._v("Sub Title")
-              ]),
+              _vm._m(2),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -46363,7 +46466,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "image" } }, [_vm._v("Image")]),
+              _vm._m(3),
               _vm._v(" "),
               _c("br"),
               _vm._v(" "),
@@ -46427,6 +46530,33 @@ var staticRenderFns = [
     return _c("section", { staticClass: "bg-primary page-title" }, [
       _c("h1", [_vm._v("Edit holiday")])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "title" } }, [
+      _vm._v("Title "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "subTitle" } }, [
+      _vm._v("Sub Title "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "image" } }, [
+      _vm._v("Image "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
   }
 ]
 render._withStripped = true
@@ -46459,7 +46589,7 @@ var render = function() {
       _vm._v(" "),
       _c("section", { staticClass: "container" }, [
         _c("div", { staticClass: "row justify-content-md-center" }, [
-          _c("div", { staticClass: "col-6" }, [
+          _c("div", { staticClass: "col-12" }, [
             _c("div", { staticClass: "card" }, [
               _vm._m(1),
               _vm._v(" "),
@@ -46832,9 +46962,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-12" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "airline" } }, [
-                    _vm._v("Connecting Flight")
-                  ]),
+                  _vm._m(1),
                   _vm._v(" "),
                   _c("br"),
                   _vm._v(" "),
@@ -46912,9 +47040,7 @@ var render = function() {
               ? _c("div", { staticClass: "row" }, [
                   _c("div", { staticClass: "col-6" }, [
                     _c("div", { staticClass: "form-group" }, [
-                      _c("label", { attrs: { for: "airline" } }, [
-                        _vm._v("Previous Flight")
-                      ]),
+                      _vm._m(2),
                       _vm._v(" "),
                       _c(
                         "select",
@@ -46981,9 +47107,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "col-6" }, [
                     _c("div", { staticClass: "form-group" }, [
-                      _c("label", { attrs: { for: "layoverLength" } }, [
-                        _vm._v("Layover Length (mins)")
-                      ]),
+                      _vm._m(3),
                       _vm._v(" "),
                       _c("input", {
                         directives: [
@@ -47031,9 +47155,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "airline" } }, [
-                    _vm._v("Airline")
-                  ]),
+                  _vm._m(4),
                   _vm._v(" "),
                   _c(
                     "select",
@@ -47096,9 +47218,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "flightNumber" } }, [
-                    _vm._v("Flight Number")
-                  ]),
+                  _vm._m(5),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -47141,9 +47261,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "originDate" } }, [
-                    _vm._v("Origin Date")
-                  ]),
+                  _vm._m(6),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -47180,9 +47298,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "destinationDate" } }, [
-                    _vm._v("Destination Date")
-                  ]),
+                  _vm._m(7),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -47223,8 +47339,6 @@ var render = function() {
                 ])
               ])
             ]),
-            _vm._v(" "),
-            _c("hr"),
             _vm._v(" "),
             _vm.flightsApiError
               ? _c("span", {
@@ -47272,6 +47386,69 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("section", { staticClass: "bg-primary page-title" }, [
       _c("h1", [_vm._v("Add Flight")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "airline" } }, [
+      _vm._v("Connecting Flight "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "airline" } }, [
+      _vm._v("Previous Flight "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "layoverLength" } }, [
+      _vm._v("Layover Length (mins) "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "airline" } }, [
+      _vm._v("Airline "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "flightNumber" } }, [
+      _vm._v("Flight Number "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "originDate" } }, [
+      _vm._v("Origin Date "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "destinationDate" } }, [
+      _vm._v("Destination Date "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
     ])
   }
 ]
@@ -47322,9 +47499,7 @@ var render = function() {
               ? _c("div", { staticClass: "row" }, [
                   _c("div", { staticClass: "col-6" }, [
                     _c("div", { staticClass: "form-group" }, [
-                      _c("label", { attrs: { for: "airline" } }, [
-                        _vm._v("Previous Flight")
-                      ]),
+                      _vm._m(1),
                       _vm._v(" "),
                       _c(
                         "select",
@@ -47391,9 +47566,7 @@ var render = function() {
                   _vm._v(" "),
                   _c("div", { staticClass: "col-6" }, [
                     _c("div", { staticClass: "form-group" }, [
-                      _c("label", { attrs: { for: "layoverLength" } }, [
-                        _vm._v("Layover Length (mins)")
-                      ]),
+                      _vm._m(2),
                       _vm._v(" "),
                       _c("input", {
                         directives: [
@@ -47441,9 +47614,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "airline" } }, [
-                    _vm._v("Airline")
-                  ]),
+                  _vm._m(3),
                   _vm._v(" "),
                   _c(
                     "select",
@@ -47506,9 +47677,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "flightNumber" } }, [
-                    _vm._v("Flight Number")
-                  ]),
+                  _vm._m(4),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -47551,9 +47720,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "originDate" } }, [
-                    _vm._v("Origin Date")
-                  ]),
+                  _vm._m(5),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -47590,9 +47757,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "originTime" } }, [
-                    _vm._v("Origin Time")
-                  ]),
+                  _vm._m(6),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -47631,9 +47796,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "originAirportShort" } }, [
-                    _vm._v("Origin Airport Short")
-                  ]),
+                  _vm._m(7),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -47676,9 +47839,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "originAirportLong" } }, [
-                    _vm._v("Origin Airport Long")
-                  ]),
+                  _vm._m(8),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -47725,9 +47886,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "destinationDate" } }, [
-                    _vm._v("Destination Date")
-                  ]),
+                  _vm._m(9),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -47770,9 +47929,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "destinationTime" } }, [
-                    _vm._v("Destination Time")
-                  ]),
+                  _vm._m(10),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -47817,9 +47974,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "destinationAirportShort" } }, [
-                    _vm._v("Destination Airport Short")
-                  ]),
+                  _vm._m(11),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -47862,9 +48017,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "destinationAirportLong" } }, [
-                    _vm._v("Destination Airport Long")
-                  ]),
+                  _vm._m(12),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -47945,6 +48098,114 @@ var staticRenderFns = [
     return _c("section", { staticClass: "bg-primary page-title" }, [
       _c("h1", [_vm._v("Edit Flight")])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "airline" } }, [
+      _vm._v("Previous Flight "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "layoverLength" } }, [
+      _vm._v("Layover Length (mins) "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "airline" } }, [
+      _vm._v("Airline "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "flightNumber" } }, [
+      _vm._v("Flight Number "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "originDate" } }, [
+      _vm._v("Origin Date "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "originTime" } }, [
+      _vm._v("Origin Time "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "originAirportShort" } }, [
+      _vm._v("Origin Airport Short "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "originAirportLong" } }, [
+      _vm._v("Origin Airport Long "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "destinationDate" } }, [
+      _vm._v("Destination Date "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "destinationTime" } }, [
+      _vm._v("Destination Time "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "destinationAirportShort" } }, [
+      _vm._v("Destination Airport Short "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "destinationAirportLong" } }, [
+      _vm._v("Destination Airport Long "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
   }
 ]
 render._withStripped = true
@@ -48002,6 +48263,16 @@ var render = function() {
                 _c("p", [
                   _vm._v(
                     "Duration - " + _vm._s(_vm.secondsToHm(_vm.flight.duration))
+                  )
+                ]),
+                _vm._v(" "),
+                _c("p", [
+                  _vm._v("Origin - " + _vm._s(_vm.flight.originDayTime))
+                ]),
+                _vm._v(" "),
+                _c("p", [
+                  _vm._v(
+                    "Destination - " + _vm._s(_vm.flight.destinationDayTime)
                   )
                 ]),
                 _vm._v(" "),
@@ -48083,7 +48354,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "name" } }, [_vm._v("Name")]),
+              _vm._m(1),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -48118,7 +48389,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "location" } }, [_vm._v("Location")]),
+              _vm._m(2),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -48153,7 +48424,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "image" } }, [_vm._v("Image")]),
+              _vm._m(3),
               _vm._v(" "),
               _c("br"),
               _vm._v(" "),
@@ -48175,7 +48446,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", [_vm._v("Check In")]),
+                  _vm._m(4),
                   _vm._v(" "),
                   _c(
                     "select",
@@ -48237,7 +48508,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", [_vm._v("Check Out")]),
+                  _vm._m(5),
                   _vm._v(" "),
                   _c(
                     "select",
@@ -48337,6 +48608,51 @@ var staticRenderFns = [
     return _c("section", { staticClass: "bg-primary page-title" }, [
       _c("h1", [_vm._v("Add Hotel")])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "name" } }, [
+      _vm._v("Name "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "location" } }, [
+      _vm._v("Location "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "image" } }, [
+      _vm._v("Image "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", [
+      _vm._v("Check In "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", [
+      _vm._v("Check Out "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
   }
 ]
 render._withStripped = true
@@ -48383,7 +48699,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "name" } }, [_vm._v("Name")]),
+              _vm._m(1),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -48418,7 +48734,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "location" } }, [_vm._v("Location")]),
+              _vm._m(2),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -48453,7 +48769,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "image" } }, [_vm._v("Image")]),
+              _vm._m(3),
               _vm._v(" "),
               _c("br"),
               _vm._v(" "),
@@ -48481,7 +48797,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", [_vm._v("Check In")]),
+                  _vm._m(4),
                   _vm._v(" "),
                   _c(
                     "select",
@@ -48543,7 +48859,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _c("label", [_vm._v("Check Out")]),
+                  _vm._m(5),
                   _vm._v(" "),
                   _c(
                     "select",
@@ -48642,6 +48958,51 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("section", { staticClass: "bg-primary page-title" }, [
       _c("h1", [_vm._v("Edit Hotel")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "name" } }, [
+      _vm._v("Name "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "location" } }, [
+      _vm._v("Location "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "image" } }, [
+      _vm._v("Image "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", [
+      _vm._v("Check In "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", [
+      _vm._v("Check Out "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
     ])
   }
 ]
@@ -48834,7 +49195,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "title" } }, [_vm._v("Title")]),
+              _vm._m(1),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -48951,8 +49312,6 @@ var render = function() {
                 attrs: { type: "file", multiple: "multiple", id: "images" },
                 on: { change: _vm.uploadFieldChange }
               }),
-              _vm._v(" "),
-              _c("hr"),
               _vm._v(" "),
               _c(
                 "div",
@@ -49082,6 +49441,15 @@ var staticRenderFns = [
     return _c("section", { staticClass: "bg-primary page-title" }, [
       _c("h1", [_vm._v("Add Message")])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "title" } }, [
+      _vm._v("Title "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
   }
 ]
 render._withStripped = true
@@ -49128,7 +49496,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "title" } }, [_vm._v("Title")]),
+              _vm._m(1),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -49460,6 +49828,15 @@ var staticRenderFns = [
     return _c("section", { staticClass: "bg-primary page-title" }, [
       _c("h1", [_vm._v("Edit Message")])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "title" } }, [
+      _vm._v("Title "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
   }
 ]
 render._withStripped = true
@@ -49580,7 +49957,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "videoUrl" } }, [_vm._v("Url")]),
+              _vm._m(1),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -49653,6 +50030,15 @@ var staticRenderFns = [
     return _c("section", { staticClass: "bg-primary page-title" }, [
       _c("h1", [_vm._v("Add Video")])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "videoUrl" } }, [
+      _vm._v("Url "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
   }
 ]
 render._withStripped = true
@@ -49699,7 +50085,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "videoUrl" } }, [_vm._v("Url")]),
+              _vm._m(1),
               _vm._v(" "),
               _c("input", {
                 directives: [
@@ -49772,8 +50158,102 @@ var staticRenderFns = [
     return _c("section", { staticClass: "bg-primary page-title" }, [
       _c("h1", [_vm._v("Edit Video")])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "videoUrl" } }, [
+      _vm._v("Url "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
   }
 ]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/home/Home.vue?vue&type=template&id=0b5baac0&":
+/*!*******************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/home/Home.vue?vue&type=template&id=0b5baac0& ***!
+  \*******************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "section",
+    { staticClass: "position-relative" },
+    [
+      _c(
+        "carousel",
+        {
+          staticClass: "full-screen-slider",
+          attrs: { nav: false, center: true, dots: false, items: 1, loop: true }
+        },
+        [
+          _c(
+            "div",
+            {
+              staticClass: "owl-slide d-flex align-items-center cover",
+              staticStyle: {
+                "background-image": "url('/images/Emily_Ryan.jpg')"
+              }
+            },
+            [
+              _c("div", { staticClass: "container" }, [
+                _c("h2", [_vm._v("Emily & Ryan")])
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "owl-slide d-flex align-items-center cover",
+              staticStyle: { "background-image": "url('/images/Emily.jpg')" }
+            },
+            [
+              _c("div", { staticClass: "container" }, [
+                _c("h2", [_vm._v("Emily")])
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "owl-slide d-flex align-items-center cover",
+              staticStyle: { "background-image": "url('/images/Ryan.jpg')" }
+            },
+            [
+              _c("div", { staticClass: "container" }, [
+                _c("h2", { staticClass: "text-center" }, [_vm._v("Ryan")])
+              ])
+            ]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "router-link",
+        { staticClass: "btn btn-login", attrs: { to: { name: "login" } } },
+        [_vm._v("login")]
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -65735,28 +66215,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "routes", function() { return routes; });
 /* harmony import */ var _views_auth_LoginComponent_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./views/auth/LoginComponent.vue */ "./resources/js/views/auth/LoginComponent.vue");
 /* harmony import */ var _views_home_UserHome_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./views/home/UserHome.vue */ "./resources/js/views/home/UserHome.vue");
-/* harmony import */ var _views_holiday_HolidayView_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./views/holiday/HolidayView.vue */ "./resources/js/views/holiday/HolidayView.vue");
-/* harmony import */ var _views_holiday_HolidayEdit_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./views/holiday/HolidayEdit.vue */ "./resources/js/views/holiday/HolidayEdit.vue");
-/* harmony import */ var _views_holiday_HolidayCreate_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./views/holiday/HolidayCreate.vue */ "./resources/js/views/holiday/HolidayCreate.vue");
-/* harmony import */ var _views_holiday_HolidayEditPermissions_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/holiday/HolidayEditPermissions.vue */ "./resources/js/views/holiday/HolidayEditPermissions.vue");
-/* harmony import */ var _views_holiday_DayView_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views/holiday/DayView.vue */ "./resources/js/views/holiday/DayView.vue");
-/* harmony import */ var _views_holiday_hotel_HotelView_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./views/holiday/hotel/HotelView.vue */ "./resources/js/views/holiday/hotel/HotelView.vue");
-/* harmony import */ var _views_holiday_hotel_HotelAdd_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./views/holiday/hotel/HotelAdd.vue */ "./resources/js/views/holiday/hotel/HotelAdd.vue");
-/* harmony import */ var _views_holiday_hotel_HotelEdit_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./views/holiday/hotel/HotelEdit.vue */ "./resources/js/views/holiday/hotel/HotelEdit.vue");
-/* harmony import */ var _views_holiday_messages_ViewMessage_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./views/holiday/messages/ViewMessage.vue */ "./resources/js/views/holiday/messages/ViewMessage.vue");
-/* harmony import */ var _views_holiday_messages_AddMessage_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./views/holiday/messages/AddMessage.vue */ "./resources/js/views/holiday/messages/AddMessage.vue");
-/* harmony import */ var _views_holiday_messages_EditMessage_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./views/holiday/messages/EditMessage.vue */ "./resources/js/views/holiday/messages/EditMessage.vue");
-/* harmony import */ var _views_holiday_flights_AddFlight_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./views/holiday/flights/AddFlight.vue */ "./resources/js/views/holiday/flights/AddFlight.vue");
-/* harmony import */ var _views_holiday_flights_EditFlight_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./views/holiday/flights/EditFlight.vue */ "./resources/js/views/holiday/flights/EditFlight.vue");
-/* harmony import */ var _views_holiday_flights_ViewFlight_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./views/holiday/flights/ViewFlight.vue */ "./resources/js/views/holiday/flights/ViewFlight.vue");
-/* harmony import */ var _views_holiday_videos_AddVideo_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./views/holiday/videos/AddVideo.vue */ "./resources/js/views/holiday/videos/AddVideo.vue");
-/* harmony import */ var _views_holiday_videos_EditVideo_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./views/holiday/videos/EditVideo.vue */ "./resources/js/views/holiday/videos/EditVideo.vue");
-/* harmony import */ var _views_admin_AdminHomeComponent_vue__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./views/admin/AdminHomeComponent.vue */ "./resources/js/views/admin/AdminHomeComponent.vue");
-/* harmony import */ var _views_admin_airlines_AirlinesList_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./views/admin/airlines/AirlinesList.vue */ "./resources/js/views/admin/airlines/AirlinesList.vue");
-/* harmony import */ var _views_admin_airlines_AirlinesAdd_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./views/admin/airlines/AirlinesAdd.vue */ "./resources/js/views/admin/airlines/AirlinesAdd.vue");
-/* harmony import */ var vue_router_multiguard__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! vue-router-multiguard */ "./node_modules/vue-router-multiguard/dist/vue-router-multiguard.min.js");
-/* harmony import */ var vue_router_multiguard__WEBPACK_IMPORTED_MODULE_21___default = /*#__PURE__*/__webpack_require__.n(vue_router_multiguard__WEBPACK_IMPORTED_MODULE_21__);
+/* harmony import */ var _views_home_Home_vue__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./views/home/Home.vue */ "./resources/js/views/home/Home.vue");
+/* harmony import */ var _views_holiday_HolidayView_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./views/holiday/HolidayView.vue */ "./resources/js/views/holiday/HolidayView.vue");
+/* harmony import */ var _views_holiday_HolidayEdit_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./views/holiday/HolidayEdit.vue */ "./resources/js/views/holiday/HolidayEdit.vue");
+/* harmony import */ var _views_holiday_HolidayCreate_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/holiday/HolidayCreate.vue */ "./resources/js/views/holiday/HolidayCreate.vue");
+/* harmony import */ var _views_holiday_HolidayEditPermissions_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views/holiday/HolidayEditPermissions.vue */ "./resources/js/views/holiday/HolidayEditPermissions.vue");
+/* harmony import */ var _views_holiday_DayView_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./views/holiday/DayView.vue */ "./resources/js/views/holiday/DayView.vue");
+/* harmony import */ var _views_holiday_hotel_HotelView_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./views/holiday/hotel/HotelView.vue */ "./resources/js/views/holiday/hotel/HotelView.vue");
+/* harmony import */ var _views_holiday_hotel_HotelAdd_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./views/holiday/hotel/HotelAdd.vue */ "./resources/js/views/holiday/hotel/HotelAdd.vue");
+/* harmony import */ var _views_holiday_hotel_HotelEdit_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./views/holiday/hotel/HotelEdit.vue */ "./resources/js/views/holiday/hotel/HotelEdit.vue");
+/* harmony import */ var _views_holiday_messages_ViewMessage_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./views/holiday/messages/ViewMessage.vue */ "./resources/js/views/holiday/messages/ViewMessage.vue");
+/* harmony import */ var _views_holiday_messages_AddMessage_vue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./views/holiday/messages/AddMessage.vue */ "./resources/js/views/holiday/messages/AddMessage.vue");
+/* harmony import */ var _views_holiday_messages_EditMessage_vue__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./views/holiday/messages/EditMessage.vue */ "./resources/js/views/holiday/messages/EditMessage.vue");
+/* harmony import */ var _views_holiday_flights_AddFlight_vue__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./views/holiday/flights/AddFlight.vue */ "./resources/js/views/holiday/flights/AddFlight.vue");
+/* harmony import */ var _views_holiday_flights_EditFlight_vue__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./views/holiday/flights/EditFlight.vue */ "./resources/js/views/holiday/flights/EditFlight.vue");
+/* harmony import */ var _views_holiday_flights_ViewFlight_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./views/holiday/flights/ViewFlight.vue */ "./resources/js/views/holiday/flights/ViewFlight.vue");
+/* harmony import */ var _views_holiday_videos_AddVideo_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./views/holiday/videos/AddVideo.vue */ "./resources/js/views/holiday/videos/AddVideo.vue");
+/* harmony import */ var _views_holiday_videos_EditVideo_vue__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./views/holiday/videos/EditVideo.vue */ "./resources/js/views/holiday/videos/EditVideo.vue");
+/* harmony import */ var _views_admin_AdminHomeComponent_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./views/admin/AdminHomeComponent.vue */ "./resources/js/views/admin/AdminHomeComponent.vue");
+/* harmony import */ var _views_admin_airlines_AirlinesList_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./views/admin/airlines/AirlinesList.vue */ "./resources/js/views/admin/airlines/AirlinesList.vue");
+/* harmony import */ var _views_admin_airlines_AirlinesAdd_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./views/admin/airlines/AirlinesAdd.vue */ "./resources/js/views/admin/airlines/AirlinesAdd.vue");
+/* harmony import */ var vue_router_multiguard__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! vue-router-multiguard */ "./node_modules/vue-router-multiguard/dist/vue-router-multiguard.min.js");
+/* harmony import */ var vue_router_multiguard__WEBPACK_IMPORTED_MODULE_22___default = /*#__PURE__*/__webpack_require__.n(vue_router_multiguard__WEBPACK_IMPORTED_MODULE_22__);
 // Views
+
 
  // Holidays
 
@@ -65838,9 +66320,11 @@ function checkLoginState(next) {
 
 var routes = [{
   path: '/',
-  components: {
-    "default": _views_auth_LoginComponent_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
-  },
+  component: _views_home_Home_vue__WEBPACK_IMPORTED_MODULE_23__["default"],
+  name: 'home'
+}, {
+  path: '/login',
+  component: _views_auth_LoginComponent_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
   name: 'login'
 }, {
   path: '/home',
@@ -65850,102 +66334,102 @@ var routes = [{
 }, {
   path: '/holiday/:holidayId',
   name: 'holiday.view',
-  component: _views_holiday_HolidayView_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+  component: _views_holiday_HolidayView_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
   beforeEnter: isLoggedIn,
   children: [{
     path: 'day/:dayId',
     name: 'holiday.view.day',
-    component: _views_holiday_DayView_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
+    component: _views_holiday_DayView_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
     beforeEnter: isLoggedIn
   }]
 }, {
   path: '/createHoliday',
   name: 'holiday.create',
-  component: _views_holiday_HolidayCreate_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
+  component: _views_holiday_HolidayCreate_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
 }, {
   path: '/holiday/:holidayId/edit',
   name: 'holiday.edit',
-  component: _views_holiday_HolidayEdit_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+  component: _views_holiday_HolidayEdit_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
   beforeEnter: isLoggedIn
 }, {
   path: '/holiday/:holidayId/permissions',
   name: 'holiday.edit.permissions',
-  component: _views_holiday_HolidayEditPermissions_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+  component: _views_holiday_HolidayEditPermissions_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
   beforeEnter: isLoggedIn
 }, // Messages
 {
   path: '/holiday/:holidayId/day/:dayId/message/:commentId',
   name: 'holiday.view.message',
-  component: _views_holiday_messages_ViewMessage_vue__WEBPACK_IMPORTED_MODULE_10__["default"],
+  component: _views_holiday_messages_ViewMessage_vue__WEBPACK_IMPORTED_MODULE_11__["default"],
   beforeEnter: isLoggedIn
 }, {
   path: '/holiday/:holidayId/day/:dayId/add/message',
   name: 'holiday.add.message',
-  component: _views_holiday_messages_AddMessage_vue__WEBPACK_IMPORTED_MODULE_11__["default"],
+  component: _views_holiday_messages_AddMessage_vue__WEBPACK_IMPORTED_MODULE_12__["default"],
   beforeEnter: isLoggedIn
 }, {
   path: '/holiday/:holidayId/day/:dayId/message/:commentId/edit',
   name: 'holiday.edit.message',
-  component: _views_holiday_messages_EditMessage_vue__WEBPACK_IMPORTED_MODULE_12__["default"],
+  component: _views_holiday_messages_EditMessage_vue__WEBPACK_IMPORTED_MODULE_13__["default"],
   beforeEnter: isLoggedIn
 }, // Flights
 {
   path: '/holiday/:holidayId/day/:dayId/flight/:flightId',
   name: 'holiday.view.flight',
-  component: _views_holiday_flights_ViewFlight_vue__WEBPACK_IMPORTED_MODULE_15__["default"],
+  component: _views_holiday_flights_ViewFlight_vue__WEBPACK_IMPORTED_MODULE_16__["default"],
   beforeEnter: isLoggedIn
 }, {
   path: '/holiday/:holidayId/day/:dayId/add/flight',
   name: 'holiday.add.flight',
-  component: _views_holiday_flights_AddFlight_vue__WEBPACK_IMPORTED_MODULE_13__["default"],
+  component: _views_holiday_flights_AddFlight_vue__WEBPACK_IMPORTED_MODULE_14__["default"],
   beforeEnter: isLoggedIn
 }, {
   path: '/holiday/:holidayId/day/:dayId/flight/:flightId/edit',
   name: 'holiday.edit.flight',
-  component: _views_holiday_flights_EditFlight_vue__WEBPACK_IMPORTED_MODULE_14__["default"],
+  component: _views_holiday_flights_EditFlight_vue__WEBPACK_IMPORTED_MODULE_15__["default"],
   beforeEnter: isLoggedIn
 }, // Hotel
 {
   path: '/holiday/:holidayId/day/:dayId/hotel/:hotelId',
   name: 'holiday.hotel.view',
-  component: _views_holiday_hotel_HotelView_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
+  component: _views_holiday_hotel_HotelView_vue__WEBPACK_IMPORTED_MODULE_8__["default"],
   beforeEnter: isLoggedIn
 }, {
   path: '/holiday/:holidayId/day/:dayId/add/hotel',
   name: 'holiday.add.hotel',
-  component: _views_holiday_hotel_HotelAdd_vue__WEBPACK_IMPORTED_MODULE_8__["default"],
+  component: _views_holiday_hotel_HotelAdd_vue__WEBPACK_IMPORTED_MODULE_9__["default"],
   beforeEnter: isLoggedIn
 }, {
   path: '/holiday/:holidayId/day/:dayId/hotel/:hotelId/edit',
   name: 'holiday.edit.hotel',
-  component: _views_holiday_hotel_HotelEdit_vue__WEBPACK_IMPORTED_MODULE_9__["default"],
+  component: _views_holiday_hotel_HotelEdit_vue__WEBPACK_IMPORTED_MODULE_10__["default"],
   beforeEnter: isLoggedIn
 }, // Video
 {
   path: '/holiday/:holidayId/day/:dayId/add/video',
   name: 'holiday.add.video',
-  component: _views_holiday_videos_AddVideo_vue__WEBPACK_IMPORTED_MODULE_16__["default"],
+  component: _views_holiday_videos_AddVideo_vue__WEBPACK_IMPORTED_MODULE_17__["default"],
   beforeEnter: isLoggedIn
 }, {
   path: '/holiday/:holidayId/day/:dayId/video/:videoId/edit',
   name: 'holiday.edit.video',
-  component: _views_holiday_videos_EditVideo_vue__WEBPACK_IMPORTED_MODULE_17__["default"],
+  component: _views_holiday_videos_EditVideo_vue__WEBPACK_IMPORTED_MODULE_18__["default"],
   beforeEnter: isLoggedIn
 }, // Admin Dashboard
 {
   path: '/admin',
   name: 'admin.home',
-  component: _views_admin_AdminHomeComponent_vue__WEBPACK_IMPORTED_MODULE_18__["default"],
-  beforeEnter: vue_router_multiguard__WEBPACK_IMPORTED_MODULE_21___default()([isLoggedIn, isAdmin]),
+  component: _views_admin_AdminHomeComponent_vue__WEBPACK_IMPORTED_MODULE_19__["default"],
+  beforeEnter: vue_router_multiguard__WEBPACK_IMPORTED_MODULE_22___default()([isLoggedIn, isAdmin]),
   children: [// Airlines
   {
     path: 'airlines',
     name: 'admin.airlines.list',
-    component: _views_admin_airlines_AirlinesList_vue__WEBPACK_IMPORTED_MODULE_19__["default"]
+    component: _views_admin_airlines_AirlinesList_vue__WEBPACK_IMPORTED_MODULE_20__["default"]
   }, {
     path: 'airlines/add',
     name: 'admin.airlines.add',
-    component: _views_admin_airlines_AirlinesAdd_vue__WEBPACK_IMPORTED_MODULE_20__["default"]
+    component: _views_admin_airlines_AirlinesAdd_vue__WEBPACK_IMPORTED_MODULE_21__["default"]
   }]
 }];
 
@@ -67362,6 +67846,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditVideo_vue_vue_type_template_id_de017660___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EditVideo_vue_vue_type_template_id_de017660___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/home/Home.vue":
+/*!******************************************!*\
+  !*** ./resources/js/views/home/Home.vue ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Home_vue_vue_type_template_id_0b5baac0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Home.vue?vue&type=template&id=0b5baac0& */ "./resources/js/views/home/Home.vue?vue&type=template&id=0b5baac0&");
+/* harmony import */ var _Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Home.vue?vue&type=script&lang=js& */ "./resources/js/views/home/Home.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Home_vue_vue_type_template_id_0b5baac0___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Home_vue_vue_type_template_id_0b5baac0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/home/Home.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/home/Home.vue?vue&type=script&lang=js&":
+/*!*******************************************************************!*\
+  !*** ./resources/js/views/home/Home.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Home.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/home/Home.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/home/Home.vue?vue&type=template&id=0b5baac0&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/views/home/Home.vue?vue&type=template&id=0b5baac0& ***!
+  \*************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_template_id_0b5baac0___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Home.vue?vue&type=template&id=0b5baac0& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/home/Home.vue?vue&type=template&id=0b5baac0&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_template_id_0b5baac0___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_template_id_0b5baac0___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

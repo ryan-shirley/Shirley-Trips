@@ -16,8 +16,8 @@
             <div class="card">
                 <div class="card-body">
                     <p>Duration - {{ secondsToHm(flight.duration) }}</p>
-                    <!-- <p>Origin - {{ flight.originDayTime }}</p>
-                    <p>Destination - {{ flight.destinationDayTime }}</p> -->
+                    <p>Origin - {{ flight.originDayTime }}</p>
+                    <p>Destination - {{ flight.destinationDayTime }}</p>
 
                     <div v-if="progress > 0">
                         <h3 class="mb-3">Flight Progress</h3>
