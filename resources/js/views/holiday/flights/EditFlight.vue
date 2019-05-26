@@ -192,7 +192,7 @@
             let token = localStorage.getItem('token')
 
             // Load Airlines
-            axios.get('/api/airlines/', {
+            axios.get('/api/airlines', {
                 headers: { Authorization: "Bearer " + token }
             })
             .then(resp => {
