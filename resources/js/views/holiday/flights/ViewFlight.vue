@@ -9,7 +9,7 @@
         <section class="bg-primary page-title" v-if="flight">
                 <h1>{{ flight.originAirportLong }} - {{ flight.destinationAirportLong }}</h1>
                 <p>No. {{ flight.flightNumber }}</p>
-                <p v-if="flightInfo">{{ getFlightStatus }}</p>
+                <p v-if="liveFlightInfo">{{ liveFlightInfo.status }}</p>
         </section>
 
         <section class="container" v-if="flight">
@@ -19,10 +19,10 @@
                     <p>Origin - {{ flight.originDayTime }}</p>
                     <p>Destination - {{ flight.destinationDayTime }}</p>
 
-                    <div v-if="progress > 0">
+                    <div v-if="liveFlightInfo && liveFlightInfo.progress_percent > 0">
                         <h3 class="mb-3">Flight Progress</h3>
                         <div class="progress">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :style="'width: ' + progress + '%;'" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100">{{ progress }}%</div>
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :style="'width: ' + liveFlightInfo.progress_percent + '%;'" :aria-valuenow="liveFlightInfo.progress_percent" aria-valuemin="0" aria-valuemax="100">{{ liveFlightInfo.progress_percent }}%</div>
                         </div>
                     </div>
                 </div>
@@ -38,8 +38,7 @@
             return {
                 flight: {},
                 activity_id: '',
-                flightInfo: null,
-                progress: -1
+                liveFlightInfo: null
             }
         },
         mounted() {
@@ -56,11 +55,11 @@
                 app.activity_id = resp.data.activity.id
 
                 // Load Live flight info
-                axios.get('/api/realtimeflight/' + app.flight.flightNumber, {
+                axios.get('/api/realtimeflight/' + flightId, {
                     headers: { Authorization: "Bearer " + token }
                 })
                 .then(resp => {
-                    app.flightInfo = resp.data
+                    app.liveFlightInfo = resp.data
                 })
                 .catch(errors => {
                     console.log(errors)
@@ -99,34 +98,5 @@
                 return hDisplay + mDisplay; 
             },
         },
-        computed: {
-            getFlightStatus() {
-                let app = this
-
-                // Check Flights Exist
-                if (typeof app.flightInfo.FlightInfoStatusResult.flights !== 'undefined') {
-                    let flights = app.flightInfo.FlightInfoStatusResult.flights
-                    let pattern = /(\d{2})\/(\d{2})\/(\d{4})/
-
-                    // Loop through live flight info to get flight for same day
-                    for (var i = 0; i < flights.length ; i++) {
-
-                        let date1 = new Date(flights[i].filed_departure_time.date.replace(pattern,'$3-$2-$1'))
-                        date1.setHours(0,0,0,0)
-                        let date2 = new Date(app.flight.originDayTime)
-                        date2.setHours(0,0,0,0)
-                        
-                        if (date1.getTime() === date2.getTime()) {
-                            app.progress = flights[i].progress_percent
-
-                            return 'Status - ' + flights[i].status
-                        }
-
-                    }
-                }
-
-                return 'Flight Status not available';
-            }
-        }
     }
 </script>

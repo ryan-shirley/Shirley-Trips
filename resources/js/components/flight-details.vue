@@ -6,7 +6,7 @@
                     <div class="col-2">
                         <span class="date">
                             <p class="number">{{ flight.originDayTime.substr(8, 2) }}</p>
-                            <p class="month">{{ month_name(new Date(flight.originDayTime)) }}</p>
+                            <p class="month">{{ month_name(new Date(flight.originDayTime.substring(0,10))) }}</p>
                         </span>
                     </div>
                     <div class="col-8 airline-name">
