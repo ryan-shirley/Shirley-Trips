@@ -9,7 +9,8 @@
         <section class="bg-primary page-title" v-if="flight">
                 <h1>{{ flight.originAirportLong }} - {{ flight.destinationAirportLong }}</h1>
                 <p>No. {{ flight.flightNumber }}</p>
-                <p v-if="liveFlightInfo">{{ liveFlightInfo.status }}</p>
+                <p v-if="liveFlightInfo && liveFlightInfo.status">{{ liveFlightInfo.status }}</p>
+                <p v-else>{{ liveFlightInfo }}</p>
         </section>
 
         <section class="container" v-if="flight">
