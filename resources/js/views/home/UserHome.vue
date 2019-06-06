@@ -3,14 +3,14 @@
         <navigation></navigation>
 
         <section class="bg-primary page-title">
-            <h1>Good Morning, {{ user.first_name }}!</h1>
+            <h1>{{ getWelcomeMessage }}</h1>
             <p>{{ inspiration }}</p>
         </section>
 
         <section class="container" v-if="holidays.length != 0">
             <h2 class="mb-3">Your Last Holidays</h2>
 
-            <router-link class="holiday" :to="{ name:'holiday.view', params: { 'holidayId' :holiday.id }}" v-for="holiday in holidays" :key="holiday.id">
+            <router-link class="holiday" :to="{ name:'holiday.view', params: { 'holidayId' :holiday.id }}" v-for="holiday in sortedHolidays" :key="holiday.id">
                 <div class="card" :style="{ 'background-image': 'url(' + holiday.image.path + ')' }">
                     <div class="overlay">
                         <h2 class="title">{{ holiday.title }}</h2>
@@ -75,6 +75,26 @@
             month_name(dt){
                 let mlist = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
                 return mlist[dt.getMonth()];
+            }
+        },
+        computed: {
+            getWelcomeMessage() {
+                let today = new Date()
+                let curHr = today.getHours()
+                let message = ''
+
+                if (curHr < 12) {
+                    message = 'Good Morning'
+                } else if (curHr < 18) {
+                    message = 'Good Afternoon'
+                } else {
+                    message = 'Good Evening'
+                }
+
+                return message + ', ' + this.user.first_name + '!'
+            },
+            sortedHolidays: function () {
+                return _.orderBy(this.holidays, 'beginDate', 'desc')
             }
         }
     }

@@ -28,7 +28,7 @@
                     <div class="col-4">
                         <i class="fas fa-plane"></i>
                         <p class="duration">{{ secondsToHm(flight.duration) }}</p>
-                        <p v-if="flight.layoverLength">Layover length {{ flight.layoverLength }}</p>
+                        <p v-if="flight.layoverLength">Layover - {{ secondsToHm(flight.layoverLength * 60) }}</p>
                     </div>
                     <div class="col-4">
                         <p class="ar-long">{{ flight.destinationAirportLong }}</p>
@@ -89,8 +89,8 @@
                 var m = Math.floor(d % 3600 / 60);
                 var s = Math.floor(d % 3600 % 60);
 
-                var hDisplay = h > 0 ? h + (h == 1 ? " hour " : " hours ") : "";
-                var mDisplay = m > 0 ? m + (m == 1 ? " minute " : " minutes") : "";
+                var hDisplay = h > 0 ? h + (h == 1 ? " hr " : " hrs ") : "";
+                var mDisplay = m > 0 ? m + (m == 1 ? " min " : " mins") : "";
                 return hDisplay + mDisplay; 
             },
         }

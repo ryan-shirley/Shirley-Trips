@@ -59,6 +59,15 @@
                             <span class="badge badge-danger" v-text="form.errors.get('flightNumber')" v-if="form.errors.has('flightNumber')"></span>
                         </div>
                     </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="duration">Duration (mins) <span class="required">*</span></label>
+
+                            <input type="text" name="duration" class="form-control" v-model="form.duration" />
+
+                            <span class="badge badge-danger" v-text="form.errors.get('duration')" v-if="form.errors.has('duration')"></span>
+                        </div>
+                    </div>
                 </div>
 
                 <hr />
@@ -169,6 +178,7 @@
                 form: new Form('/flight/' +  this.$route.params.flightId, 'put', true, {
                     airlineId: '',
                     flightNumber: '',
+                    duration: '',
                     originDate: '',
                     originTime: '',
                     originAirportShort: '',
@@ -207,6 +217,7 @@
             .then(resp => {
                 app.form.airlineId = resp.data.airline_id
                 app.form.flightNumber = resp.data.flightNumber
+                app.form.duration = resp.data.duration / 60
                 app.form.originAirportShort = resp.data.originAirportShort
                 app.form.originAirportLong = resp.data.originAirportLong
                 app.form.destinationAirportShort = resp.data.destinationAirportShort
