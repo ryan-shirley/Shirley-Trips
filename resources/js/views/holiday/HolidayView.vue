@@ -55,9 +55,23 @@
                     
                     
                     if(app.$route.params.dayId != undefined) {
+                        // Day was selected
                         app.$router.replace({ name: 'holiday.view.day', params: { 'dayId' : app.$route.params.dayId } })
                     }
                     else {
+                        // No day specified
+                        let currentDate = new Date();
+
+                        for (var i = 0; i < app.holiday.days.length ; i++) {
+                            let holidayDate = new Date(app.holiday.days[i]['day'])
+
+                            if(currentDate.getDate() + ' ' + currentDate.getMonth() + ' ' + currentDate.getYear() === holidayDate.getDate() + ' ' + holidayDate.getMonth() + ' ' + holidayDate.getYear()) {
+                                console.log('Current date is during holiday')
+                                app.$router.replace({ name: 'holiday.view.day', params: { 'dayId' : app.holiday.days[i].id } })
+                                return;
+                            }
+                        }
+
                         app.$router.replace({ name: 'holiday.view.day', params: { 'dayId' : app.holiday.days[0].id } })
                     }
                 })

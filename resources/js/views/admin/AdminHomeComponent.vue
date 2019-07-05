@@ -11,6 +11,9 @@
                 <li class="nav-item">
                     <router-link :to="{ name:'admin.airlines.list'}" class="nav-link" v-bind:class="{ 'active': checkActive('admin.airlines.list') }">Airlines</router-link>
                 </li>
+                <li class="nav-item">
+                    <router-link :to="{ name:'admin.tinypng'}" class="nav-link" v-bind:class="{ 'active': checkActive('admin.tinypng') }">Tiny PNG</router-link>
+                </li>
             </ul>
         </section>
 

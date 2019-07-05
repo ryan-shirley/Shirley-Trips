@@ -12,11 +12,17 @@
             </div>
         </div>
     </router-link>
-    <div v-else class="text-center">
-        <p>You are staying at the <router-link 
+    <router-link 
         :to="{ name: 'holiday.hotel.view', params: { 'hotelId' :hotel.id } }"
-        class="card-wrapper">{{ hotel.name }} in {{ hotel.location }}</router-link> today.</p>
-    </div>
+        class="card-wrapper" v-else>
+        <div class="activity-card">
+            <div class="body">
+                <h4>{{ hotel.name }}</h4>
+                <p>{{ hotel.location }}</p>
+            </div>
+            <img v-if="hotelImagePath" :src="hotelImagePath" :alt="hotel.name">
+        </div>
+    </router-link>
     <!--/.Hotel -->
 </template>
 

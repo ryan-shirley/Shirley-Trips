@@ -1870,7 +1870,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     isAdmin: function isAdmin() {
-      if (localStorage.getItem('isAdmin')) {
+      if (localStorage.getItem('isAdmin') == 'true') {
         return true;
       } else {
         return false;
@@ -2228,6 +2228,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'date-slider',
@@ -2294,6 +2295,10 @@ __webpack_require__.r(__webpack_exports__);
       var day = date.getDay(); //Return the element that corresponds to that index.
 
       return weekdays[day];
+    },
+    month_name: function month_name(dt) {
+      var mlist = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      return mlist[dt.getMonth()];
     }
   }
 });
@@ -2403,8 +2408,8 @@ __webpack_require__.r(__webpack_exports__);
       var h = Math.floor(d / 3600);
       var m = Math.floor(d % 3600 / 60);
       var s = Math.floor(d % 3600 % 60);
-      var hDisplay = h > 0 ? h + (h == 1 ? " hour " : " hours ") : "";
-      var mDisplay = m > 0 ? m + (m == 1 ? " minute " : " minutes") : "";
+      var hDisplay = h > 0 ? h + (h == 1 ? " hr " : " hrs ") : "";
+      var mDisplay = m > 0 ? m + (m == 1 ? " min " : " mins") : "";
       return hDisplay + mDisplay;
     }
   }
@@ -2457,6 +2462,12 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2721,6 +2732,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {},
   data: function data() {
@@ -2884,6 +2898,54 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {}
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/admin/tinypng/dashboard.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/admin/tinypng/dashboard.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  mounted: function mounted() {
+    var app = this;
+    var token = localStorage.getItem('token');
+    axios.get('/api/tinypng/compressionCount', {
+      headers: {
+        Authorization: "Bearer " + token
+      }
+    }).then(function (resp) {
+      app.compressionCount = resp.data;
+    })["catch"](function (resp) {
+      alert('Could not get tinypng compression count');
+    });
+  },
+  data: function data() {
+    return {
+      compressionCount: null
+    };
+  }
 });
 
 /***/ }),
@@ -3571,6 +3633,7 @@ __webpack_require__.r(__webpack_exports__);
         app.checkIsOwner();
 
         if (app.$route.params.dayId != undefined) {
+          // Day was selected
           app.$router.replace({
             name: 'holiday.view.day',
             params: {
@@ -3578,6 +3641,24 @@ __webpack_require__.r(__webpack_exports__);
             }
           });
         } else {
+          // No day specified
+          var currentDate = new Date();
+
+          for (var i = 0; i < app.holiday.days.length; i++) {
+            var holidayDate = new Date(app.holiday.days[i]['day']);
+
+            if (currentDate.getDate() + ' ' + currentDate.getMonth() + ' ' + currentDate.getYear() === holidayDate.getDate() + ' ' + holidayDate.getMonth() + ' ' + holidayDate.getYear()) {
+              console.log('Current date is during holiday');
+              app.$router.replace({
+                name: 'holiday.view.day',
+                params: {
+                  'dayId': app.holiday.days[i].id
+                }
+              });
+              return;
+            }
+          }
+
           app.$router.replace({
             name: 'holiday.view.day',
             params: {
@@ -4008,6 +4089,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -4015,6 +4105,7 @@ __webpack_require__.r(__webpack_exports__);
       form: new _classes_Form_js__WEBPACK_IMPORTED_MODULE_0__["default"]('/flight/' + this.$route.params.flightId, 'put', true, {
         airlineId: '',
         flightNumber: '',
+        duration: '',
         originDate: '',
         originTime: '',
         originAirportShort: '',
@@ -4054,6 +4145,7 @@ __webpack_require__.r(__webpack_exports__);
     }).then(function (resp) {
       app.form.airlineId = resp.data.airline_id;
       app.form.flightNumber = resp.data.flightNumber;
+      app.form.duration = resp.data.duration / 60;
       app.form.originAirportShort = resp.data.originAirportShort;
       app.form.originAirportLong = resp.data.originAirportLong;
       app.form.destinationAirportShort = resp.data.destinationAirportShort;
@@ -4163,13 +4255,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       flight: {},
       activity_id: '',
-      flightInfo: null,
-      progress: -1
+      liveFlightInfo: null
     };
   },
   mounted: function mounted() {
@@ -4185,12 +4277,12 @@ __webpack_require__.r(__webpack_exports__);
       app.flight = resp.data;
       app.activity_id = resp.data.activity.id; // Load Live flight info
 
-      axios.get('/api/realtimeflight/' + app.flight.flightNumber, {
+      axios.get('/api/realtimeflight/' + flightId, {
         headers: {
           Authorization: "Bearer " + token
         }
       }).then(function (resp) {
-        app.flightInfo = resp.data;
+        app.liveFlightInfo = resp.data;
       })["catch"](function (errors) {
         console.log(errors);
       });
@@ -4239,30 +4331,6 @@ __webpack_require__.r(__webpack_exports__);
       var hDisplay = h > 0 ? h + (h == 1 ? " hour " : " hours ") : "";
       var mDisplay = m > 0 ? m + (m == 1 ? " minute " : " minutes") : "";
       return hDisplay + mDisplay;
-    }
-  },
-  computed: {
-    getFlightStatus: function getFlightStatus() {
-      var app = this; // Check Flights Exist
-
-      if (typeof app.flightInfo.FlightInfoStatusResult.flights !== 'undefined') {
-        var flights = app.flightInfo.FlightInfoStatusResult.flights;
-        var pattern = /(\d{2})\/(\d{2})\/(\d{4})/; // Loop through live flight info to get flight for same day
-
-        for (var i = 0; i < flights.length; i++) {
-          var date1 = new Date(flights[i].filed_departure_time.date.replace(pattern, '$3-$2-$1'));
-          date1.setHours(0, 0, 0, 0);
-          var date2 = new Date(app.flight.originDayTime);
-          date2.setHours(0, 0, 0, 0);
-
-          if (date1.getTime() === date2.getTime()) {
-            app.progress = flights[i].progress_percent;
-            return 'Status - ' + flights[i].status;
-          }
-        }
-      }
-
-      return 'Flight Status not available';
     }
   }
 });
@@ -5708,6 +5776,26 @@ __webpack_require__.r(__webpack_exports__);
       app.$router.push({
         name: 'login'
       });
+    }
+  },
+  computed: {
+    getWelcomeMessage: function getWelcomeMessage() {
+      var today = new Date();
+      var curHr = today.getHours();
+      var message = '';
+
+      if (curHr < 12) {
+        message = 'Good Morning';
+      } else if (curHr < 18) {
+        message = 'Good Afternoon';
+      } else {
+        message = 'Good Evening';
+      }
+
+      return message + ', ' + this.user.first_name + '!';
+    },
+    sortedHolidays: function sortedHolidays() {
+      return _.orderBy(this.holidays, 'beginDate', 'desc');
     }
   }
 });
@@ -45116,8 +45204,14 @@ var render = function() {
       },
       on: { changed: _vm.dayChanged }
     },
-    _vm._l(_vm.days, function(day) {
+    _vm._l(_vm.days, function(day, index) {
       return _c("div", { key: day.id, staticClass: "text-center" }, [
+        day.day.slice(-2) === "01" || index == 0
+          ? _c("p", { staticClass: "month" }, [
+              _vm._v(_vm._s(_vm.month_name(new Date(day.day))))
+            ])
+          : _vm._e(),
+        _vm._v(" "),
         _c("span", { staticClass: "letter" }, [
           _vm._v(_vm._s(_vm.getWeekDay(new Date(day.day))))
         ]),
@@ -45170,7 +45264,11 @@ var render = function() {
                 _vm._v(" "),
                 _c("p", { staticClass: "month" }, [
                   _vm._v(
-                    _vm._s(_vm.month_name(new Date(_vm.flight.originDayTime)))
+                    _vm._s(
+                      _vm.month_name(
+                        new Date(_vm.flight.originDayTime.substring(0, 10))
+                      )
+                    )
                   )
                 ])
               ])
@@ -45222,7 +45320,10 @@ var render = function() {
               _vm._v(" "),
               _vm.flight.layoverLength
                 ? _c("p", [
-                    _vm._v("Layover length " + _vm._s(_vm.flight.layoverLength))
+                    _vm._v(
+                      "Layover - " +
+                        _vm._s(_vm.secondsToHm(_vm.flight.layoverLength * 60))
+                    )
                   ])
                 : _vm._e()
             ]),
@@ -45369,33 +45470,33 @@ var render = function() {
           ])
         ]
       )
-    : _c("div", { staticClass: "text-center" }, [
-        _c(
-          "p",
-          [
-            _vm._v("You are staying at the "),
-            _c(
-              "router-link",
-              {
-                staticClass: "card-wrapper",
-                attrs: {
-                  to: {
-                    name: "holiday.hotel.view",
-                    params: { hotelId: _vm.hotel.id }
-                  }
-                }
-              },
-              [
-                _vm._v(
-                  _vm._s(_vm.hotel.name) + " in " + _vm._s(_vm.hotel.location)
-                )
-              ]
-            ),
-            _vm._v(" today.")
-          ],
-          1
-        )
-      ])
+    : _c(
+        "router-link",
+        {
+          staticClass: "card-wrapper",
+          attrs: {
+            to: {
+              name: "holiday.hotel.view",
+              params: { hotelId: _vm.hotel.id }
+            }
+          }
+        },
+        [
+          _c("div", { staticClass: "activity-card" }, [
+            _c("div", { staticClass: "body" }, [
+              _c("h4", [_vm._v(_vm._s(_vm.hotel.name))]),
+              _vm._v(" "),
+              _c("p", [_vm._v(_vm._s(_vm.hotel.location))])
+            ]),
+            _vm._v(" "),
+            _vm.hotelImagePath
+              ? _c("img", {
+                  attrs: { src: _vm.hotelImagePath, alt: _vm.hotel.name }
+                })
+              : _vm._e()
+          ])
+        ]
+      )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -45733,6 +45834,23 @@ var render = function() {
               )
             ],
             1
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            { staticClass: "nav-item" },
+            [
+              _c(
+                "router-link",
+                {
+                  staticClass: "nav-link",
+                  class: { active: _vm.checkActive("admin.tinypng") },
+                  attrs: { to: { name: "admin.tinypng" } }
+                },
+                [_vm._v("Tiny PNG")]
+              )
+            ],
+            1
           )
         ])
       ]),
@@ -45938,6 +46056,84 @@ var render = function() {
     ],
     2
   )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/admin/tinypng/dashboard.vue?vue&type=template&id=77c073bf&":
+/*!*********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/admin/tinypng/dashboard.vue?vue&type=template&id=77c073bf& ***!
+  \*********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("h2", { staticClass: "text-center" }, [
+      _vm._v("TinyPNG usage this month")
+    ]),
+    _vm._v(" "),
+    _vm.compressionCount != null
+      ? _c("h4", { staticClass: "text-center" }, [
+          _c(
+            "span",
+            {
+              staticClass: "badge badge-pill",
+              class: {
+                "badge-success": _vm.compressionCount < 400,
+                "badge-warning":
+                  _vm.compressionCount >= 400 && _vm.compressionCount < 500,
+                "badge-danger": _vm.compressionCount >= 500
+              }
+            },
+            [
+              _vm._v(
+                "\n            " +
+                  _vm._s(_vm.compressionCount) +
+                  " / 500\n        "
+              )
+            ]
+          )
+        ])
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.compressionCount != null && _vm.compressionCount > 0
+      ? _c("div", { staticClass: "progress mt-5" }, [
+          _c(
+            "div",
+            {
+              staticClass: "progress-bar progress-bar-striped",
+              style:
+                "width: " +
+                Math.floor((_vm.compressionCount / 500) * 100) +
+                "%;",
+              attrs: {
+                role: "progressbar",
+                "aria-valuenow": Math.floor((_vm.compressionCount / 500) * 100),
+                "aria-valuemin": "0",
+                "aria-valuemax": "100"
+              }
+            },
+            [
+              _vm._v(
+                _vm._s(Math.floor((_vm.compressionCount / 500) * 100)) + "%"
+              )
+            ]
+          )
+        ])
+      : _vm._e()
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -47813,6 +48009,43 @@ var render = function() {
                       })
                     : _vm._e()
                 ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-12" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _vm._m(5),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.duration,
+                        expression: "form.duration"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", name: "duration" },
+                    domProps: { value: _vm.form.duration },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "duration", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.form.errors.has("duration")
+                    ? _c("span", {
+                        staticClass: "badge badge-danger",
+                        domProps: {
+                          textContent: _vm._s(_vm.form.errors.get("duration"))
+                        }
+                      })
+                    : _vm._e()
+                ])
               ])
             ]),
             _vm._v(" "),
@@ -47821,7 +48054,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _vm._m(5),
+                  _vm._m(6),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -47858,7 +48091,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _vm._m(6),
+                  _vm._m(7),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -47897,7 +48130,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _vm._m(7),
+                  _vm._m(8),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -47940,7 +48173,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _vm._m(8),
+                  _vm._m(9),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -47987,7 +48220,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _vm._m(9),
+                  _vm._m(10),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -48030,7 +48263,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _vm._m(10),
+                  _vm._m(11),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -48075,7 +48308,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _vm._m(11),
+                  _vm._m(12),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -48118,7 +48351,7 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "col-6" }, [
                 _c("div", { staticClass: "form-group" }, [
-                  _vm._m(12),
+                  _vm._m(13),
                   _vm._v(" "),
                   _c("input", {
                     directives: [
@@ -48240,6 +48473,15 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c("label", { attrs: { for: "duration" } }, [
+      _vm._v("Duration (mins) "),
+      _c("span", { staticClass: "required" }, [_vm._v("*")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("label", { attrs: { for: "originDate" } }, [
       _vm._v("Origin Date "),
       _c("span", { staticClass: "required" }, [_vm._v("*")])
@@ -48351,9 +48593,9 @@ var render = function() {
             _vm._v(" "),
             _c("p", [_vm._v("No. " + _vm._s(_vm.flight.flightNumber))]),
             _vm._v(" "),
-            _vm.flightInfo
-              ? _c("p", [_vm._v(_vm._s(_vm.getFlightStatus))])
-              : _vm._e()
+            _vm.liveFlightInfo && _vm.liveFlightInfo.status
+              ? _c("p", [_vm._v(_vm._s(_vm.liveFlightInfo.status))])
+              : _c("p", [_vm._v(_vm._s(_vm.liveFlightInfo))])
           ])
         : _vm._e(),
       _vm._v(" "),
@@ -48377,7 +48619,7 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
-                _vm.progress > 0
+                _vm.liveFlightInfo && _vm.liveFlightInfo.progress_percent > 0
                   ? _c("div", [
                       _c("h3", { staticClass: "mb-3" }, [
                         _vm._v("Flight Progress")
@@ -48389,15 +48631,23 @@ var render = function() {
                           {
                             staticClass:
                               "progress-bar progress-bar-striped progress-bar-animated",
-                            style: "width: " + _vm.progress + "%;",
+                            style:
+                              "width: " +
+                              _vm.liveFlightInfo.progress_percent +
+                              "%;",
                             attrs: {
                               role: "progressbar",
-                              "aria-valuenow": _vm.progress,
+                              "aria-valuenow":
+                                _vm.liveFlightInfo.progress_percent,
                               "aria-valuemin": "0",
                               "aria-valuemax": "100"
                             }
                           },
-                          [_vm._v(_vm._s(_vm.progress) + "%")]
+                          [
+                            _vm._v(
+                              _vm._s(_vm.liveFlightInfo.progress_percent) + "%"
+                            )
+                          ]
                         )
                       ])
                     ])
@@ -50390,9 +50640,7 @@ var render = function() {
       _c("navigation"),
       _vm._v(" "),
       _c("section", { staticClass: "bg-primary page-title" }, [
-        _c("h1", [
-          _vm._v("Good Morning, " + _vm._s(_vm.user.first_name) + "!")
-        ]),
+        _c("h1", [_vm._v(_vm._s(_vm.getWelcomeMessage))]),
         _vm._v(" "),
         _c("p", [_vm._v(_vm._s(_vm.inspiration))])
       ]),
@@ -66412,8 +66660,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _views_admin_AdminHomeComponent_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./views/admin/AdminHomeComponent.vue */ "./resources/js/views/admin/AdminHomeComponent.vue");
 /* harmony import */ var _views_admin_airlines_AirlinesList_vue__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./views/admin/airlines/AirlinesList.vue */ "./resources/js/views/admin/airlines/AirlinesList.vue");
 /* harmony import */ var _views_admin_airlines_AirlinesAdd_vue__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./views/admin/airlines/AirlinesAdd.vue */ "./resources/js/views/admin/airlines/AirlinesAdd.vue");
-/* harmony import */ var vue_router_multiguard__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! vue-router-multiguard */ "./node_modules/vue-router-multiguard/dist/vue-router-multiguard.min.js");
-/* harmony import */ var vue_router_multiguard__WEBPACK_IMPORTED_MODULE_22___default = /*#__PURE__*/__webpack_require__.n(vue_router_multiguard__WEBPACK_IMPORTED_MODULE_22__);
+/* harmony import */ var _views_admin_tinypng_dashboard_vue__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./views/admin/tinypng/dashboard.vue */ "./resources/js/views/admin/tinypng/dashboard.vue");
+/* harmony import */ var vue_router_multiguard__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! vue-router-multiguard */ "./node_modules/vue-router-multiguard/dist/vue-router-multiguard.min.js");
+/* harmony import */ var vue_router_multiguard__WEBPACK_IMPORTED_MODULE_23___default = /*#__PURE__*/__webpack_require__.n(vue_router_multiguard__WEBPACK_IMPORTED_MODULE_23__);
 // Views
 
 
@@ -66441,8 +66690,10 @@ __webpack_require__.r(__webpack_exports__);
 
  // Admin
 
- // Admin - Airlines
+ // Airlines
 
+
+ // Tiny Png
 
  // Middleware
 
@@ -66597,7 +66848,7 @@ var routes = [{
   path: '/admin',
   name: 'admin.home',
   component: _views_admin_AdminHomeComponent_vue__WEBPACK_IMPORTED_MODULE_19__["default"],
-  beforeEnter: vue_router_multiguard__WEBPACK_IMPORTED_MODULE_22___default()([isLoggedIn, isAdmin]),
+  beforeEnter: vue_router_multiguard__WEBPACK_IMPORTED_MODULE_23___default()([isLoggedIn, isAdmin]),
   children: [// Airlines
   {
     path: 'airlines',
@@ -66607,6 +66858,11 @@ var routes = [{
     path: 'airlines/add',
     name: 'admin.airlines.add',
     component: _views_admin_airlines_AirlinesAdd_vue__WEBPACK_IMPORTED_MODULE_21__["default"]
+  }, // Tiny PNG
+  {
+    path: 'tinypng',
+    name: 'admin.tinypng',
+    component: _views_admin_tinypng_dashboard_vue__WEBPACK_IMPORTED_MODULE_22__["default"]
   }]
 }];
 
@@ -66814,6 +67070,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AirlinesList_vue_vue_type_template_id_c39bb284___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AirlinesList_vue_vue_type_template_id_c39bb284___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/admin/tinypng/dashboard.vue":
+/*!********************************************************!*\
+  !*** ./resources/js/views/admin/tinypng/dashboard.vue ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _dashboard_vue_vue_type_template_id_77c073bf___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./dashboard.vue?vue&type=template&id=77c073bf& */ "./resources/js/views/admin/tinypng/dashboard.vue?vue&type=template&id=77c073bf&");
+/* harmony import */ var _dashboard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./dashboard.vue?vue&type=script&lang=js& */ "./resources/js/views/admin/tinypng/dashboard.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _dashboard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _dashboard_vue_vue_type_template_id_77c073bf___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _dashboard_vue_vue_type_template_id_77c073bf___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/admin/tinypng/dashboard.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/admin/tinypng/dashboard.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/views/admin/tinypng/dashboard.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_dashboard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./dashboard.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/admin/tinypng/dashboard.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_dashboard_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/admin/tinypng/dashboard.vue?vue&type=template&id=77c073bf&":
+/*!***************************************************************************************!*\
+  !*** ./resources/js/views/admin/tinypng/dashboard.vue?vue&type=template&id=77c073bf& ***!
+  \***************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_dashboard_vue_vue_type_template_id_77c073bf___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./dashboard.vue?vue&type=template&id=77c073bf& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/admin/tinypng/dashboard.vue?vue&type=template&id=77c073bf&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_dashboard_vue_vue_type_template_id_77c073bf___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_dashboard_vue_vue_type_template_id_77c073bf___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

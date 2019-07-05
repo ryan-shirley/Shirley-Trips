@@ -20,7 +20,8 @@
                 }
             }"
         >
-        <div v-for="day in days" :key="day.id" class="text-center">
+        <div v-for="(day, index) in days" :key="day.id" class="text-center">
+            <p v-if="day.day.slice(-2) === '01' || index == 0" class="month">{{ month_name(new Date(day.day)) }}</p>
             <span class="letter">{{ getWeekDay(new Date(day.day)) }}</span>
             <span class="day">{{ day.day.slice(-2) }}</span>
         </div>
@@ -85,7 +86,11 @@
                 var day = date.getDay();
                 //Return the element that corresponds to that index.
                 return weekdays[day];
-            }
+            },
+            month_name(dt){
+                let mlist = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+                return mlist[dt.getMonth()];
+            },
         }
     }
 </script>

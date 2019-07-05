@@ -78,6 +78,9 @@ Route::middleware('auth:api')->group(function () {
         Route::resource('airlines', 'API\AirlineController')->except([
             'create', 'edit', 'show', 'index'
         ]);
+
+        // TinyPNG
+        Route::get('tinypng/compressionCount', 'API\TinyPNGController@compressionCount');
     });
 
 });

@@ -10934,6 +10934,15 @@ body {
   color: #A4AEB8;
 }
 
+.owl-carousel .owl-item .month {
+  position: absolute;
+  top: 3px;
+  left: 5px;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 800;
+}
+
 .floating-activity-btn {
   position: fixed;
   right: 15px;

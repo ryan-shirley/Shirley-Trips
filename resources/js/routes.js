@@ -33,9 +33,11 @@ import VideoEditComponent from './views/holiday/videos/EditVideo.vue';
 
 // Admin
 import AdminHomeComponent from './views/admin/AdminHomeComponent.vue';
-// Admin - Airlines
+// Airlines
 import AirlinesListComponent from './views/admin/airlines/AirlinesList.vue';
 import AirlinesAddComponent from './views/admin/airlines/AirlinesAdd.vue';
+// Tiny Png
+import TinypngDashboardComponent from './views/admin/tinypng/dashboard.vue';
 
 
 // Middleware
@@ -221,6 +223,12 @@ export const routes = [
                 path: 'airlines/add',
                 name: 'admin.airlines.add',
                 component: AirlinesAddComponent,
+            },
+            // Tiny PNG
+            {
+                path: 'tinypng',
+                name: 'admin.tinypng',
+                component: TinypngDashboardComponent,
             },
         ]
     },

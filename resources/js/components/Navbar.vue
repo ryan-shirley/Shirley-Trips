@@ -101,7 +101,7 @@
         },
         computed: {
             isAdmin() {
-                if(localStorage.getItem('isAdmin')) {
+                if(localStorage.getItem('isAdmin') == 'true') {
                     return true
                 }
                 else {

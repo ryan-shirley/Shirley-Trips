@@ -3,7 +3,7 @@
         <navigation></navigation>
 
         <section class="bg-primary page-title">
-            <h1>Good Morning, {{ user.first_name }}!</h1>
+            <h1>{{ getWelcomeMessage }}</h1>
             <p>{{ inspiration }}</p>
         </section>
 
@@ -76,6 +76,26 @@
                 let app = this
                 let token = localStorage.removeItem('token')
                 app.$router.push({ name: 'login' })
+            }
+        },
+        computed: {
+            getWelcomeMessage() {
+                let today = new Date()
+                let curHr = today.getHours()
+                let message = ''
+
+                if (curHr < 12) {
+                    message = 'Good Morning'
+                } else if (curHr < 18) {
+                    message = 'Good Afternoon'
+                } else {
+                    message = 'Good Evening'
+                }
+
+                return message + ', ' + this.user.first_name + '!'
+            },
+            sortedHolidays: function () {
+                return _.orderBy(this.holidays, 'beginDate', 'desc')
             }
         }
     }

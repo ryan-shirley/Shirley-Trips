@@ -79,6 +79,7 @@ class FlightController extends Controller
         $validator = Validator::make($request->all(), [
             'airlineId' => 'required|numeric|exists:airlines,id',
             'flightNumber' => 'required|string|max:50',
+            'duration' => 'required|numeric',
             'originDate' => 'required|date',
             'originTime' => 'required|date_format:H:i',
             'originAirportShort' => 'required|string|max:50',
@@ -103,10 +104,7 @@ class FlightController extends Controller
         $flight->flightNumber = $request->input('flightNumber');
         $flight->originDayTime = new DateTime($request->input('originDate') . ' ' . $request->input('originTime'));
         $flight->destinationDayTime =  new DateTime($request->input('destinationDate') . ' ' . $request->input('destinationTime'));
-
-        // Need to calculate the duration here..
-        $flight->duration = 0;
-
+        $flight->duration = $request->input('duration') * 60;
         $flight->originAirportShort = $request->input('originAirportShort');
         $flight->originAirportLong = $request->input('originAirportLong');
         $flight->destinationAirportShort = $request->input('destinationAirportShort');
