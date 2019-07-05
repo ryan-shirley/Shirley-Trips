@@ -66,7 +66,6 @@
                 this.form.submit()
                     .then(data => {
                         localStorage.setItem('token', data.token)
-                        localStorage.setItem('first_name', data.first_name)
                         localStorage.setItem('isAdmin', data.isAdmin)
                         app.$router.push({name: 'account.home'})
                     })

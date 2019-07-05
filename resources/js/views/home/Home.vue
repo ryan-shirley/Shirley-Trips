@@ -6,6 +6,7 @@
             :dots="false"
             :items="1"
             :loop="true"
+            :autoplay="true"
             class="full-screen-slider"
         >
             <div class="owl-slide d-flex align-items-center cover" style="background-image: url('/images/Emily_Ryan.jpg');">

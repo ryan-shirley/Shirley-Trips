@@ -10,17 +10,51 @@ use App\User;
 use App\Holiday;
 use App\Image;
 use App\Day;
+use Illuminate\Foundation\Inspiring;
 
 class HolidayController extends Controller
 {
 
     public function index()
     {
+        // Get user, all holidays and inspiration
         $user =  auth()->user();
-        $u = auth()->user();
-        $holidays = $u->holidays->load('image');
+        $holidays = $user->holidays->load('image');
+        $inspiration = Inspiring::quote();
 
-        return response()->json($holidays, 200);
+        // Current date
+        $currentDate = date("Y-m-d");
+
+        // Array for various holiday times
+        $liveHolidays = array();
+        $upcommingHolidays = array();
+        $pastHolidays = array();
+
+        // Sort holidays
+        foreach($holidays as $holiday) {
+            // Holiday Beginning and end dates
+            $beginningDate = $holiday->beginDate;
+            $endDate = $holiday->endDate;
+
+            // Holiday in the past
+            if ($currentDate > $beginningDate && $currentDate > $endDate) {
+                array_push($pastHolidays, $holiday); 
+            }
+            else if ($currentDate > $beginningDate && $currentDate < $endDate) {
+                array_push($liveHolidays, $holiday);
+            }
+            else if ($currentDate < $beginningDate) {
+                array_push($upcommingHolidays, $holiday);
+            }
+        }
+
+        return response()->json([
+            'user_first_name' => $user->first_name,
+            'inspiration' => $inspiration,
+            'live_holidays' => $liveHolidays,
+            'upcomming_holidays' => $upcommingHolidays,
+            'past_holidays' => $pastHolidays
+        ], 200);
     }
 
     public function show($id)

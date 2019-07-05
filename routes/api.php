@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Inspiring;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,8 +23,6 @@ Route::middleware('auth:api')->group(function () {
     Route::get('logout', 'API\PassportController@logout');
 
     Route::get('users', 'API\UsersController@index');
-
-    Route::get('inspiration', function () { return Inspiring::quote(); });
 
     // Holidays
     Route::resource('holiday', 'API\HolidayController')->except([

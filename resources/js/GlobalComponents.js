@@ -8,6 +8,7 @@ import flightDetails from './components/flight-details.vue'
 import commentDetails from './components/comment-details.vue'
 import hotelDetails from './components/hotel-details.vue'
 import videoCard from './components/video-card.vue'
+import holdidayCard from './components/holiday-card.vue'
 
 Vue.component(dateSlider.name, dateSlider)
 Vue.component(Navigation.name, Navigation)
@@ -17,3 +18,4 @@ Vue.component(flightDetails.name, flightDetails)
 Vue.component(commentDetails.name, commentDetails)
 Vue.component(hotelDetails.name, hotelDetails)
 Vue.component(videoCard.name, videoCard)
+Vue.component(holdidayCard.name, holdidayCard)

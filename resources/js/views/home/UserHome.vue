@@ -7,21 +7,31 @@
             <p>{{ inspiration }}</p>
         </section>
 
-        <section class="container" v-if="holidays.length != 0">
-            <h2 class="mb-3">Your Last Holidays</h2>
+        <section class="container" v-if="pastHolidays.length != 0">
+            <h2 class="mb-3">Your Past Holidays</h2>
 
-            <router-link class="holiday" :to="{ name:'holiday.view', params: { 'holidayId' :holiday.id }}" v-for="holiday in holidays" :key="holiday.id">
-                <div class="card" :style="{ 'background-image': 'url(' + holiday.image.path + ')' }">
-                    <div class="overlay">
-                        <h2 class="title">{{ holiday.title }}</h2>
-                        <p class="subTitle">{{ holiday.subTitle }}</p>
-                        <p class="date">{{ holiday.beginDate.slice(-2) }} {{ month_name(new Date(holiday.beginDate)) }} - {{ holiday.endDate.slice(-2) }} {{ month_name(new Date(holiday.endDate)) }}</p>
-                    </div>
-                </div>
-            </router-link>
-
+            <div v-for="holiday in pastHolidays" :key="holiday.id">
+                <holiday-card :holiday="holiday" />
+            </div>
         </section>
-        <section v-else>
+
+        <section class="container" v-if="liveHolidays.length != 0">
+            <h2 class="mb-3">Your Live Holidays</h2>
+
+            <div v-for="holiday in liveHolidays" :key="holiday.id">
+                <holiday-card :holiday="holiday" />
+            </div>
+        </section>
+
+        <section class="container" v-if="upcommingHolidays.length != 0">
+            <h2 class="mb-3">Your Upcomming Holidays</h2>
+
+            <div v-for="holiday in upcommingHolidays" :key="holiday.id">
+                <holiday-card :holiday="holiday" />
+            </div>
+        </section>
+
+        <section v-else class="container">
             <h2>Oops looks like you have no holidays yet. Why not try creating one?</h2>
         </section>
     </div>
@@ -33,24 +43,16 @@
             let app = this
             let token = localStorage.getItem('token')
 
-            app.user.first_name = localStorage.getItem('first_name')
-            app.user.isAdmin = localStorage.getItem('isAdmin')
-
-            axios.get('/api/inspiration', {
-                headers: { Authorization: "Bearer " + token }
-            })
-            .then(function (resp) {
-                app.inspiration = resp.data;
-            })
-            .catch(function (resp) {
-                alert('Could not load inspiration')
-            })
-
+            // Load holidays
             axios.get('/api/holiday', {
                 headers: { Authorization: "Bearer " + token }
             })
             .then(function (resp) {
-                app.holidays = resp.data;
+                app.inspiration = resp.data.inspiration
+                app.liveHolidays = resp.data.live_holidays
+                app.upcommingHolidays = resp.data.upcomming_holidays
+                app.pastHolidays = resp.data.past_holidays
+                app.user.first_name = resp.data.user_first_name
             })
             .catch(function (resp) {
                 alert('Could not load holidays')
@@ -63,7 +65,10 @@
                     isAdmin: false
                 },
                 inspiration: '',
-                holidays: []
+                liveHolidays: [],
+                upcommingHolidays: [],
+                pastHolidays: []
+
             }
         },
         methods: {
@@ -71,10 +76,6 @@
                 let app = this
                 let token = localStorage.removeItem('token')
                 app.$router.push({ name: 'login' })
-            },
-            month_name(dt){
-                let mlist = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
-                return mlist[dt.getMonth()];
             }
         }
     }
