@@ -9,7 +9,7 @@
         </div>
         <div class="card comment double" v-else-if="comment.images.length == 2">
             <div class="row no-gutters">
-                <div v-for="image in orderedImages" class="col-6" :key="'activity_image' + image.id">
+                <div v-for="image in comment.images" class="col-6" :key="'activity_image' + image.id">
                     <img :src="image.path" class="card-img" />
                 </div>
             </div>
@@ -21,11 +21,11 @@
         <div class="card comment tripple" v-else>
             <div class="row no-gutters" v-if="comment.images.length > 0">
                 <div class="col-8 left">
-                    <img :src="orderedImages[0].path" class="card-img" />
+                    <img :src="comment.images[0].path" class="card-img" />
                 </div>
                 <div class="col-4 right">
-                    <img :src="orderedImages[1].path" class="card-img" />
-                    <img :src="orderedImages[2].path" class="card-img" />
+                    <img :src="comment.images[1].path" class="card-img" />
+                    <img :src="comment.images[2].path" class="card-img" />
                 </div>
             </div>
             <div class="card-body">
@@ -50,11 +50,6 @@
             comment: Object,
             reOrderMode: Boolean,
             dayId: Number
-        },
-        computed: {
-            orderedImages: function () {
-                return _.orderBy(this.comment.images, 'order')
-            }
         }
     }
 </script>

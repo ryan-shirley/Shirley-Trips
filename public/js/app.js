@@ -1981,12 +1981,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'activity-list',
   props: {
-    activitiesRaw: Array,
+    activities: Array,
     hotel: Object,
     day: String,
     reOrderMode: Boolean,
@@ -1994,75 +1993,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      activities: []
+      activitiesList: []
     };
   },
   mounted: function mounted() {
-    this.loadActivities();
+    this.activitiesList = this.activities;
   },
   methods: {
-    loadActivities: function loadActivities() {
-      var app = this;
-      var token = localStorage.getItem('token');
-      var activitiesRaw = app.activitiesRaw;
-
-      if (activitiesRaw != undefined || activitiesRaw != null) {
-        var _loop = function _loop() {
-          var activity = activitiesRaw[i];
-
-          if (activity.comment_id != null) {
-            axios.get('/api/comment/' + activity.comment_id, {
-              headers: {
-                Authorization: "Bearer " + token
-              }
-            }).then(function (resp) {
-              var data = resp.data;
-              data.activity_id = activity.id;
-              data.order = activity.order;
-              app.activities.push(data);
-              app.checkAllActivitiesLoaded();
-            })["catch"](function (resp) {
-              alert('Could not load comment');
-            });
-          } else if (activity.flight_id != null) {
-            axios.get('/api/flight/' + activity.flight_id, {
-              headers: {
-                Authorization: "Bearer " + token
-              }
-            }).then(function (resp) {
-              var data = resp.data;
-              data.activity_id = activity.id;
-              data.order = activity.order;
-              app.activities.push(data);
-              app.checkAllActivitiesLoaded();
-            })["catch"](function (resp) {
-              console.log(resp);
-              alert('Could not load flight');
-            });
-          } else if (activity.video_id != null) {
-            axios.get('/api/videos/' + activity.video_id, {
-              headers: {
-                Authorization: "Bearer " + token
-              }
-            }).then(function (resp) {
-              var data = resp.data;
-              data.activity_id = activity.id;
-              data.order = activity.order;
-              app.activities.push(data);
-              app.checkAllActivitiesLoaded();
-            })["catch"](function (resp) {
-              console.log(resp);
-              alert('Could not load video');
-            });
-          }
-        };
-
-        for (var i = 0; i < activitiesRaw.length; i++) {
-          _loop();
-        }
-      }
-    },
-    removeActivity: function removeActivity(activity_id) {
+    removeActivity: function removeActivity(activityId) {
       console.log('Removing Activity');
       var app = this;
       var index = app.activities.findIndex(function (activity) {
@@ -2078,23 +2016,28 @@ __webpack_require__.r(__webpack_exports__);
       var app = this;
       var token = localStorage.getItem('token');
 
-      for (var i = 0; i < app.activities.length; i++) {
-        var activity = app.activities[i];
-        axios.put('/api/activities/' + activity.activity_id, {
-          'order': i + 1
+      var _loop = function _loop() {
+        var activity = app.activitiesList[i];
+        var order = i + 1; // Update on server
+
+        axios.put('/api/activities/' + activity.activityId, {
+          'order': order
         }, {
           headers: {
             Authorization: "Bearer " + token
           }
         }).then(function (resp) {
-          console.log('Updated');
+          // console.log('Updated')
+          // Update local list
+          app.activitiesList[order - 1].order = order;
         })["catch"](function (resp) {
+          // console.log(resp)
           alert('Could not sort activity list');
         });
-      }
-    },
-    checkAllActivitiesLoaded: function checkAllActivitiesLoaded() {
-      if (this.activitiesRaw.length == this.activities.length) {// Do someting
+      };
+
+      for (var i = 0; i < app.activitiesList.length; i++) {
+        _loop();
       }
     }
   },
@@ -2109,9 +2052,6 @@ __webpack_require__.r(__webpack_exports__);
         disabled: false,
         ghostClass: "ghost"
       };
-    },
-    sortedActivities: function sortedActivities() {
-      return _.orderBy(this.activities, 'order');
     }
   }
 });
@@ -2178,11 +2118,6 @@ __webpack_require__.r(__webpack_exports__);
     comment: Object,
     reOrderMode: Boolean,
     dayId: Number
-  },
-  computed: {
-    orderedImages: function orderedImages() {
-      return _.orderBy(this.comment.images, 'order');
-    }
   }
 });
 
@@ -2365,24 +2300,6 @@ __webpack_require__.r(__webpack_exports__);
     reOrderMode: Boolean,
     dayId: Number
   },
-  data: function data() {
-    return {
-      airlineImagePath: ''
-    };
-  },
-  mounted: function mounted() {
-    var app = this;
-    var token = localStorage.getItem('token');
-    axios.get('/api/images/' + app.flight.airline.image_id, {
-      headers: {
-        Authorization: "Bearer " + token
-      }
-    }).then(function (resp) {
-      app.airlineImagePath = resp.data.path;
-    })["catch"](function (error) {
-      return alert("Could not get image for airline");
-    });
-  },
   methods: {
     month_name: function month_name(dt) {
       var mlist = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -2495,26 +2412,7 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     hotel: Object,
     editMode: Boolean,
-    dayId: Number,
     day: String
-  },
-  data: function data() {
-    return {
-      hotelImagePath: ''
-    };
-  },
-  mounted: function mounted() {
-    var app = this;
-    var token = localStorage.getItem('token');
-    axios.get('/api/images/' + app.hotel.image_id, {
-      headers: {
-        Authorization: "Bearer " + token
-      }
-    }).then(function (resp) {
-      app.hotelImagePath = resp.data.path;
-    })["catch"](function (error) {
-      return alert("Could not get image for hotel");
-    });
   }
 });
 
@@ -3065,13 +2963,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     reOrderMode: Boolean
   },
   data: function data() {
     return {
-      day: {}
+      dayId: '',
+      date: '',
+      activities: [],
+      hotel: {}
     };
   },
   mounted: function mounted() {
@@ -3083,15 +2985,14 @@ __webpack_require__.r(__webpack_exports__);
         Authorization: "Bearer " + token
       }
     }).then(function (resp) {
-      app.day = resp.data; // app.day.activities.sort((a, b) => (a.order > b.order) ? 1 : -1)
+      var data = resp.data.day;
+      app.activities = data.activities;
+      app.hotel = data.hotel;
+      app.dayId = data.dayId;
+      app.date = data.date;
     })["catch"](function (resp) {
       alert('Could not load day');
     });
-  },
-  computed: {
-    sortedActivities: function sortedActivities() {
-      return _.orderBy(this.day.activities, 'order');
-    }
   }
 });
 
@@ -3617,60 +3518,52 @@ __webpack_require__.r(__webpack_exports__);
     var app = this;
     var id = app.$route.params.holidayId;
     var token = localStorage.getItem('token');
-    axios.get('/api/user', {
+    axios.get('/api/holiday/' + id, {
       headers: {
         Authorization: "Bearer " + token
       }
     }).then(function (resp) {
+      app.holiday = resp.data.holiday;
       app.user = resp.data.user;
-      axios.get('/api/holiday/' + id, {
-        headers: {
-          Authorization: "Bearer " + token
-        }
-      }).then(function (resp) {
-        app.holiday = resp.data;
-        app.editPermission();
-        app.checkIsOwner();
+      app.editPermission();
+      app.checkIsOwner();
 
-        if (app.$route.params.dayId != undefined) {
-          // Day was selected
-          app.$router.replace({
-            name: 'holiday.view.day',
-            params: {
-              'dayId': app.$route.params.dayId
-            }
-          });
-        } else {
-          // No day specified
-          var currentDate = new Date();
-
-          for (var i = 0; i < app.holiday.days.length; i++) {
-            var holidayDate = new Date(app.holiday.days[i]['day']);
-
-            if (currentDate.getDate() + ' ' + currentDate.getMonth() + ' ' + currentDate.getYear() === holidayDate.getDate() + ' ' + holidayDate.getMonth() + ' ' + holidayDate.getYear()) {
-              console.log('Current date is during holiday');
-              app.$router.replace({
-                name: 'holiday.view.day',
-                params: {
-                  'dayId': app.holiday.days[i].id
-                }
-              });
-              return;
-            }
+      if (app.$route.params.dayId != undefined) {
+        // Day was selected
+        app.$router.replace({
+          name: 'holiday.view.day',
+          params: {
+            'dayId': app.$route.params.dayId
           }
+        });
+      } else {
+        // No day specified
+        var currentDate = new Date();
 
-          app.$router.replace({
-            name: 'holiday.view.day',
-            params: {
-              'dayId': app.holiday.days[0].id
-            }
-          });
+        for (var i = 0; i < app.holiday.days.length; i++) {
+          var holidayDate = new Date(app.holiday.days[i]['day']);
+
+          if (currentDate.getDate() + ' ' + currentDate.getMonth() + ' ' + currentDate.getYear() === holidayDate.getDate() + ' ' + holidayDate.getMonth() + ' ' + holidayDate.getYear()) {
+            console.log('Current date is during holiday');
+            app.$router.replace({
+              name: 'holiday.view.day',
+              params: {
+                'dayId': app.holiday.days[i].id
+              }
+            });
+            return;
+          }
         }
-      })["catch"](function (resp) {
-        alert('Could not load holiday');
-      });
+
+        app.$router.replace({
+          name: 'holiday.view.day',
+          params: {
+            'dayId': app.holiday.days[0].id
+          }
+        });
+      }
     })["catch"](function (resp) {
-      alert('Could not load user');
+      alert('Could not load holiday');
     });
   },
   data: function data() {
@@ -44884,7 +44777,6 @@ var render = function() {
             attrs: {
               hotel: _vm.hotel,
               reOrderMode: _vm.reOrderMode,
-              dayId: _vm.dayId,
               day: _vm.day
             },
             on: { hotelDeleted: _vm.removeHotel }
@@ -44895,7 +44787,7 @@ var render = function() {
           ])
         : _vm._e(),
       _vm._v(" "),
-      _vm.sortedActivities && _vm.reOrderMode
+      _vm.reOrderMode && _vm.activities
         ? _c(
             "section",
             { staticClass: "activity-list" },
@@ -44906,11 +44798,11 @@ var render = function() {
                   {
                     on: { change: _vm.onReorderList },
                     model: {
-                      value: _vm.activities,
+                      value: _vm.activitiesList,
                       callback: function($$v) {
-                        _vm.activities = $$v
+                        _vm.activitiesList = $$v
                       },
-                      expression: "activities"
+                      expression: "activitiesList"
                     }
                   },
                   "draggable",
@@ -44920,10 +44812,10 @@ var render = function() {
                 [
                   _c(
                     "transition-group",
-                    _vm._l(_vm.activities, function(activity) {
+                    _vm._l(_vm.activitiesList, function(activity) {
                       return _c(
                         "div",
-                        { key: activity.activity_id },
+                        { key: activity.activityId },
                         [
                           activity.airline_id != null
                             ? _c("flight-details", {
@@ -44968,14 +44860,14 @@ var render = function() {
             ],
             1
           )
-        : _vm.sortedActivities && !_vm.reOrderMode
+        : !_vm.reOrderMode && _vm.activities
         ? _c(
             "section",
             { staticClass: "activity-list" },
-            _vm._l(_vm.sortedActivities, function(activity) {
+            _vm._l(_vm.activitiesList, function(activity) {
               return _c(
                 "div",
-                { key: activity.activity_id },
+                { key: activity.activityId },
                 [
                   activity.airline_id != null
                     ? _c("flight-details", {
@@ -45081,7 +44973,7 @@ var render = function() {
                 _c(
                   "div",
                   { staticClass: "row no-gutters" },
-                  _vm._l(_vm.orderedImages, function(image) {
+                  _vm._l(_vm.comment.images, function(image) {
                     return _c(
                       "div",
                       {
@@ -45115,19 +45007,19 @@ var render = function() {
                       _c("div", { staticClass: "col-8 left" }, [
                         _c("img", {
                           staticClass: "card-img",
-                          attrs: { src: _vm.orderedImages[0].path }
+                          attrs: { src: _vm.comment.images[0].path }
                         })
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "col-4 right" }, [
                         _c("img", {
                           staticClass: "card-img",
-                          attrs: { src: _vm.orderedImages[1].path }
+                          attrs: { src: _vm.comment.images[1].path }
                         }),
                         _vm._v(" "),
                         _c("img", {
                           staticClass: "card-img",
-                          attrs: { src: _vm.orderedImages[2].path }
+                          attrs: { src: _vm.comment.images[2].path }
                         })
                       ])
                     ])
@@ -45285,7 +45177,7 @@ var render = function() {
             _c("div", { staticClass: "col-2 airline-logo" }, [
               _c("img", {
                 attrs: {
-                  src: _vm.airlineImagePath,
+                  src: _vm.flight.airline.image.path,
                   alt: _vm.flight.airline.name
                 }
               })
@@ -45451,12 +45343,10 @@ var render = function() {
         },
         [
           _c("div", { staticClass: "card hotel" }, [
-            _vm.hotelImagePath
-              ? _c("img", {
-                  staticClass: "card-img-top",
-                  attrs: { src: _vm.hotelImagePath, alt: _vm.hotel.name }
-                })
-              : _vm._e(),
+            _c("img", {
+              staticClass: "card-img-top",
+              attrs: { src: _vm.hotel.image.path, alt: _vm.hotel.name }
+            }),
             _vm._v(" "),
             _c("div", { staticClass: "card-body" }, [
               _c("h5", { staticClass: "card-title" }, [
@@ -45489,11 +45379,9 @@ var render = function() {
               _c("p", [_vm._v(_vm._s(_vm.hotel.location))])
             ]),
             _vm._v(" "),
-            _vm.hotelImagePath
-              ? _c("img", {
-                  attrs: { src: _vm.hotelImagePath, alt: _vm.hotel.name }
-                })
-              : _vm._e()
+            _c("img", {
+              attrs: { src: _vm.hotel.image.path, alt: _vm.hotel.name }
+            })
           ])
         ]
       )
@@ -46331,27 +46219,27 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm.day.activities
-    ? _c("div", { staticClass: "row justify-content-md-center" }, [
-        _c(
-          "div",
-          { staticClass: "col-12 col-sm-6" },
-          [
-            _c("activity-list", {
-              key: _vm.day.day,
+  return _c("div", { staticClass: "row justify-content-md-center" }, [
+    _c(
+      "div",
+      { staticClass: "col-12 col-sm-6" },
+      [
+        _vm.date
+          ? _c("activity-list", {
+              key: _vm.date,
               attrs: {
-                activitiesRaw: _vm.sortedActivities,
-                hotel: _vm.day.hotel,
-                day: _vm.day.day,
-                dayId: _vm.day.id,
+                activities: _vm.activities,
+                hotel: _vm.hotel,
+                day: _vm.date,
+                dayId: _vm.dayId,
                 reOrderMode: _vm.reOrderMode
               }
             })
-          ],
-          1
-        )
-      ])
-    : _vm._e()
+          : _vm._e()
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

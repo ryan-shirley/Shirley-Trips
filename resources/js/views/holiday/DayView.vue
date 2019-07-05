@@ -1,13 +1,14 @@
 <template>
-    <div class="row justify-content-md-center" v-if="day.activities">
+    <div class="row justify-content-md-center">
         <div class="col-12 col-sm-6">
             <activity-list 
-                :activitiesRaw="sortedActivities" 
-                :hotel="day.hotel"
-                :day="day.day"
-                :dayId="day.id"
+                v-if="date"
+                :activities="activities" 
+                :hotel="hotel"
+                :day="date"
+                :dayId="dayId"
                 :reOrderMode="reOrderMode"
-                :key="day.day"
+                :key="date"
             />
         </div>
     </div>
@@ -21,7 +22,10 @@
         },
         data() {
             return {
-                day: {}
+                dayId: '',
+                date: '',
+                activities: [],
+                hotel: {}
             }
         },
         mounted() {
@@ -33,18 +37,16 @@
                 headers: { Authorization: "Bearer " + token }
             })
             .then(function (resp) {
-                app.day = resp.data
+                let data = resp.data.day
 
-                // app.day.activities.sort((a, b) => (a.order > b.order) ? 1 : -1)
+                app.activities = data.activities
+                app.hotel = data.hotel
+                app.dayId = data.dayId
+                app.date = data.date
             })
             .catch(function (resp) {
                 alert('Could not load day')
             })
-        },
-        computed: {
-            sortedActivities: function () {
-                return _.orderBy(this.day.activities, 'order')
-            }
         }
     }
 </script>

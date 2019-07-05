@@ -13,7 +13,7 @@
                         {{ flight.airline.name }}
                     </div>
                     <div class="col-2 airline-logo">
-                        <img :src="airlineImagePath" :alt="flight.airline.name">
+                        <img :src="flight.airline.image.path" :alt="flight.airline.name">
                     </div>
                 </div>
             </div>
@@ -49,23 +49,6 @@
             flight: Object,
             reOrderMode: Boolean,
             dayId: Number
-        },
-        data() {
-            return {
-                airlineImagePath: ''
-            }
-        },
-        mounted() {
-            let app = this
-            let token = localStorage.getItem('token')
-            
-            axios.get('/api/images/' + app.flight.airline.image_id, {
-                headers: { Authorization: "Bearer " + token }
-            })
-            .then(resp => {
-                app.airlineImagePath = resp.data.path
-            })
-            .catch(error => alert("Could not get image for airline"))
         },
         methods: {
             month_name(dt){

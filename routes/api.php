@@ -32,7 +32,6 @@ Route::middleware('auth:api')->group(function () {
 
     // Days
     Route::get('day/{id}', 'API\DayController@show')->name('day.show');
-    Route::get('day/{id}/flights', 'API\DayController@flights')->name('day.flights');
 
     // Hotels
     Route::resource('hotels', 'API\HotelController')->except([

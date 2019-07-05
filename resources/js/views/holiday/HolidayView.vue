@@ -39,20 +39,14 @@
             let id = app.$route.params.holidayId
             let token = localStorage.getItem('token')
 
-            axios.get('/api/user', {
-                headers: { Authorization: "Bearer " + token }
-            })
-            .then(function (resp) {
-                app.user = resp.data.user
-
-                axios.get('/api/holiday/' + id, {
+            axios.get('/api/holiday/' + id, {
                     headers: { Authorization: "Bearer " + token }
                 })
                 .then(function (resp) {
-                    app.holiday = resp.data
+                    app.holiday = resp.data.holiday
+                    app.user = resp.data.user
                     app.editPermission()
                     app.checkIsOwner()
-                    
                     
                     if(app.$route.params.dayId != undefined) {
                         // Day was selected
@@ -78,10 +72,6 @@
                 .catch(function (resp) {
                     alert('Could not load holiday')
                 })
-            })
-            .catch(function (resp) {
-                alert('Could not load user')
-            })
 
         },
         data() {

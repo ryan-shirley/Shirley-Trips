@@ -59,10 +59,12 @@ class HolidayController extends Controller
 
     public function show($id)
     {
+        $user =  auth()->user();
+
         $holiday = Holiday::findOrFail($id);
         $holiday->load('users', 'days', 'image');
 
-        return $holiday;
+        return ['holiday' => $holiday, 'user' => $user];
     }
 
 

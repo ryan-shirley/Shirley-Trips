@@ -5,7 +5,6 @@
             v-if="hotel && !reOrderMode"
             :hotel='hotel'
             :reOrderMode="reOrderMode"
-            :dayId="dayId"
             :day="day"
             v-on:hotelDeleted="removeHotel"
             v-cloak
@@ -15,15 +14,15 @@
         </section>
        <!--/.Hotel -->
 
-        <section class="activity-list" v-if="sortedActivities && reOrderMode">
+        <section class="activity-list" v-if="reOrderMode && activities">
 
             <draggable 
-                v-model="activities" 
+                v-model="activitiesList" 
                 v-bind="dragOptions"
                 @change="onReorderList"
             >
             <transition-group >
-                <div v-for="activity in activities" :key="activity.activity_id">
+                <div v-for="activity in activitiesList" :key="activity.activityId">
 
                     <flight-details 
                         v-if="activity.airline_id != null"
@@ -52,8 +51,8 @@
             </transition-group>
             </draggable>
         </section>
-        <section class="activity-list" v-else-if="sortedActivities && !reOrderMode">
-            <div v-for="activity in sortedActivities" :key="activity.activity_id">
+        <section class="activity-list" v-else-if="!reOrderMode && activities">
+            <div v-for="activity in activitiesList" :key="activity.activityId">
 
                 <flight-details 
                     v-if="activity.airline_id != null"
@@ -94,7 +93,7 @@
     export default {
         name: 'activity-list',
         props: {
-            activitiesRaw: Array,
+            activities: Array,
             hotel: Object,
             day: String,
             reOrderMode: Boolean,
@@ -102,76 +101,14 @@
         },
         data() {
             return {
-                activities: []
+                activitiesList: []
             }
         },
         mounted() {
-            this.loadActivities()
+            this.activitiesList = this.activities
         },
         methods: {
-            loadActivities() {
-                let app = this
-                let token = localStorage.getItem('token')
-                let activitiesRaw = app.activitiesRaw
-
-                if(activitiesRaw != undefined || activitiesRaw != null) {
-                    for (var i = 0; i < activitiesRaw.length; i++) {
-                        let activity = activitiesRaw[i]
-
-                        if(activity.comment_id != null) {
-                            axios.get('/api/comment/' + activity.comment_id, {
-                                    headers: { Authorization: "Bearer " + token }
-                                })
-                                .then(function (resp) {
-                                    let data = resp.data
-                                    data.activity_id = activity.id
-                                    data.order = activity.order
-
-                                    app.activities.push(data)
-                                    app.checkAllActivitiesLoaded()
-                                })
-                                .catch(function (resp) {
-                                    alert('Could not load comment')
-                                })
-                        }
-                        else if (activity.flight_id != null) {
-                            axios.get('/api/flight/' + activity.flight_id, {
-                                    headers: { Authorization: "Bearer " + token }
-                                })
-                                .then(function (resp) {
-                                    let data = resp.data
-                                    data.activity_id = activity.id
-                                    data.order = activity.order
-
-                                    app.activities.push(data)
-                                    app.checkAllActivitiesLoaded()
-                                })
-                                .catch(function (resp) {
-                                    console.log(resp)
-                                    alert('Could not load flight')
-                                })
-                        }
-                        else if (activity.video_id != null) {
-                            axios.get('/api/videos/' + activity.video_id, {
-                                    headers: { Authorization: "Bearer " + token }
-                                })
-                                .then(function (resp) {
-                                    let data = resp.data
-                                    data.activity_id = activity.id
-                                    data.order = activity.order
-
-                                    app.activities.push(data)
-                                    app.checkAllActivitiesLoaded()
-                                })
-                                .catch(function (resp) {
-                                    console.log(resp)
-                                    alert('Could not load video')
-                                })
-                        }
-                    }
-                }
-            },
-            removeActivity(activity_id) {
+            removeActivity(activityId) {
                 console.log('Removing Activity')
                 let app = this
 
@@ -188,25 +125,26 @@
                 let app = this
                 let token = localStorage.getItem('token')
 
-                for (var i = 0; i < app.activities.length; i++) {
-                    let activity = app.activities[i]
+                for (var i = 0; i < app.activitiesList.length; i++) {
+                    let activity = app.activitiesList[i]
+
+                    let order = i + 1
                     
-                    axios.put('/api/activities/' + activity.activity_id, {
-                        'order': (i + 1) 
+                    // Update on server
+                    axios.put('/api/activities/' + activity.activityId, {
+                        'order': order
                     }, {
                         headers: { Authorization: "Bearer " + token }
                     })
                     .then(function (resp) {
-                        console.log('Updated')
+                        // console.log('Updated')
+                        // Update local list
+                        app.activitiesList[order - 1].order = order
                     })
                     .catch(function (resp) {
+                        // console.log(resp)
                         alert('Could not sort activity list')
                     })
-                }
-            },
-            checkAllActivitiesLoaded() {
-                if(this.activitiesRaw.length == this.activities.length) {
-                    // Do someting
                 }
             },
         },
@@ -222,9 +160,6 @@
                     ghostClass: "ghost"
                 };
             },
-            sortedActivities: function () {
-                return _.orderBy(this.activities, 'order')
-            }
         }
     }
 </script>
