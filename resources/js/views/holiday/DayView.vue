@@ -11,7 +11,7 @@
                 :key="date"
             />
 
-            <div class="container mt-5 pt-5">
+            <div class="container mt-5 pt-5 mb-5">
                 <div class="row">
                     <div class="col" v-if="previousDay">
                         <router-link v-if="previousDay.id" class="btn btn-primary btn-block" :to="{ name:'holiday.view.day', params: { 'dayId' :previousDay.id }}">
