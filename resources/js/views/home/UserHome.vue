@@ -1,8 +1,8 @@
 <template>
-    <div v-cloak>
+    <div>
         <navigation></navigation>
 
-        <section class="bg-primary page-title">
+        <section class="bg-primary page-title" v-if="user.first_name">
             <h1>{{ getWelcomeMessage }}</h1>
             <p>{{ inspiration }}</p>
         </section>
