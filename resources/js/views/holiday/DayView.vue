@@ -13,14 +13,14 @@
 
             <div class="container mt-5 pt-5">
                 <div class="row">
-                    <div class="col">
-                        <router-link class="btn btn-primary btn-block" :to="{ name:'holiday.view.day', params: { 'dayId' :previousDay.id }}" v-if="previousDay">
-                            Previous Day
+                    <div class="col" v-if="previousDay">
+                        <router-link v-if="previousDay.id" class="btn btn-primary btn-block" :to="{ name:'holiday.view.day', params: { 'dayId' :previousDay.id }}">
+                            <i class="fas fa-angle-double-left"></i> Previous Day
                         </router-link>
                     </div>
-                    <div class="col">
-                        <router-link class="btn btn-primary btn-block" :to="{ name:'holiday.view.day', params: { 'dayId' :nextDay.id }}" v-if="nextDay">
-                            Next Day
+                    <div class="col" v-if="nextDay">
+                        <router-link v-if="nextDay.id" class="btn btn-primary btn-block" :to="{ name:'holiday.view.day', params: { 'dayId' :nextDay.id }}">
+                            Next Day <i class="fas fa-angle-double-right"></i>
                         </router-link>
                     </div>
                 </div>
