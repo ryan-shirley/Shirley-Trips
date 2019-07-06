@@ -6,7 +6,7 @@
             v-on:delete="deleteMessage"
         />
 
-        <section class="bg-primary page-title">
+        <section class="bg-primary page-title mb-0">
                 <h1>{{ message.title }}</h1>
                 <p>{{ message.subTitle }}</p>
         </section>
@@ -20,13 +20,13 @@
                             <p class="description">{{ message.description }}</p>
                         </div>
                     </div>
-
-                    <div v-for="image in orderedImages" :key="image.path" class="card image-only">
-                        <img :src="image.path" class="img-fluid" :alt="message.title">
-                    </div>
                 </div>
             </div>
         </section>
+
+        <div v-for="image in orderedImages" :key="image.path">
+            <img :src="image.path" class="img-fluid mb-3 img-center" :alt="message.title">
+        </div>
     </div>
 </template>
 
