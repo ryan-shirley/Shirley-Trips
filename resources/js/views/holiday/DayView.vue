@@ -10,6 +10,22 @@
                 :reOrderMode="reOrderMode"
                 :key="date"
             />
+
+            <div class="container mt-5 pt-5">
+                <div class="row">
+                    <div class="col">
+                        <router-link class="btn btn-primary btn-block" :to="{ name:'holiday.view.day', params: { 'dayId' :previousDay.id }}" v-if="previousDay">
+                            Previous Day
+                        </router-link>
+                    </div>
+                    <div class="col">
+                        <router-link class="btn btn-primary btn-block" :to="{ name:'holiday.view.day', params: { 'dayId' :nextDay.id }}" v-if="nextDay">
+                            Next Day
+                        </router-link>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </template>
@@ -25,7 +41,9 @@
                 dayId: '',
                 date: '',
                 activities: [],
-                hotel: {}
+                hotel: {},
+                previousDay: {},
+                nextDay: {}
             }
         },
         mounted() {
@@ -43,6 +61,8 @@
                 app.hotel = data.hotel
                 app.dayId = data.dayId
                 app.date = data.date
+                app.nextDay = resp.data.nextDay
+                app.previousDay = resp.data.previousDay
             })
             .catch(function (resp) {
                 alert('Could not load day')

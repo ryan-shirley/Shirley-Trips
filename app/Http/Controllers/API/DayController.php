@@ -18,8 +18,8 @@ class DayController extends Controller
         // Find day
         $day = Day::findOrFail($id);
 
-        // Load hotel and activities
-        $day->load('hotel', 'activities');
+        // Load hotel, activities and holiday
+        $day->load('hotel', 'activities', 'holiday');
 
         // Load hotel image
         if($day->hotel) {
@@ -66,13 +66,31 @@ class DayController extends Controller
         // Order activities corrctly
         usort($activityList, array($this, 'order'));
 
+        // Get next and previous days
+        $days = $day->holiday->load('days')->days;
+        $nextDay = null;
+        $previousDay = null;
+
+        foreach($days as $d) {
+            // If Next Day
+            if($day->id + 1 == $d->id) {
+                $nextDay = $d;
+            }
+            // If previous day
+            else if($day->id - 1 == $d->id) {
+                $previousDay = $d;
+            }
+        }
+
         return response()->json([
             'day' => [
                 'dayId' =>$day->id,
                 'date' => $day->day,
                 'hotel' => $day->hotel,
-                'activities' => $activityList
-            ]
+                'activities' => $activityList,
+            ],
+            'previousDay' => $previousDay,
+            'nextDay' => $nextDay 
         ], 200);
     }
 
