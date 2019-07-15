@@ -15,7 +15,7 @@
              <div class="row justify-content-md-center">
                 <div class="col-12 col-md-8">
 
-                    <div class="card" v-if="message.description">
+                    <div class="card mt-4" v-if="message.description">
                         <div class="card-body">
                             <p class="description">{{ message.description }}</p>
                         </div>
