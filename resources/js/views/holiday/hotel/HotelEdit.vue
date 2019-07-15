@@ -188,7 +188,8 @@
                 
                 let data = new FormData()
                 data.append('image', app.imageToUpload)
-                data.append('folder', 'hotels')
+                data.append('type', 'hotel')
+                data.append('holidayId', app.$route.params.holidayId)
 
                 return new Promise((resolve, reject) => {
                     axios.post('/api/images', data, {

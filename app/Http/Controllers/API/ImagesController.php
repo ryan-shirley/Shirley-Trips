@@ -5,10 +5,12 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
-Use App\Image;
+use App\Traits\ImageHandler;
 
 class ImagesController extends Controller
 {
+    use Imagehandler;
+
     public function show($id)
     {
         $image = Image::findOrFail($id);
@@ -20,7 +22,8 @@ class ImagesController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'image' => 'required|file|image',
-            'folder' => 'required|string',
+            'type' => 'required|string',
+            'holidayId' => 'required|numeric|exists:holidays,id',
         ]);
 
         // Check if user has permission to actuall save this... ******
@@ -29,18 +32,19 @@ class ImagesController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        $image = $request->file('image');
-        $originalFileName = $image->getClientOriginalName();
-        $extension = $image->getClientOriginalExtension();
-        // $filename = date('Y-m-d-His') . '_' . $request->input('name') . '.' . $extension;
-        $filename = $originalFileName . '-' . date('Y-m-d-His') . '.' . $extension;
-        $path = $image->storeAs($request->input('folder'), $filename, 'public');
+        if($request->input('type') == 'holiday') {
+            $image = $this->saveHolidayImage($request->file('image'),  $request->input('holidayId'));
+            return $image;
+        }
+        else if($request->input('type') == 'hotel') {
+            $image = $this->saveHotelImage($request->file('image'),  $request->input('holidayId'));
+            return $image;
+        }
+        else {
+            return response()->json('Type is not valid', 422);
+        }
 
-        $image = new Image();
-        $image->path = 'storage/' . $path;
-        $image->save();
-
-        return $image;
+        
     }
 
 }

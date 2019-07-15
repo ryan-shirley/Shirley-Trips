@@ -74,11 +74,11 @@
                 headers: { Authorization: "Bearer " + token }
             })
             .then(resp => {
-                app.form.title = resp.data.title
-                app.form.subTitle = resp.data.subTitle
-                app.form.beginDate = resp.data.beginDate
-                app.form.endDate = resp.data.endDate
-                app.imagePath = resp.data.image.path
+                app.form.title = resp.data.holiday.title
+                app.form.subTitle = resp.data.holiday.subTitle
+                app.form.beginDate = resp.data.holiday.beginDate
+                app.form.endDate = resp.data.holiday.endDate
+                app.imagePath = resp.data.holiday.image.path
             })
             .catch(errors => alert('Could not load holiday'))
         },
@@ -126,7 +126,8 @@
                 
                 let data = new FormData()
                 data.append('image', app.imageToUpload)
-                data.append('folder', 'holidays')
+                data.append('type', 'holiday')
+                data.append('holidayId', app.$route.params.holidayId)
 
                 return new Promise((resolve, reject) => {
                     axios.post('/api/images', data, {

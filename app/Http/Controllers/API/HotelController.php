@@ -8,12 +8,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 Use App\Hotel;
 Use App\Day;
-Use App\Image;
 Use App\Holiday;
 use Validator;
+use App\Image;
+use App\Traits\ImageHandler;
 
 class HotelController extends Controller
 {
+    use Imagehandler;
+
     public function show($id)
     {
         $hotel = Hotel::findOrFail($id);
@@ -42,15 +45,7 @@ class HotelController extends Controller
         $user = auth()->user();
 
         // Upload Image
-        $image = $request->file('image');
-        $originalFileName = $image->getClientOriginalName();
-        $extension = $image->getClientOriginalExtension();
-        $filename = $originalFileName . '-' . date('Y-m-d-His') . '.' . $extension;
-        $path = $image->storeAs('hotels', $filename, 'public');
-
-        $image = new Image();
-        $image->path = 'storage/' . $path;
-        $image->save();
+        $image = $this->saveHotelImage($request->file('image'), $request->input('holidayId'));
         
         // Create Hotel
         $hotel = new Hotel();

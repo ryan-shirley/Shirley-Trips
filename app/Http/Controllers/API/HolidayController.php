@@ -11,9 +11,12 @@ use App\Holiday;
 use App\Image;
 use App\Day;
 use Illuminate\Foundation\Inspiring;
+use App\Traits\ImageHandler;
+use DB;
 
 class HolidayController extends Controller
 {
+    use Imagehandler;
 
     public function index()
     {
@@ -87,16 +90,9 @@ class HolidayController extends Controller
         // Get User
         $user = auth()->user();
 
-        // Upload Image
-        $image = $request->file('image');
-        $originalFileName = $image->getClientOriginalName();
-        $extension = $image->getClientOriginalExtension();
-        $filename = $originalFileName . '-' . date('Y-m-d-His') . '.' . $extension;
-        $path = $image->storeAs('holidays', $filename, 'public');
-
-        $image = new Image();
-        $image->path = 'storage/' . $path;
-        $image->save();
+        // Save Image
+        $nextHolidayId = DB::select("SHOW TABLE STATUS LIKE 'holidays'")[0]->Auto_increment;
+        $image = $this->saveHolidayImage($request->file('image'), $nextHolidayId);
         
         // Create Holiday
         $holiday = new Holiday();
@@ -125,12 +121,9 @@ class HolidayController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:50',
             'subTitle' => 'required|string|max:50',
-            'imageId' => 'nullable|numeric|exists:images,id',
-            // 'beginDate' => 'required|date',
-            // 'endDate' => 'required|date',
+            'imageId' => 'nullable|numeric|exists:images,id'
         ]);
 
-        // Check if user has permission to actuall update this... ******
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
