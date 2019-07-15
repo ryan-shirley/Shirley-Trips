@@ -100,7 +100,7 @@
                 headers: { Authorization: "Bearer " + token }
             })
             .then(resp => {
-                app.days = resp.data.days
+                app.days = resp.data.holiday.days
 
 
                 // Load Hotel

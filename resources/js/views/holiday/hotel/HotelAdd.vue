@@ -98,7 +98,7 @@ import { parse } from 'path';
                 headers: { Authorization: "Bearer " + token }
             })
             .then(resp => {
-                app.days = resp.data.days
+                app.days = resp.data.holiday.days
             })
             .catch(errors => alert('Could not load holiday days'))
         },
