@@ -27,6 +27,8 @@
         <div v-for="image in orderedImages" :key="image.path">
             <img :src="image.path" class="img-fluid mb-3 img-center" :alt="message.title">
         </div>
+
+        <footer-global />
     </div>
 </template>
 

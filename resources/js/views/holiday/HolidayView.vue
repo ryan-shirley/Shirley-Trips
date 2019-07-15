@@ -27,6 +27,8 @@
         ></router-view>
 
         <new-acitvity-picker :dayId="$route.params.dayId" v-if="editPer" v-once></new-acitvity-picker>
+
+        <footer-global />
         
     </div>
 </template>

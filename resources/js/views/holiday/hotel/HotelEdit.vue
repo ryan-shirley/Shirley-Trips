@@ -64,6 +64,8 @@
             </form>
         </section>
 
+        <footer-global />
+
     </div>
 </template>
 

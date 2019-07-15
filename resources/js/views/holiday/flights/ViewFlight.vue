@@ -30,6 +30,8 @@
             </div>
         </section>
 
+        <footer-global />
+
     </div>
 </template>
 

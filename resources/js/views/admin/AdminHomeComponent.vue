@@ -21,6 +21,8 @@
             <router-view></router-view>
         </section>
 
+        <footer-global />
+
     </div>
 </template>
 

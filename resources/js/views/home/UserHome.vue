@@ -34,6 +34,8 @@
         <section v-else class="container">
             <h2>Oops looks like you have no holidays yet. Why not try creating one?</h2>
         </section>
+
+        <footer-global />
     </div>
 </template>
 
