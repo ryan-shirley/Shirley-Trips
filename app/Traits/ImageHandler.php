@@ -9,7 +9,7 @@ trait ImageHandler
         $user =  auth()->user();
 
         // Image Folder
-        $imageFolder = 'users/' . $user->id . '/holiday-' . $holidayId . '/comments' . '/';
+        $imageFolder = 'users/' . $user->id . '/holiday-' . $holidayId . '/comments';
 
         // Image file name
         $originalFileName = $imageToSave->getClientOriginalName();
@@ -55,7 +55,7 @@ trait ImageHandler
         $user =  auth()->user();
 
         // Image Folder
-        $imageFolder = 'users/' . $user->id . '/holiday-' . $holidayId . '/hotels' . '/';
+        $imageFolder = 'users/' . $user->id . '/holiday-' . $holidayId . '/hotels';
 
         // Image file name
         $originalFileName = str_replace(" ", "-", $imageToSave->getClientOriginalName());
