@@ -43,7 +43,7 @@
                             v-bind="dragOptions"
                         >
                                 <div class="attachment-holder animated fadeIn" v-cloak v-for="(image, index) in images" :key="image.path"> 
-                                    <img :src="image_previews[index]" class="img-thumbnail" style="max-width:200px" />
+                                    <img :src="image_previews[index]" class="img-thumbnail" style="max-width:100px" />
                                     <span class="label label-primary">{{ image.name + ' (' + Number((image.size / 1024 / 1024).toFixed(1)) + 'MB)'}}</span> 
                                     <span class="" style="background: red; cursor: pointer;" @click.prevent="removeImage(image)"><button class="btn btn-xs btn-danger">Remove</button></span>
                                 </div>
@@ -64,7 +64,7 @@
                             v-bind="dragOptions"
                         >
                                 <div class="attachment-holder animated fadeIn" v-cloak v-for="image in form.imagesUploaded" :key="image.path"> 
-                                    <img :src="image.path" class="img-thumbnail" style="max-width:200px" />
+                                    <img :src="image.path" class="img-thumbnail" style="max-width:100px" />
                                     <span class="" style="background: red; cursor: pointer;" @click.prevent="removeUploadedImage(image)"><button class="btn btn-xs btn-danger">Remove</button></span>
                                 </div>
                         </draggable>
