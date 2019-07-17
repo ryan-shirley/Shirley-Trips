@@ -4,7 +4,7 @@
             <div class="overlay">
                 <h2 class="title">{{ holiday.title }}</h2>
                 <p class="subTitle">{{ holiday.subTitle }}</p>
-                <p class="date">{{ holiday.beginDate.slice(-2) }} {{ month_name(new Date(holiday.beginDate)) }} - {{ holiday.endDate.slice(-2) }} {{ month_name(new Date(holiday.endDate)) }}</p>
+                <p class="date">{{ holiday.beginDate.slice(-2) }} {{ month_name(new Date(holiday.beginDate)) }} - {{ holiday.endDate.slice(-2) }} {{ month_name(new Date(holiday.endDate)) }} {{ holiday.endDate.substring(0, 4) }}</p>
             </div>
         </div>
     </router-link>
