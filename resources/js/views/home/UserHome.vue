@@ -7,18 +7,18 @@
             <p>{{ inspiration }}</p>
         </section>
 
-        <section class="container" v-if="pastHolidays.length != 0">
-            <h2 class="mb-3">Your Past Holidays</h2>
-
-            <div v-for="holiday in pastHolidays" :key="holiday.id">
-                <holiday-card :holiday="holiday" />
-            </div>
-        </section>
-
         <section class="container" v-if="liveHolidays.length != 0">
             <h2 class="mb-3">Your Live Holidays</h2>
 
             <div v-for="holiday in liveHolidays" :key="holiday.id">
+                <holiday-card :holiday="holiday" />
+            </div>
+        </section>
+
+        <section class="container" v-if="pastHolidays.length != 0">
+            <h2 class="mb-3">Your Past Holidays</h2>
+
+            <div v-for="holiday in pastHolidays" :key="holiday.id">
                 <holiday-card :holiday="holiday" />
             </div>
         </section>
