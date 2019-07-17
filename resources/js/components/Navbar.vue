@@ -1,9 +1,10 @@
 <template>
     <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-white navbar-offcanvas">
         <button class="navbar-toggler d-block" type="button" @click="toggleNav" v-if="!backArrow">
-            <span></span>
-            <span></span>
-            <span></span>
+            <span v-if="!open"></span>
+            <span v-if="!open"></span>
+            <span v-if="!open"></span>
+            <i v-if="open" class="fas fa-minus-square"></i>
         </button>
         <span v-else @click="goBack" class="back-arrow"><i class="fas fa-chevron-left"></i></span>
 
