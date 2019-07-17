@@ -1,6 +1,6 @@
 <template>
     <div>
-        <navigation></navigation>
+        <navigation :backArrow='true'></navigation>
 
         <section class="bg-primary page-title">
                 <h1>Add Message</h1>

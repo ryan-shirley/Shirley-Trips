@@ -2,6 +2,7 @@
     <div class="comment">
         <navigation
             :viewing='true'
+            :backArrow='true'
             v-on:edit="switchToEditFlight"
             v-on:delete="deleteFlight"
         />

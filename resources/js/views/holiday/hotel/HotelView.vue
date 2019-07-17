@@ -2,6 +2,7 @@
     <div>
         <navigation
             :viewing='true'
+            :backArrow='true'
             v-on:edit="switchToEditHotel"
             v-on:delete="deleteHotel"
         />

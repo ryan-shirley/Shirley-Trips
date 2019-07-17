@@ -1,10 +1,11 @@
 <template>
     <nav class="navbar navbar-expand-lg fixed-top navbar-light bg-white navbar-offcanvas">
-        <button class="navbar-toggler d-block" type="button" @click="toggleNav">
+        <button class="navbar-toggler d-block" type="button" @click="toggleNav" v-if="!backArrow">
             <span></span>
             <span></span>
             <span></span>
         </button>
+        <span v-else @click="goBack" class="back-arrow"><i class="fas fa-chevron-left"></i></span>
 
         <router-link to="/" class="navbar-brand">E &amp; R</router-link>
 
@@ -60,6 +61,10 @@
                 default: false
             },
             viewing: Boolean,
+            backArrow: {
+                type: Boolean,
+                default: false
+            },
         },
         data() {
             return {
@@ -97,6 +102,9 @@
                     })
                     .catch(error => alert("Could not delete holiday"))
                 }
+            },
+            goBack () {
+                this.$router.go(-1)
             }
         },
         computed: {

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <navigation />
+        <navigation :backArrow='true' />
 
         <section class="bg-primary page-title">
             <h1>Edit Hotel</h1>
