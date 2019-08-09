@@ -151,6 +151,7 @@
                                 imageData.append('image', images[i])
                                 imageData.append('order', (i + 50) )
                                 imageData.append('commentId', data.id)
+                                imageData.append('holidayId', app.$route.params.holidayId)
 
                                 axios.post('/api/comment-images', imageData, {
                                     headers: { 
