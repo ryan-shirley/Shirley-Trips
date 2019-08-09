@@ -43,7 +43,7 @@ class HolidayController extends Controller
             if ($currentDate > $beginningDate && $currentDate > $endDate) {
                 array_push($pastHolidays, $holiday); 
             }
-            else if ($currentDate >= $beginningDate && $currentDate < $endDate) {
+            else if ($currentDate >= $beginningDate && $currentDate <= $endDate) {
                 array_push($liveHolidays, $holiday);
             }
             else if ($currentDate < $beginningDate) {
