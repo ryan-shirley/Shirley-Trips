@@ -10708,6 +10708,11 @@ body {
   }
 }
 
+.img-center {
+  margin: 0 auto;
+  display: block;
+}
+
 .navbar-light .offcanvas-collapse {
   position: fixed;
   top: 44px;
@@ -10804,6 +10809,10 @@ body {
   padding: 10px;
   background: none;
   border: none;
+}
+
+.navbar .back-arrow:hover {
+  cursor: pointer;
 }
 
 .page-title {
@@ -11052,10 +11061,6 @@ body {
 
 .card.comment.tripple .right img:last-child {
   border-radius: 0;
-}
-
-.card.image-only img {
-  border-radius: 10px;
 }
 
 .comment .description {
